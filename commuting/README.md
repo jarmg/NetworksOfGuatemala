@@ -4,6 +4,19 @@
 Given a set of call detail records (CDR) from a major Guatemalan telecom provider, this project categorizes callers into weekday commuters and weekend commuters. If x,y coordinates of cell towers are used, home and work locations can be approximated. Once mapped, this data can be compared with existing data such as regional economics and other interesting data. 
 **Hyphothesis:** _weekend commuters earn a lower salary than weekday commuters_ 
 
+
+
+Version 1:
+- sort by ANUMBER
+- for each ANUMBER, 
+  - find which CELLID is closest on Wednesdays around 2pm (work)
+  - find which CELLID is closest on Sundays around 4am (home)
+- show percentage of time at home and at work
+
+
+
+#TODO:
+
 #Definitions:
 - **schoolHours:** 7am-2pm inclusive
 - **workHours:** 7am-5pm inclusive
