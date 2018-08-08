@@ -1,0 +1,16 @@
+Approx. Total Number of Households in Guatemala: 3297636.96
+(found by using the 1981 measures the UN collected on the total population size of Guatemala and the total number of households, taking the ratio between
+the two and then dividing the current Guatemalan population by this ratio to find the approx. current total of households in Guatemala)
+
+3,297,636.96 / 11,536
+= 285.856186 
+(the factor by which the ENCOVI data should be multiplied by in order to extrapolate the data to the whole population)
+
+
+As of a 2016 study, the average household size is 5.9, therefore, the factor changes significantly.
+17,280,673 / 5.9 
+= 2,928,927.63 (approx total number of current households in Guatemala)
+
+2,928,927.63 / 11,536
+= 253.894559
+(the new factor by which the ENCOVI data should be multiplied by in order to extrapolate the data to the whole population)

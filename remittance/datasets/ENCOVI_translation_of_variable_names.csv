@@ -1,0 +1,1077 @@
+REGION,REGION
+Región Administrativa,Administrative Region
+DEPTO,DEPT
+Departamento,Department
+AREA,AREA
+Área,Area
+UPM,UPM
+Unidad Primaria de Muestreo,Primary Sampling Unit
+NUMHOG,NUMHOG
+Número de hogar (ID unico de hogar),Home number (unique home ID)
+FACTOR,FACTOR
+Factor de expansión de hogares con agregado de consumo,Household expansion factor with consumption aggregate
+POBREZA,POVERTY
+Clasificación de hogar (Pobreza),Classification of household (Poverty)
+THOGAR,THOGAR
+Tamaño Del Hogar,Household Size
+ID,ID
+Identificador único de persona en el hogar,Unique identifier of person in the home
+PPA02,PPA02
+Sexo,Sex
+PPA03,PPA03
+Edad,Age
+PPA04A,PPA04A
+Nacimiento Día,Birth Day
+PPA04B,PPA04B
+Nacimiento Mes,Birth Month
+PPA04C,PPA04C
+Nacimiento Año,Birth Year
+PPA05,PPA05
+Parentesco,Relationship
+PPA06,PPA06
+Estado Civil,Civil status
+PPA07,PPA07
+Dpi,Dpi
+PPA08,PPA08
+Celular,Cell phone
+PPA09,PPA09
+Resultado,Result
+P03A01,P03A01
+"Es Miembro O Participa En Algún Grupo, Organizacion O Asociacion?","Are you a member or participate in any group, organization or association?"
+P03A02,P03A02
+"En Cuántos Grupos, Organizaciones O Asociaciones Participa (...)?","In How Many Groups, Organizations Or Associations Do You Participate (...)?"
+P03A03A,P03A03A
+De Que Grupo Es (...) Miembro O Participante? (Nombre Del Grupo),What Group Is (...) Member Or Participant? (Group name)
+P03A03B,P03A03B
+De Que Grupo Es (...) Miembro O Participante? (Cod Del Grupo),What Group Is (...) Member Or Participant? (Group Code)
+P03A04,P03A04
+"Cómo Participa (...) En El Grupo, Organización O Asociación?","How Do You Participate (...) In The Group, Organization Or Association?"
+P03B01,P03B01
+Generalmente Cómo Se Entera Usted De Lo Que Pasa En El País?,Generally How Do You Know About What Happens in the Country?
+P03B02,P03B02
+Generalmente Cómo Se Entera De Lo Que Pasa En Su Municipio O Comunidad?,Generally How Do You Know About What Happens in Your Municipality or Community?
+P04A01A,P04A01A
+El Padre De (...) Vive En Este Hogar?,Father Of (...) Live In This Home?
+P04A01B,P04A01B
+Código Del Padre (Cp Que Corresponde Al Padre De (...) ),Father's Code (Cp That Corresponds to Father Of (...))
+P04A02,P04A02
+Cuál Es O Fue El Nivel Educativo Más Alto Alcanzado Por El Padre De (...)?,What Is Or Was The Highest Educational Level Reached By The Father Of (...)?
+P04A03A,P04A03A
+Qué Idioma Habla O Hablaba El Padre De (...)? (Codigo),What Language Does O Father Talk About (...)? (Code)
+P04A04A,P04A04A
+La Madre De (...) Vive En Este Hogar?,Mother Of (...) Live In This Home?
+P04A04B,P04A04B
+Código De La Madre (Cp Que Corresponde A La Madre De (...) ),Code Of The Mother (Cp That Corresponds To The Mother Of (...))
+P04A05,P04A05
+Cuál Es O Fue El Nivel Educativo Más Alto Alcanzado Por La Madre De (...)?,What Is Or Was The Highest Educational Level Reached By Mother Of (...)?
+P04A06A,P04A06A
+Qué Idioma Habla O Hablaba La Madre De (...)? (Codigo),What Language Does O Mother Speak (...)? (Code)
+P04A07A,P04A07A
+Cuál Es El Idioma En El Que Aprendió A Hablar (...)? (Codigo),What is the language in which you learned to speak (...)? (Code)
+P04A08A,P04A08A
+Qué Otro Idioma Habla (...)?,What Other Language Do you speak (...)?
+P04A09A,P04A09A
+Qué Idioma Habla Más Frecuentemente (...)?,What Language Do You Speak Most Frequently (...)?
+P04A10,P04A10
+Con Quién O Donde Aprendió (...) El Idioma Que Más Habla?,With Who or Where Did You Learn (...) Which Language Do You Speak The Most?
+P04A11A,P04A11A
+"Según Su Historia, Tradiciones Y Costumbres ¿A Qué Pueblo Considera Que","According to His History, Traditions and Customs Which People Do You Consider?"
+Pertence (...)?,Pertence (...)?
+P05A01,P05A01
+"Con Quién Permaneció (...) La Mayor Parte Del Tiempo, La Semana Pasada?","With Who He Stayed (...) Most of the Time, Last Week?"
+P05A02,P05A02
+Durante Cuánto Tiempo Le Dió O Lleva Dándole Solamente Pecho A (...)?,For How Long Did He Give Or Give Only Chest To (...)?
+P05A03,P05A03
+"Cuántos Meses Tenía (...) Cuando Usted Empezó A Darle Leche De Fórmula,","How many months did you have (...) when you started giving formula milk,"
+P05A04,P05A04
+Cuántos Meses Tenía (...) Cuando Usted Dejó De Darle Pecho?,How many months did you have (...) when you stopped breastfeeding?
+P05A05,P05A05
+Cuál Fue La Razón Principal Por La Que Usted Dejó De Darle O Nunca Le Dio,What was the main reason why you stopped giving or never gave
+Pecho A (...)?,Chest A (...)?
+P05A06,P05A06
+"En Su Trabajo, ¿Tiene O Tenía Facilidades Para Cuidar Y/O Alimentar A (...)?","In Your Work, Do You Have Or Have Facilities To Care For And / Or Feed A (...)?"
+P05B01A,P05B01A
+Tiene Tarjeta De Vacunación?,Do you have a Vaccination Card?
+P05B01B,P05B01B
+La Presentó (La Tarjeta De Vacunacion)?,The Presented (The Vaccination Card)?
+P05B02,P05B02
+Recibió Vacuna Contra La Tuberculosis? (Bcg),Received Vaccine Against Tuberculosis? (Bcg)
+P05B03A,P05B03A
+Recibió La Vacuna Pentavalente?,Did you receive the Pentavalent Vaccine?
+P05B03B,P05B03B
+Cuántas Dosis De Pentavalente Recibio?,How many doses of pentavalent did you receive?
+P05B04,P05B04
+"Recibió Vacuna Contra La Difeteria, Tosferina Y El Tétano? (Dtp)","Received Vaccine Against La Difeteria, Whooping Cough and Tetanus? (Dtp)"
+P05B05A,P05B05A
+Recibió Vacuna Contra Rotavirus?,Received Vaccine Against Rotavirus?
+P05B05B,P05B05B
+Cuántas Dosis Recibió De La Vacuna Contra Rotavirus?,How many doses did you receive from the Rotavirus Vaccine?
+P05B06A,P05B06A
+Recibió Vacuna Contra La Polio?,Did you receive Vaccine Against Polio?
+P05B06B,P05B06B
+Cuántas Dósis Recibió De La Vacuna Contra La Polio?,How many doses did you receive from the vaccine against polio?
+P05B06C,P05B06C
+Recibió Refuerzo?,Received Reinforcement?
+P05B07,P05B07
+Recibió Vacuna Contra El Spr?,Received Vaccine Against The Spr?
+P05C01,P05C01
+"El Mes Pasado (...), ¿Tuvo Diarrea?","Last Month (...), Did You Have Diarrhea?"
+P05C02,P05C02
+Qué Le Dieron A (...) Principalmente Para La Diarrea?,What Did They Give To (...) Primarily For Diarrhea?
+P05C03,P05C03
+"Tuvo Gripe, Tos, Tosferina, Bronquitis, Ahogo, Alguna Infección Respíratoria?","Had Flu, Cough, Whooping Cough, Bronchitis, Drowning, Any Respite Infection?"
+P05C04,P05C04
+"Qué Le Dió Principalmente A (...) Para La Gripe, Tos, Etc.?","What Mainly Did You GIVE (...) For Flu, Cough, Etc.?"
+P05C05,P05C05
+Quién Atendió A (...) Por La Diarrea O Las Infecciones Respiratorias Que Tuvo En El,Who Cared At (...) For The Diarrhea Or Respiratory Infections That He Had In The
+Mes Pasado?,Last month?
+P05C06,P05C06
+En Dónde Atendieron A (...)?,Where Did They Attend (...)?
+P05C07A,P05C07A
+Cuánto Tiempo Tardó En Trasladar (...) Al Lugar Donde Lo Atendieron? (Horas),How Long Did It Take To Move (...) To The Place Where They Attended? (Hours)
+P05C07B,P05C07B
+Cuánto Tiempo Tardó En Trasladar (...) Al Lugar Donde Lo Atendieron? (Minutos),How Long Did It Take To Move (...) To The Place Where They Attended? (Minutes)
+P05C08A,P05C08A
+Qué Medios De Transporte Utilizó Para Llevar A (...) Al Lugar Donde Lo Atendieron?,What Means of Transportation Did You Use To Take (...) To The Place Where You Came?
+(1Er Medio),(1Er Medium)
+P05C08B,P05C08B
+Qué Medios De Transporte Utilizó Para Llevar A (...) Al Lugar Donde Lo Atendieron?,What Means of Transportation Did You Use To Take (...) To The Place Where You Came?
+(2Do Medio),(2ND Medium)
+P05C09A,P05C09A
+Cuanto Pago El Mes Pasado Por Consultas Médicas Para (...)?,How much pay the month passed by medical consultations for (...)?
+P05C09B,P05C09B
+Cuanto Pago El Mes Pasado Por Exámenes Para (...)?,How much pay the month passed by exams for (...)?
+P05C09C,P05C09C
+Cuanto Pago El Mes Pasado Por Medicinas Para (...)?,How much do I pay for the month spent on medicines for (...)?
+P05C09D,P05C09D
+Cuanto Pago El Mes Pasado Por Transporte Para (...)?,How much do I pay last month for transportation to (...)?
+P05C09E,P05C09E
+Cuanto Pago El Mes Pasado Por Hospedaje Y Alimentación Para (...)?,How much do I pay the month spent for lodging and food for (...)?
+P05C09F,P05C09F
+Cuanto Pago El Mes Pasado En Un Solo Total Para (...)?,How much did I pay last month in a single total for (...)?
+P05C09G,P05C09G
+Cuanto Pago El Mes Pasado En Otros Gastos Medicos Para (...)?,How Much Payment Last Month In Other Medical Expenses For (...)?
+P05C10,P05C10
+"El Mes Pasado, (...) Tuvo Algun Accidente, Enfermedad, O Quebrando De Salud?","Last Month, (...) Did You Have Any Accident, Illness, or Health Breaking?"
+P05D01,P05D01
+"El Mes Pasado (...) Sufrió Alguna Enfermedad, Accidente Etc. ? (12 Años +)","The Last Month (...) Suffered Some Illness, Accident Etc.? (12 Years +)"
+P05D02,P05D02
+"Aunque (...) No Estuvo Enfermo, ¿Visito Un Médico, Dentista, Enfermera, Etc.?","Although (...) Was Not Sick, Do I Visit A ??Doctor, Dentist, Nurse, Etc.?"
+P05D03A,P05D03A
+"Por La Enfermedad Que (...) Tuvo, Dejó De Asistir A Su Trabajo/Estudio/Actividad","For The Disease That (...) He Had, He Stopped From Attending His Work / Study / Activity"
+Normal?,Normal?
+P05D03B,P05D03B
+Por Cuantos Dias Del Mes Pasado Tuvo Que Dejar De Asistir A Su,For how many days of the last month he had to stop attending his
+Trabajo/Estudio/Actividad Normal?,Work / Study / Normal Activity?
+P05D04A,P05D04A
+A Quién Consultó (...) El Mes Pasado Cuando Se Enfermó/Tuvo Accidente/Etc.?,Who Did You Consult (...) Last Month When You Became Sick / Had an Accident / Etc?
+P05D04B,P05D04B
+Cuantas Veces (...) Hizo Consulta Con (..) El Mes Pasado Cuando Se Enfermó/Tuvo,How Many Times (...) Did He Consult With (..) The Last Month When He Became Sick / Had
+Accidente/Etc.?,Accident / Etc?
+P05D05,P05D05
+"Por Qué Razón (...) ¿No Consultó Con Un Médico, Odontólogo(A), Psicólogo(A)","Why Reason (...) Did not Consult With A Doctor, Dentist (A), Psychologist (A)"
+Etc.)?,Etc.)?
+P05D06A,P05D06A
+"Gastó Dinero El Mes Pasado En Medicinas Por La Enfermedad, Accidente Etc. Que","Spent Money Last Month On Drugs For Illness, Accident Etc. That"
+Tuvo?,He had?
+P05D06B,P05D06B
+"Cuánto Gastó El Mes Pasado En Medicinas Por La Enfermedad, Accidente Etc. Que","How much did you spend last month on medicines for illness, accident, etc."
+Tuvo?,He had?
+P05D07,P05D07
+En Dónde Atendieron A (...)?,Where Did They Attend (...)?
+P05D08A,P05D08A
+Cuánto Tiempo Tarda Para Ir Al Lugar Donde Atendieron A (...)? (Horas),How Long Does It Take To Go To The Place Where They Attended (...)? (Hours)
+P05D08B,P05D08B
+Cuánto Tiempo Tarda Para Ir Al Lugar Donde Atendieron A (...)? (Minutos),How Long Does It Take To Go To The Place Where They Attended (...)? (Minutes)
+P05D09A,P05D09A
+Qué Medios De Transporte Utilizó (...) Para Ir Al Lugar Donde Lo/La Atendieron?,What Means of Transportation Did You Use (...) To Go To The Place Where You Were Served?
+(1Er),(1Er)
+P05D09B,P05D09B
+Qué Medios De Transporte Utilizó (...) Para Ir Al Lugar Donde Lo/La Atendieron?,What Means of Transportation Did You Use (...) To Go To The Place Where You Were Served?
+(2Do),(2Do)
+P05D10A,P05D10A
+Cuánto Tiempo Le Tocó Esperar (...) La Ultima Vez Que Para Su Consulta? (Horas),How Long Did It Take You To Wait (...) The Last Time For Your Inquiry? (Hours)
+P05D10B,P05D10B
+Cuánto Tiempo Le Tocó Esperar (...) La Ultima Vez Que Para Su Consulta?,How Long Did It Take You To Wait (...) The Last Time For Your Inquiry?
+(Minutos),(Minutes)
+P05D11A,P05D11A
+El Mes Pasado (...) ¿Pagó Dinero Por: La Consulta Médica?,Last Month (...) Did You Pay Money For: The Medical Consultation?
+P05D11B,P05D11B
+Cuánto Pago El Mes Pasado Por La Consulta Medica?,How much did I pay in the month after the medical visit?
+P05D12A,P05D12A
+El Mes Pasado (...) ¿Pagó Dinero Por: Medicinas?,Last Month (...) Did You Pay Money For: Medicines?
+P05D12B,P05D12B
+Cuánto Pago El Mes Pasado Por Medicinas?,How much do I pay for medicine?
+P05D13A,P05D13A
+"El Mes Pasado (...) ¿Pagó Dinero Por: Radiografías, Exámenes De Laboratorio Etc.?","Last Month (...) Did You Pay Money For: X-rays, Laboratory Tests Etc.?"
+P05D13B,P05D13B
+"Cuánto Pago El Mes Pasado Por Radiografias, Examenes De Laboratorio, Etc.?","How much pay the month passed by x-rays, lab tests, etc.?"
+P05D14A,P05D14A
+El Mes Pasado (...) ¿Pagó Dinero Por: El Transporte Incluido El De Urgencia?,Last Month (...) Did You Pay Money For: Transportation Included The Emergency?
+P05D14B,P05D14B
+Cuánto Pago El Mes Pasado Por El Transporte Incluido El De Urgencia?,How much do I pay for the month spent on transportation including the emergency?
+P05D15A,P05D15A
+El Mes Pasado (...) ¿Pagó Dinero Por: Aparatos O Equipos Ortopédicos?,Last Month (...) Did You Pay Money For: Devices Or Orthopedic Equipment?
+P05D15B,P05D15B
+Cuánto Pago El Mes Pasado Por Aparatos O Equipos Ortopedicos?,How much do I pay for the month passed by appliances or orthopedic equipment?
+P05D16A,P05D16A
+"El Mes Pasado (...) ¿Pagó Dinero Por: Lentes Graduados, Audífonos Para Sordos,","Last Month (...) Did You Pay Money For: Graduated Lenses, Hearing Aids For The Deaf, Plates?"
+Placas?,P05D16B
+P05D16B,"How much I pay for the month spent on graduated lenses, hearing aids for the deaf,"
+"Cuánto Pago El Mes Pasado Por Lentes Graduados, Audifonos Para Sordos, Placas?",Plates?
+P05D17A,P05D17A
+"Por La Enfermedad O Accidente Que Tuvo (...) El Mes Pasado, Lo(A)","For The Illness Or Accident That He Had (...) Last Month, Lo (A)"
+Hospitalizaron?,Hospitalized?
+P05D17B,P05D17B
+Cuántos Días Hospitalizaron A (...) El Mes Pasado?,How Many Days Did They Hospitalize (...) Last Month?
+P05D18A,P05D18A
+El Mes Pasado (...) Pagó Dinero Por Hospitalización?,Last Month (...) Did You Pay Money For Hospitalization?
+P05D18B,P05D18B
+El Mes Pasado (...) Cuanto Pagó Por Encamamiento?,The Last Month (...) How much did you pay for bedding?
+P05D18C,P05D18C
+El Mes Pasado (...) Cuanto Pagó  Por Honorarios?,The Last Month (...) How Much Did You Pay For Fees?
+P05D18D,P05D18D
+El Mes Pasado (...) Cuanto Pagó Por Exámenes?,Last Month (...) How Much Did You Pay For Exams?
+P05D18E,P05D18E
+El Mes Pasado (...) Cuanto Pagó Por Medicinas?,Last Month (...) How Much Did You Pay For Medicines?
+P05D18F,P05D18F
+El Mes Pasado (...) Cuanto Pagó Por Transporte?,Last Month (...) How much did you pay for transportation?
+P05D18G,P05D18G
+El Mes Pasado (...) Cuanto Pagó En Un Solo Total?,The Last Month (...) How much did you pay in a single total?
+P05D18H,P05D18H
+"El Mes Pasado (...) Cuanto Pagó Por (Otros, Cúales)?","The Last Month (...) How Much Did You Pay For (Others, What)?"
+P05D19,P05D19
+Está Afiliado(A) O Cubierto(A) Por (...)?,Are You Affiliated (A) Or Covered (A) For (...)?
+P05E01,P05E01
+Se Ha Hecho Alguna Vez El Examen De Papanicolau? (Pap),Has the Pap Test Been Done Anytime? (Pap)
+P05E02,P05E02
+Cuándo Fue El Último Examen De Papanicolau Que Se Hizo?,When Was The Last Papanicolau Test Done?
+P05E03,P05E03
+Se Ha Hecho El Exámen De Mamografía?,Has the Mammography Screening Done?
+P05E04,P05E04
+Cuántos Embarazos Incluídas Las Pérdidas Ha Tenido?,How many pregnancies did the losses include?
+P05E05,P05E05
+Está Embarazada Actualmente?,Are you pregnant now?
+P05E06A,P05E06A
+En Qué Mes Y Año Quedó Embarazada La Última Vez? Mes,In What Month And Year Did You Get Pregnant The Last Time? Month
+P05E06B,P05E06B
+En Qué Mes Y Año Quedó Embarazada La Última Vez? Año,In What Month And Year Did You Get Pregnant The Last Time? Year
+P05E07,P05E07
+Cuántos Meses De Embarazo Tenía Cuándo Fue Su Primer Control?,How many months of pregnancy did you have when your first control was?
+P05E08,P05E08
+Cuántas Veces Fue A Control En Su Último Embarazo O Cuántas Veces Ha Ido En,How many times was it in control in your last pregnancy or how many times have you gone
+Su Actual Embarazo?,Your Current Pregnancy?
+P05E09,P05E09
+"En Su Último Embarazo O En El Actual, ¿Quién La Atendió O La Atiende","In Your Last Pregnancy Or In The Present, Who Cared Or Attended"
+Principalmente?,Mainly?
+P05E10,P05E10
+Dónde Ha Realizado Sus Exámenes De Control?,Where Have You Performed Your Control Exams?
+P05E11A,P05E11A
+"En Su Embarazo, Tomó O Toma, Ácido Fólico Y/O Pastillas Prenatales? (A-F)","In Your Pregnancy, Did You Take Or Take, Folic Acid And / Or Prenatal Pills? (A-F)"
+P05E11B,P05E11B
+"En Su Embarazo, Tomó O Toma, Ácido Fólico Y/O Pastillas Prenatales? (Pre-N)","In Your Pregnancy, Did You Take Or Take, Folic Acid And / Or Prenatal Pills? (Pre-N)"
+P05E12,P05E12
+"Durante Su Ultimo Embarazo, La Vacunaron Contra El Tétano?","During Your Last Pregnancy, Was Vaccinated Against Tetanus?"
+P05E13A,P05E13A
+"Durante Los Ultimos 12 Meses, ¿Ha Pagado Por Las Consultas, Exámenes,","During the last 12 months, have you paid for the consultations, exams,"
+Médicinas Etc. De Su Embarazo?,Medicines Etc. Of Your Pregnancy?
+P05E13B,P05E13B
+"Cuánto Ha Pagado Por Las Consultas, Examenes Etc. De Su Ultimo Embarazo?","How Much Have You Paid For The Consultations, Tests Etc. Of Your Ultimate Pregnancy?"
+P05E14,P05E14
+"En Total, ¿Cuántos Hijos E Hijas Nacidos Vivos Ha Tenido?","In Total, How many Sons and Daughters have been born alive?"
+P05E15,P05E15
+"De Estos Hijos, ¿Cuántos Están Vivos Actualmente?","Of These Children, How Many Are Currently Living?"
+P05E16A,P05E16A
+"En Que Més Y Año, ¿Tuvo Su Último Hijo O Hija Nacido Vivo? Mes","In what month and year, did you have your last child or daughter born alive? Month"
+P05E16B,P05E16B
+"En Que Més Y Año, ¿Tuvo Su Último Hijo O Hija Nacido Vivo? Año","In what month and year, did you have your last child or daughter born alive? Year"
+P05E17,P05E17
+Está Vivo Su Último Hijo O Hija Nacido Vivo?,Is Your Last Son or Alive Daughter Alive?
+P05E18,P05E18
+Quién La Atendió Principalmente En Su Último Parto?,Who Helped You Mainly In Your Last Childbirth?
+P05E19,P05E19
+Dónde La Atendió Principalmente En Su Último Parto?,Where Did You Mainly Attend Your Last Childbirth?
+P05E20,P05E20
+Su Último Parto Fue:,His Last Labor was:
+P05E21A,P05E21A
+"Pagó Por La Atención, Medicina, Exámenes, Cesáreas, Hospitalización En Su Ultimo","Paid for Care, Medicine, Exams, Cesareans, Hospitalization in Your Ultimate"
+Parto?,Birth?
+P05E21B,P05E21B
+"Cuánto Pagó En Total Por Atencion Medica, Medicina Etc. En Su Ultimo Parto?","How Much Did You Pay Totally For Medical Care, Medicine Etc. In Your Last Childbirth?"
+P05E22,P05E22
+Ha Escuchado O Conoce De Alguna Forma De Evitar Los Embarazos?,Have you heard or know of any way to avoid pregnancy?
+P05E23A,P05E23A
+Conoce/Ha Oido Hablar De: Mela?,Know / Have You Heard Of: Mela?
+P05E23B,P05E23B
+Conoce/Ha Oido Hablar De: Ovulacion?,Know / Have You Heard Of: Ovulation?
+P05E23C,P05E23C
+Conoce/Ha Oido Hablar De: Collar?,Know / Have You Heard Of: Necklace?
+P05E23D,P05E23D
+Conoce/Ha Oido Hablar De: Condon?,Know / Have You Heard Of: Condon?
+P05E23E,P05E23E
+Conoce/Ha Oido Hablar De: Pastilla?,Know / Have You Heard Of: Pill?
+P05E23F,P05E23F
+Conoce/Ha Oido Hablar De: T De Cobre?,Know / Have You Heard Of: Copper T?
+P05E23G,P05E23G
+Conoce/Ha Oido Hablar De: Inyeccion?,Know / Have You Heard Of: Injection?
+P05E23H,P05E23H
+Conoce/Ha Oido Hablar De: Operacion Del Hombre?,Know / Have You Heard Of: Operation Of Man?
+P05E23I,P05E23I
+Conoce/Ha Oido Hablar De: Operacion De La Mujer?,Know / Have You Heard Of: Woman's Operation?
+P05E23J,P05E23J
+"Otro, Cual?","Other, what?"
+P05E24A,P05E24A
+Ha Usado El Metodo De: Mela?,Has He Used The Method Of: Mela?
+P05E24B,P05E24B
+Ha Usado El Metodo De: Ovulacion?,Has He Used The Method Of: Ovulation?
+P05E24C,P05E24C
+Ha Usado El Metodo De: Collar?,Has He Used The Method Of: Necklace?
+P05E24D,P05E24D
+Ha Usado El Metodo De: Condon?,Has He Used The Method Of: Condon?
+P05E24E,P05E24E
+Ha Usado El Metodo De: Pastilla?,Has He Used The Method Of: Pill?
+P05E24F,P05E24F
+Ha Usado El Metodo De: T De Cobre?,Has The Method Of: Copper T Used?
+P05E24G,P05E24G
+Ha Usado El Metodo De: Inyeccion?,Has He Used The Method Of: Injection?
+P05E24H,P05E24H
+Ha Usado El Metodo De: Operacion De Hombre?,Have You Used The Method Of: Man Operation?
+P05E24I,P05E24I
+Ha Usaddo El Metodo De: Operacion De La Mujer?,Have you used the method of: Woman Operation?
+P05E24J,P05E24J
+"Otro, Cual?","Other, what?"
+P06A01,P06A01
+"Para El Presente Año Escolar, ¿Inscribieron A (...) En...","For the Present School Year, did they sign A (...) In ..."
+P06A02,P06A02
+El Plantel Educativo Donde Inscribieron A (...) Es...,The Educational Site Where You Entered (...) Is ...
+P06A03A,P06A03A
+"Para El Presente Año Escolar, ¿Pagó Por La Inscripción O Matrícula De (...)?","For the Present School Year, Did You Pay For Registration Or Enrollment (...)?"
+P06A03B,P06A03B
+Cuánto Pagó Por La Inscripción O Matrícula De (...)?,How Much Did You Pay For The Registration Or Registration Of (...)?
+P06A04A,P06A04A
+"Para El Presente Año Escolar, ¿Compró Uniformes Para (...)?","For the Present School Year, did you buy uniforms for (...)?"
+P06A04B,P06A04B
+Cuánto Pagó En Total Por Uniformes Para (...)?,How Much Did You Pay Totally For Uniforms To (...)?
+P06A05A,P06A05A
+"Al Inicio Del Presente Año Escolar, ¿Compró Libros, Útiles Y Materiales Para (...)?","At the Beginning of the Present School Year, did you buy books, supplies and materials for (...)?"
+P06A05B,P06A05B
+"Cuánto Pagó En Total Por Libros, Materiales Para (...)?","How Much Did You Pay In Total For Books, Materials For (...)?"
+P06A06A,P06A06A
+"Para El Presente Año Escolar, ¿Está Pagando La Mensualidad Escolar De (...)?","For the Present School Year, Are You Paying The School Monthly Of (...)?"
+P06A06B,P06A06B
+Cuánto Pagó En Total Por La Mensualidad Escolar De (...)?,How Much Did You Pay Totally For The School Monthly Of (...)?
+P06A07A,P06A07A
+A ¿Está Pagando Por El Transporte De (...) Para Asistir Al Plantel Educativo?,A Are You Paying For The Transportation Of (...) To Attend The Educational Site?
+P06A07B,P06A07B
+Cuánto Pagó En Total Por Transporte De (...) Para Asistir Al Plantel Educativo?,How Much Did You Pay In Full For Transportation From (...) To Attend The Educational Site?
+P06A08A,P06A08A
+"Sin Incluir Lo Comprado Al Inicio Del Presente Año Escolar, ¿Ha Tenido Gastos","Not including what was purchased at the beginning of the current school year, have you had expenses"
+Mensuales Por La Compra De Materiales,Monthly for the purchase of materials
+P06A08B,P06A08B
+"Cuánto Pagó En Total Por Gastos Mensuales, Comprando Materiales Que Le","How much did you pay in total for monthly expenses, buying materials that"
+Piden?,They ask?
+P06A09A,P06A09A
+Para El Presente Año Escolar ¿Ha Tenido Gastos Diferentes A Los Anteriores Por,For the Present School Year Have You Had Different Expenses Than Previous Years?
+La Educación De (...)?,The Education Of (...)?
+P06A09B,P06A09B
+Cuánto Pagó En Total Este Año Escolar De Gastos Diferentes A Los Año Anteriores,How Much Did You Pay Totally This School Year Of Expenses Different Than Previous Years
+Para (...)?,For (...)?
+P06B01,P06B01
+Sabe Leer Y Escribir?,Do you know how to read and write?
+P06B02A,P06B02A
+A (...) ¿Sabe Leer Y Escribir En Un Idioma Indígena?,A (...) Do you know how to read and write in an indigenous language?
+P06B02B,P06B02B
+Nombre Del Idioma Indigena Que (...) Sabe Leer Y Escribir,Indigenous Language Name That (...) Can Read and Write
+P06B03C,P06B03C
+Codigo Del Idioma Indigena Que (...) Sabe Leer Y Escribir,Indigenous Language Code That (...) Can Read and Write
+P06B03,P06B03
+Qué Edad Tenía (...) Cuando Se Inscribió Por Primera Vez En 1Er Grado De,How old you were (...) when you first enrolled in 1st grade
+Primaria?,Primary?
+P06B04,P06B04
+Qué Edad Tenía (...) Cuando Se Inscribió Por Primera Vez En 1Er Grado De Basico?,How old were you (...) when you enrolled for the first time in 1st grade of basic?
+P06B05,P06B05
+Se Inscribió (...) En Algún Plantel Educativo Para El Presente Año Escolar?,Did You Enroll (...) In Any Educational Site For The Present School Year?
+P06B06A,P06B06A
+En Que Nivel Y Grado Se Inscribio (...) Para El Presente Año Escolar? (Nivel),In what level and grade did you sign up (...) for the current school year? (Level)
+P06B06B,P06B06B
+En Que Nivel Y Grado Se Inscribio (...) Para El Presente Año Escolar? (Grado),In what level and grade did you sign up (...) for the current school year? (Grade)
+P06B07A,P06B07A
+En Qué Idioma Le Enseñan A (...)?,In What Language Do You Teach (...)?
+P06B07B,P06B07B
+Nombre Del Idioma En Que Le Enseñan A (...),Name Of The Language In Which They Teach (...)
+P06B07C,P06B07C
+Codigo Del Idioma En Que Le Enseñan A (...),Language Code In What They Teach (...)
+P06B08A,P06B08A
+Es La Primera Vez Que (...) Se Inscribe En Este Nivel Y En Este Grado?,Is It The First Time That (...) Is Enrolled In This Level And In This Degree?
+P06B08B,P06B08B
+Cuántas Veces Se Ha Inscrito (...) En Este Nivel Y Grado?,How many times have you enrolled (...) in this level and grade?
+P06B09,P06B09
+El Plantel Educativo Donde Inscribió A (...) Es:,The Educational Site Where You Enrolled A (...) Is:
+P06B10A,P06B10A
+Cuánto Tiempo Tarda (...) Para Ir Al Centro Educativo Donde Estudia? (Horas),How Long Does It Take (...) To Go To The Educational Center Where Do You Study? (Hours)
+P06B10B,P06B10B
+Cuánto Tiempo Tarda (...) Para Ir Al Centro Educativo Donde Estudia? (Minutos),How Long Does It Take (...) To Go To The Educational Center Where Do You Study? (Minutes)
+P06B11A,P06B11A
+Qué Medios De Transporte Utiliza (...) Para Trasladarse Al Plantel Educativo Donde,What Means of Transportation Do You Use (...) To Move to the Educational Site Where
+Estudia? (1Er),Study? (1Er)
+P06B11B,P06B11B
+Qué Medios De Transporte Utiliza (...) Para Trasladarse Al Plantel Educativo Donde,What Means of Transportation Do You Use (...) To Move to the Educational Site Where
+Estudia? (2Do),Study? (2Do)
+P06B12A,P06B12A
+"Para El Presente Año Escolar, ¿Pagó Por La Inscripción O Matrícula De (...)?","For the Present School Year, Did You Pay For Registration Or Enrollment (...)?"
+P06B12B,P06B12B
+Cuánto Pagó En Total Este Año Por La Inscripcion/Matricula De (...)?,How Much Did You Pay Totally This Year For The Registration / Registration Of (...)?
+P06B13A,P06B13A
+"Para El Presente Año Escolar, ¿Compró Uniformes Para (...)?","For the Present School Year, did you buy uniforms for (...)?"
+P06B13B,P06B13B
+Cuánto Pagó En Total Este Año Escolar En La Compra De Uniformes Para (...)?,How Much Did You Pay Totally This School Year In Purchasing Uniforms For (...)?
+P06B14A,P06B14A
+A ¿Compró O Alquiló Libros Para (?)?,A Did you buy or rent books for (?)?
+P06B14B,P06B14B
+Cuánto Pagó En Total Por Los Libros Para (...)?,How Much Did You Pay Totally For The Books For (...)?
+P06B15,P06B15
+"Para El Presente Año Escolar, ¿Cómo Obtuvo (?) La Mayor Parte De Libros?","For the Present School Year, How Did You Get (?) Most Books?"
+P06B16A,P06B16A
+"Al Inicio Del Presente Año Escolar, ¿Compró Cuadernos Y/O Materiales Escolares","At the Beginning of the Present School Year, Did You Buy Notebooks and / or School Supplies?"
+Para (?)?,For (?)?
+P06B16B,P06B16B
+"Al Inicio Del Presente Año Escolar, ¿Cuánto Pagó En Total Por Los","At the Beginning of the Present School Year, How Much Did You Pay Totally for the"
+Cuadernos/Materiales Para (...)?,Notebooks / Materials For (...)?
+P06B17,P06B17
+"Para El Presente Año Escolar, ¿Cómo Obtuvo (?) La Mayor Parte De Cuadernos Y","For the Present School Year, How Did You Get (?) Most Notebooks And"
+Útiles Escolares?,School Supplies?
+P06B18A,P06B18A
+"Para El Presente Año Escolar, ¿Paga Por La Mensualidad Escolar O Colegiatura De","For the Present School Year, Do You Pay For School Monthly or Tuition?"
+(?)?,(?)?
+P06B18B,P06B18B
+Presente Año] ¿Cuánto Pagó En Total Por La Mensualidad Escolar/Colegiatura De,Present Year] How Much Did You Pay Totally For School Monthly / Tuition?
+(...)?,(...)?
+P06B19A,P06B19A
+"Para El Presente Año Escolar, ¿Gasta Por El Transporte De (?) Para Asistir Al","For the Present School Year, Do You Spend For The Transportation Of (?) To Attend"
+Plantel Educativo?,Educational Campus?
+P06B19B,P06B19B
+Presente Año] ¿Cuánto Gasta Mensualmente Por El Transporte De (...) Para Asistir,Present Year] How much do you spend monthly for transportation (...) to assist
+[Plantel Educativo]?,[Educational Campus]?
+P06B20A,P06B20A
+"Sin Incluir [Inicio Del Año], ¿Ha Tenido Gastos Mensuales Por La Compra De","Without Including [Start of Year], have you had monthly expenses for the purchase of"
+Materiales Para (...)?,Materials For (...)?
+P06B20B,P06B20B
+Sin Incluir [Inicio Del Año] ¿Cuánto Pagó En Total De Gastos Mensuales [Materiales],Without Including [Start Of Year] How Much Did You Pay In Total Of Monthly Expenses [Materials]
+Para (...)?,For (...)?
+P06B21A,P06B21A
+Presente Año] ¿Ha Tenido Gastos Diferentes A Los Anteriores Por La Educación De,Present Year] Have You Had Different Expenses Than Previous Years For Education
+(?)?,(?)?
+P06B21B,P06B21B
+Presente Año] ¿Cuánto Pagó En Total En Gastos Diferentes A Los Años Anteriores,Present Year] How Much Did You Pay Totally In Expenditures Different To Previous Years?
+[Educacion De (...)]?,[Education Of (...)]?
+P06B22,P06B22
+Presente Año] ¿Abandonó O Ya No Está Asistiendo Al Plantel Donde Se Inscribió?,Present Year] Abandoned Or Is Not Attending The Campus Where You Enrolled?
+P06B23,P06B23
+Cuál  Es La  Razón Principal Por La Que (?) Abandonó Definitivamente Este Año,What Is The Main Reason Why (?) Definitively Abandoned This Year
+Escolar?,School?
+P06B24,P06B24
+Por Qué Razón (...) No Se Inscribió En El Presente Año Escolar?,Why Reason (...) Did Not Enroll In The Present School Year?
+P06B25A,P06B25A
+Cuál Fue El Nivel Y Grado De Educación Más Alto Aprobado Por (?)? (Nivel),What was the Level and Degree of Higher Education Approved by (?)? (Level)
+P06B25B,P06B25B
+Cuál Fue El Nivel Y Grado De Educación Más Alto Aprobado Por (?)? (Grado),What was the Level and Degree of Higher Education Approved by (?)? (Grade)
+P06B26,P06B26
+"Por El Nivel Educativo Más Alto Que Aprobó, ¿Obtuvo Algún Título O Diploma?","For the Highest Educational Level You Approved, Did You Get Any Title Or Diploma?"
+P06B27A,P06B27A
+Cuál Es El Título O Diploma Obtenido Por El Nivel Educativo Mas Alto Que Aprobo?,What Is The Title Or Diploma Obtained By The Highest Educational Level I Approved?
+P06B27B,P06B27B
+Nombre Del Título Obtenido Por El Nivel Educativo Mas Alto Que Aprobo,Title Name Obtained by Higher Education Level I Approved
+P07A01,P07A01
+"Durante Últimos 12 Meses, ¿Asistió A Cursos De Capacitación Para El","During Last 12 Months, Did You Attend Training Courses For The"
+Trabajo/Buscar Empleo?,Job / Job Search?
+P07A02A,P07A02A
+Cómo Se Llamaba El Último Curso Al Que Asistió? (Cod),What was the name of the last course he attended? (Cod)
+P07A02B,P07A02B
+Cómo Se Llamaba El Último Curso Al Que Asistió? (Nombre Del Curso),What was the name of the last course he attended? (Course name)
+P07A03,P07A03
+Cuántas Horas En Total Duró El Último Curso De Capacitación Al Que Asistió?,How many hours in total lasted the last training course attended?
+P07A04,P07A04
+Qué Institución O Empresa Impartió El Último Curso De Capacitación Al Que,Which Institution or Company Provided the Last Training Course That
+Asistió?,He attended?
+P07A05,P07A05
+"Ademas De Lo Que Aprendio, ¿Cuál Fue El Principal Beneficio De La","In addition to what you learned, what was the main benefit of the"
+Capacitación:?,Training:?
+P07A06A,P07A06A
+Está Usted Interesado(A) En Recibir Algún Curso De Capacitación Para El Trabajo?,Are You Interested In Receiving Some Training Course For Work?
+P07A06B,P07A06B
+En Qué Desea Capacitarse?,In What Do You Want to Train?
+P07A06C,P07A06C
+Codigo Del Area En Que Desea Capacitarse,Area Code In Which You Want to Train
+P08A01A,P08A01A
+En Qué Lugar Nació (...)? (Aqui O Otro Lugar?),In What Place Was He Born (...)? (Here Or Another Place?)
+P08A01B,P08A01B
+Otro Departamento O País (Cual?),Other Department Or Country (Which?)
+P08A01C,P08A01C
+Otro Municipio (Cual?),Other Municipality (Which?)
+P08A01D,P08A01D
+Otro Departamento O País (Codigo),Other Department OR Country (Code)
+P08A01E,P08A01E
+Otro Municipio (Codigo),Other Municipality (Code)
+P08A02,P08A02
+Cuántos Años Seguidos Lleva (...) Viviendo En Éste Lugar?,How many years have you followed (...) living in this place?
+P08A03A,P08A03A
+En Qué Lugar Vivía Habitualmente En Junio Del 2009?,In What Place Did You Usually Live In June 2009?
+P08A03B,P08A03B
+Departamento O País Donde Vivia En Junio 2009,Department Or Country Where Vivia In June 2009
+P08A03C,P08A03C
+Municipio Donde Vivia En Junio 2009,Municipality Where Vivia In June 2009
+P08A03D,Educational Campus?
+Departamento O País Donde Vivia En Junio 2009 (Codigo),P06B19B
+P08A03E,Present Year] How much do you spend monthly for transportation (...) to assist
+Municipio Donde Vivia En Junio 2009 (Codigo),[Educational Campus]?
+P08A04,P06B20A
+Cuál Fue La Razón Principal Por La Que (...) Dejó De Vivir En (...)?,"Without Including [Start of Year], have you had monthly expenses for the purchase of"
+P09A01A,Materials For (...)?
+"Durante El Día De Ayer, ¿Trabajó En Una Empresa, Institución, Finca Etc. ?",P06B20B
+P09A01B,Without Including [Start Of Year] How Much Did You Pay In Total Of Monthly Expenses [Materials]
+"Horas Que Trabajó En Una Empresa, Finca, Etc. Ayer",For (...)?
+P09A01C,P06B21A
+"Minutos Que Trabajó En Una Empresa, Finca, Etc. Ayer",Present Year] Have You Had Different Expenses Than Previous Years For Education
+P09A02A,(?)?
+Durante Ayer ¿Trabajó En Su Negocio Etc. De Forma Independiente A Cambio De,P06B21B
+Ingreso Etc.?,Present Year] How Much Did You Pay Totally In Expenditures Different To Previous Years?
+P09A02B,[Education Of (...)]?
+Horas Que Trabajó Ayer De Forma Independiente,P06B22
+P09A02C,Present Year] Abandoned Or Is Not Attending The Campus Where You Enrolled?
+Minutos Que Trabajó Ayer De Forma Independiente,P06B23
+P09A03A,What Is The Main Reason Why (?) Definitively Abandoned This Year
+Durante Ayer ¿Trabajó Ayudando En Las Actividades De La Finca Etc. Sin Recibir,School?
+Ingresos?,P06B24
+P09A03B,Why Reason (...) Did Not Enroll In The Present School Year?
+Horas Que Trabajó Ayer Sin Percibir Ingresos,P06B25A
+P09A03C,What was the Level and Degree of Higher Education Approved by (?)? (Level)
+Minutos Que Trabajó Ayer Sin Percibir,P06B25B
+P09A04A,What was the Level and Degree of Higher Education Approved by (?)? (Grade)
+Ayer] ¿Crió Animales Para Consumo Del Hogar?,P06B26
+P09A04B,"For the Highest Educational Level You Approved, Did You Get Any Title Or Diploma?"
+Horas Que Crió Animales Para Consumo Del Hogar (Ayer),P06B27A
+P09A04C,What Is The Title Or Diploma Obtained By The Highest Educational Level I Approved?
+Minutos Que Crió Animales Para Consumo Del Hogar (Ayer),P06B27B
+P09B01A,Title Name Obtained by Higher Education Level I Approved
+"Ayer] ¿Estudió, Se Capacitó, Hizo Deberes En Su Hogar, Etc.?",P07A01
+P09B01B,"During Last 12 Months, Did You Attend Training Courses For The"
+"Horas Que Estudio, Se Capacitó, Hizo Deberes En Su Hogar, Etc. (Ayer)",Job / Job Search?
+P09B01C,P07A02A
+"Minutos Que Estudio, Se Capacitó, Hizo Deberes En Su Hogar, Etc. (Ayer)",What was the name of the last course he attended? (Cod)
+P09B02A,P07A02B
+Ayer] ¿Se Transportó A Su Lugar De Estudios O Lugar De Capacitación?,What was the name of the last course he attended? (Course name)
+P09B02B,P07A03
+Cuantas Horas Pasó En Transporte A Su Lugar De Estudios? (Ayer),How many hours in total lasted the last training course attended?
+P09B02C,P07A04
+Cuantos Minutos Pasó En Transporte A Su Lugar De Estudios? (Ayer),Which Institution or Company Provided the Last Training Course That
+P09C01A,He attended?
+Durante El Dia Ayer ¿Limpió O Arregló La Casa?,P07A05
+P09C01B,"In addition to what you learned, what was the main benefit of the"
+Horas Que Pasó Limpiando La Casa (Ayer),Training:?
+P09C01C,P07A06A
+Minutos Que Pasó Limpiando La Casa (Ayer),Are You Interested In Receiving Some Training Course For Work?
+P09C02A,P07A06B
+"Ayer] ¿Cocinó O Preparó Alimentos O Bebidas Para Desayuno, Almuerzo Etc.?",In What Do You Want to Train?
+P09C02B,P07A06C
+Horas Que Pasó Cocinando (Ayer),Area Code In Which You Want to Train
+P09C02C,P08A01A
+Minutos Que Pasó Cocinando (Ayer),In What Place Was He Born (...)? (Here Or Another Place?)
+P09C03A,P08A01B
+"Ayer] ¿Lavó, Secó O Acomodó Trastos Del Hogar?",Other Department Or Country (Which?)
+P09C03B,P08A01C
+"Horas Que Pasó Lavando, Secando Trastos (Ayer)",Other Municipality (Which?)
+P09C03C,P08A01D
+"Minutos Que Pasó Lavando, Secando Trastos (Ayer)",Other Department OR Country (Code)
+P09C04A,P08A01E
+Lavó Y/O Tendió Ropa De Los Miembros Del Hogar Ayer?,Other Municipality (Code)
+P09C04B,P08A02
+Horas Que Paso Lavando/Tendiendo Ropa De Los Miembros Del Hogar Ayer?,How many years have you followed (...) living in this place?
+P09C04C,P08A03A
+Minutos Que Paso Lavando/Tendiendo Ropa De Los Miembros Del Hogar Ayer?,In What Place Did You Usually Live In June 2009?
+P09C05A,P08A03B
+Ayer] ¿Planchó Y/O Dobló Ropa De Los Miembros Del Hogar?,Department Or Country Where Vivia In June 2009
+P09C05B,P08A03C
+Horas Que Paso Planchando/Doblando Ropa Ayer,Municipality Where Vivia In June 2009
+P09C05C,P08A03D
+Minutos Que Paso Planchando/Doblando Ropa Ayer,Department Or Country Where Vivia In June 2009 (Code)
+P09C06A,P08A03E
+"Ayer] ¿Tejió, Bordó, Confeccionó O Elaboró Prendas De Vestir Para Los Miembros",Municipality Where Vivia In June 2009 (Code)
+Del Hogar?,P08A04
+P09C06B,What Was The Main Reason Why (...) Stop Living In (...)?
+"Horas Que Tejio, Bordo, Etc. Prendas De Vestir (Ayer)",P09A01A
+P09C06C,"During Yesterday's Day, did you work in a company, institution, farm etc.?"
+"Minutos Que Que Tejio, Bordo, Etc. Prendas De Vestir (Ayer)",P09A01B
+P09C07A,"Hours That Worked In A Company, Farm, Etc. Yesterday"
+Efectuó Reparaciones Menores A Su Vivienda De Cualquier Tipo Ayer?,P09A01C
+P09C07B,"Minutes That Worked In A Company, Farm, Etc. Yesterday"
+Horas Que Efectuó Reparaciones Menores A Su Vivienda Ayer,P09A02A
+P09C07C,Yesterday Did You Work On Your Business Etc. Independently In Exchange For
+Minutos Que Efectuó Reparaciones Menores A Su Vivienda Ayer,Income Etc.?
+P09C08A,P09A02B
+Acarreó Agua Para El Uso Del Hogar Ayer?,Hours That Worked Yesterday Independently
+P09C08B,P09A02C
+Horas Que Acarreó Agua Para El Uso Del Hogar Ayer,Minutes That Yesterday Work Independently
+P09C08C,P09A03A
+Minutos Que Acarreó Agua Para El Uso Del Hogar Ayer,During Yesterday Did You Work Helping In The Activities Of The Farm Etc. Without Receiving
+P09C09A,Income?
+Recogió Leña Para Uso Del Hogar?,P09A03B
+P09C09B,Hours That Worked Yesterday Without Receiving Income
+Horas Que Recogió Leña Para Uso Del Hogar Ayer,P09A03C
+P09C09C,Minutes That Worked Yesterday Unperceived
+Minutos Que Recogió Leña Para Uso Del Hogar Ayer,P09A04A
+P09D01A,Yesterday] Did you raise animals for home consumption?
+Ayer] ¿Atendió Y/O Cuidó Niños(As)?,P09A04B
+P09D01B,Hours That Raised Animals For Household Consumption (Yesterday)
+Horas Que Atendió Y/O Cuidó Niños(As) Ayer,P09A04C
+P09D01C,Minutes That Raised Animals For Household Consumption (Yesterday)
+Minutos Que Atendió Y/O Cuidó Niños(As) Ayer,P09B01A
+P09D02A,"Yesterday] Did You Study, Qualified, Did Homework, Etc.?"
+Cuidó A Una O Varias Personas Mayores De Sesenta Años Miembros Del Hogar?,P09B01B
+P09D02B,"Hours I Study, Qualified, Did Duties At Home, Etc. (Yesterday)"
+Horas Que Cuidó Personas Mayores Del Hogar Ayer,P09B01C
+P09D02C,"Minutes That Study, He Was Qualified, He Did Duties At Home, Etc. (Yesterday)"
+Minutos Que Cuidó Personas Mayores Del Hogar Ayer,P09B02A
+P09D03A,Yesterday] Was it transported to your place of studies or place of training?
+A ¿Cuidó A Una O Varias Personas Enfermas Miembros Del Hogar?,P09B02B
+P09D03B,How many hours did you spend in transportation to your place of study? (Yesterday)
+Horas Que Cuidó Personas Enfermas Del Hogar Ayer,P09B02C
+P09D03C,How many minutes did you spend on transportation to your place of study? (Yesterday)
+Minutos  Que Cuidó Personas Enfermas Del Hogar Ayer,P09C01A
+P09E01A,During The Day Yesterday Did You Clean Up Or Arrange The House?
+A ¿Se Trasladó A Buscar Productos / Realizó Compras Para El Hogar Ayer?,P09C01B
+P09E01B,Hours That Happened Cleaning the House (Yesterday)
+Horas Que Se Trasladó A Buscar Productos / Realizó Compras Para El Hogar Ayer,P09C01C
+P09E01C,Minutes That Happened Cleaning the House (Yesterday)
+Minutos Que Se Trasladó A Buscar Productos / Realizó Compras Para El Hogar Ayer,P09C02A
+P09E02A,"Yesterday] Cooked Or Prepared Food Or Drinks For Breakfast, Lunch Etc.?"
+A ¿Realizó Pagos O Trámites Del Hogar Y De Servicios De La Vivienda Ayer?,P09C02B
+P09E02B,Hours Spent Cooking (Yesterday)
+Horas Que Realizó Pagos O Trámites Del Hogar Y De Servicios De La Vivienda Ayer,P09C02C
+P09E02C,Minutes That He Spent Cooking (Yesterday)
+Minutos Que Realizó Pagos O Trámites Del Hogar Y De Servicios De La Vivienda,P09C03A
+Ayer,"Yesterday] Was It Washed, Dried Or Accommodated Household Tackle?"
+P09F01A,P09C03B
+"A ¿Dedicó Tiempo Para El Cuidado, Atención Y Arreglo Personal Ayer?","Hours spent washing, drying up junk (Yesterday)"
+P09F01B,P09C03C
+"Horas Que Dedicó Al Cuidado, Atención Y Arreglo Personal Ayer","Minutes That Washed, Drying Takes (Yesterday)"
+P09F01C,P09C04A
+"Minutos Que Dedicó Al Cuidado, Atención Y Arreglo Personal Ayer",Was Laid And / Or Tended Clothing Of Household Members Yesterday?
+P09F02A,P09C04B
+"A (Ayer) ¿Cuánto Tiempo Le Consumió: Comer, Dormir? (Horas)",How many hours did you spend washing / tending clothes from household members yesterday?
+P09F02B,P09C04C
+"B (Ayer) ¿Cuánto Tiempo Le Consumió: Comer, Dormir? (Minutos)",Minutes That I spend Washing / Spreading Clothes From Home Members Yesterday?
+P09F03A,P09C05A
+A ¿Dedicó Tiempo Para Trasladarse A Su Lugar De Trabajo Ayer?,Yesterday] Did You Plan And / Or Double Clothes Of Household Members?
+P09F03B,P09C05B
+Horas Que Dedico A Trasladarse A Su Lugar De Trabajo Ayer,Hours That Step Ironing / Folding Clothes Yesterday
+P09F03C,P09C05C
+Minutos Que Dedico A Trasladarse A Su Lugar De Trabajo Ayer,Minutes That Step Ironing / Folding Clothes Yesterday
+P09F04A,P09C06A
+"A ¿Dedicó Tiempo A Descansar, Relajarse, Meditar, Orar, Rezar?","Yesterday] Did you knit, embroidered, made or made garments for members"
+P09F04B,Of home?
+"Horas Que Dedicó A Descansar, Relajarse, Etc. Ayer",P09C06B
+P09F04C,"Hours Weaving, Board, Etc. Clothing (Yesterday)"
+"Minutos Que Dedicó A Descansar, Relajarse, Etc. Ayer",P09C06C
+P09F05A,"Minutes What Tejio, Board, Etc. Clothing (Yesterday)"
+"Realizó Actividades Deportivas, Culturales Etc. Fuera Del Hogar Ayer?",P09C07A
+P09F05B,Did You Make Minor Repairs On Your Home Of Any Type Yesterday?
+"Horas Que Dedico A Actividades Deportivas, Culturales Etc. Fuera Del Hogar Ayer",P09C07B
+P09F05C,Hours That Made Minor Repairs to Your Home Yesterday
+"Minutos Que Dedico A Actividades Deportivas, Culturales Etc. Fuera Del Hogar Ayer",P09C07C
+P09F06A,Minutes That Made Minor Repairs to Your Home Yesterday
+A ¿Dedicó Tiempo A Algún Trabajo Para Otros Hogares De Forma Gratuita Ayer?,P09C08A
+P09F06B,Haul Water For Home Use Yesterday?
+Horas Que Dedicó A Algún Trabajo Para Otros Hogares De Forma Gratuita Ayer,P09C08B
+P09F06C,Hours That Caught Water For Household Use Yesterday
+Minutos Que Dedicó A Algún Trabajo Para Otros Hogares De Forma Gratuita Ayer,P09C08C
+P09F07A,Minutes That Caught Water For Home Use Yesterday
+Dedicó Tiempo A Realizar Gestiones Para Mejoras De La Comunidad Etc. Ayer?,P09C09A
+P09F07B,Picked Firewood For Home Use?
+Horas Que Dedicó A Realizar Gestiones Para Mejoras De La Comunidad Etc. Ayer,P09C09B
+P09F07C,Hours That Gathered Firewood for Home Use Yesterday
+Minutos Que Dedicó A Realizar Gestiones Para Mejoras De La Comunidad Etc. Ayer,P09C09C
+P09F08A,Minutes That Gathered Firewood For Home Use Yesterday
+"A ¿Dedicó Tiempo A Lectura Recreativa De Algún Libro, Revista, Períodico?",P09D01A
+P09F08B,Yesterday] Did You Attend And / Or Care for Children (As)?
+"Horas Que Dedicó A Lectura Recreativa De Algún Libro, Revista, Períodico Ayer",P09D01B
+P09F08C,Hours Attended And / Or Cared for Children (As) Yesterday
+"Minutos Que Dedicó A Lectura Recreativa De Algún Libro, Revista, Períodico Ayer",P09D01C
+P09F09A,Minutes That He Attended And / Or Cared for Children (As) Yesterday
+"A ¿Dedicó Tiempo A Ver Tele, Escuchar Música, Utilizar Internet (Entretenimiento)",P09D02A
+Ayer?,Cared For One Or Several Elderly Sixty Years Members Of The Household?
+P09F09B,P09D02B
+"Horas Que Dedicó A Ver Tele, Escuchar Música, Utilizar Internet (Entretenimiento)",Hours That Cared for Senior Household Yesterday
+Ayer,P09D02C
+P09F09C,Minutes That Cared for Senior Household Yesterday
+"Minutos Que Dedicó A Ver Tele, Escuchar Música, Utilizar Internet (Entretenimiento)",P09D03A
+Ayer,A Did You Care For One Or Several Sick Household Members?
+P09G01A,P09D03B
+Suma Horas De Todas Las Actividades Mencionadas De Seccion,Hours That Cared for Homeless People Yesterday
+P09G01B,P09D03C
+Suma Minutos De Todas Las Actividades Mencionadas De Seccion,Minutes That Cared for Homeless People Yesterday
+P09H01A,P09E01A
+Actividades Realizado En Forma Simultanea (Conjunto 1),A Did You Move To Search Products / Did You Purchase For Home Yesterday?
+P09H01B,P09E01B
+Actividades Realizado En Forma Simultanea (Conjunto 2),Hours That Moved To Find Products / Performed Home Purchases Yesterday
+P09H01C,P09E01C
+Actividades Realizado En Forma Simultanea (Conjunto 3),Minutes That Moved To Find Products / Performed Home Purchases Yesterday
+P09H01D,P09E02A
+Actividades Realizado En Forma Simultanea (Conjunto 4),A Did You Make Payments Or Procedures For Home And Housing Services Yesterday?
+P09I01,P09E02B
+Código De Día En Que Se Realiza La Encuesta,Hours You Made Payments Or Procedures Of Home And Housing Services Yesterday
+P09I02,P09E02C
+Nombre De Día De Semana En Que Se Realiza La Encuesta,Minutes You Made Payments or Procedures for Home and Housing Services
+P09I03,Yesterday
+Día En Que Se Realiza La Encuesta,P09F01A
+P09I04,"A Did You Dedicate Time For Personal Care, Attention And Arrangement Yesterday?"
+Mes En Que Se Realiza La Encuesta,P09F01B
+P09I05,"Hours Dedicated to Personal Care, Attention and Arrangement Yesterday"
+Año En Que Se Realiza La Encuesta,P09F01C
+P10A01,"Minutes Dedicated to Personal Care, Attention and Arrangement Yesterday"
+Código De Persona Que Informó Sobre Las Actividades De Miembros De Familia,P09F02A
+P10A02,"A (Yesterday) How Much Time Did You Eat: Eat, Sleep? (Hours)"
+Cuál Fue La Actividad Principal De (...) La Semana Pasada?,P09F02B
+P10A03,"B (Yesterday) How Much Time Did You Eat: Eat, Sleep? (Minutes)"
+"Además De La Actividad Principal (?.), ¿La Semana Pasada:",P09F03A
+P10A04,A Did You Devote Time to Move to Your Workplace Yesterday?
+"Aunque (?.) No Trabajó La Semana Pasada, ¿Tenía Algun Trabajo Etc. Con",P09F03B
+Ingresos?,Hours I Dedicate to Move to Your Workplace Yesterday
+P10A05,P09F03C
+Cuál Fue La Razón Principal Por La Que (?.) No Trabajó La Semana Pasada?,Minutes That I Dedicate to Move to Your Workplace Yesterday
+P10A06,P09F04A
+"La Semana Pasada, (...) ¿Hizo Algún Trámite Para Buscar Trabajo/Instalar Propio","A Did You Devote Time To Rest, Relax, Meditate, Pray, Pray?"
+Negocio?,P09F04B
+P10A07,"Hours Dedicated To Rest, Relax, Etc. Yesterday"
+"En Las Últimas Cuatro Semanas, (?.) ¿Hizo Algún Trámite Para Buscar Trabajo?",P09F04C
+P10B01,"Minutes That He Dedicated To Rest, Relax, Etc. Yesterday"
+Cuántos Trabajos Tuvo (?.) La Semana Pasada?,P09F05A
+P10B02B,"Performed Sports, Cultural Activities Etc. Outside the Home Yesterday?"
+Qué Hizo (...) En El Trabajo Al Que Dedicó Más Horas La Semana Pasada? Codigo,P09F05B
+P10B02B_1D,"Hours I dedicate to Sports, Cultural Activities Etc. Outside the Home Yesterday"
+¿Qué hizo en el trabajo al que dedicó más horas la última semana que trabajó? (Un,P09F05C
+dígito),"Minutes That I dedicate to Sports, Cultural Activities Etc. Outside the Home Yesterday"
+P10B03B,P09F06A
+"Codigo De Actividad Económica A Que Se Dedica La Empresa, Etc. Donde (...)",A Did You Dedicate Time To Some Work For Other Homes For Free Yesterday?
+Trabajo La Semana Pasada,P09F06B
+P10B03B_1D,Hours Dedicated To Some Work For Other Homes For Free Yesterday
+¿A qué actividad económica se dedica principalmente en donde trabajó la última,P09F06C
+semana? (Un dígito),Minutes That You Dedicated To Some Work For Other Homes For Free Yesterday
+P10B04,P09F07A
+En El Trabajo Al Que Dedicó Más Horas La Semana Pasada O La,Dedicated Time To Perform Proceedings For Community Improvements Etc. Yesterday?
+P10B05,P09F07B
+Tiene Contrato Escrito De Trabajo O Nombramiento,Hours Dedicated To Carry Out Procedures For Community Improvements Etc. Yesterday
+P10B06,P09F07C
+El Contrato De Trabajo O Nombramiento Es:,Minutes That You Dedicated To Carry Out Procedures For Community Improvements Etc. Yesterday
+P10B07A,P09F08A
+"En Total, ¿Cuántos Años Y Meses Contínuos Lleva Trabajando En Esta Empresa?","A Did You Devote Time To Recreational Reading Of Some Book, Magazine, Periodic?"
+(Años),P09F08B
+P10B07B,"Hours Dedicated to Recreational Reading of Some Book, Magazine, Periodic Yesterday"
+"En Total, ¿Cuántos Años Y Meses Contínuos Lleva Trabajando En Esta Empresa?",P09F08C
+(Meses),"Minutes Dedicated to Recreational Reading of Some Book, Magazine, Newspaper Yesterday"
+P10B08,P09F09A
+Cuál Fue El Sueldo O Salario Mensual Sin Descuentos De (...) En Este Trabajo?,"A Dedicated Time To Watch Tele, Listen to Music, Use Internet (Entertainment)"
+P10B09A,Yesterday?
+El Mes Pasado (...) Trabajó Horas Extras?,P09F09B
+P10B09B,"Hours Dedicated to Watch TV, Listen to Music, Use the Internet (Entertainment)"
+Cuántas Horas Extras Trabajó (...) El Mes Pasado?,Yesterday
+P10B09C,P09F09C
+Cuánto Le Pagan (...) Por Hora Extra Trabajada?,"Minutes That You Dedicated to Watch TV, Listen to Music, Use the Internet (Entertainment)"
+P10B10A,Yesterday
+El Mes Pasado ¿(...) Recibió Dinero Por Concepto De Comisiones O Propinas?,P09G01A
+P10B10B,Sum Of Hours Of All Activities Mentioned In Section
+Cuánto Recibió (...) Por Concepto De Comisiones O Propinas?,P09G01B
+P10B11A,Sum Of Minutes Of All Activities Mentioned In Section
+Recibió Dinero Por Concepto De Bono 14 El Mes Pasado?,P09H01A
+P10B11B,Activities Performed Simultaneously (Set 1)
+Cuánto Recibió Por Concepto De Bono 14 El Mes Pasado?,P09H01B
+P10B12A,Activities Performed Simultaneously (Set 2)
+A ¿Recibió Dinero Por  Concepto De Aguinaldo El Mes Pasado?,P09H01C
+P10B12B,Activities Performed Simultaneously (Set 3)
+Cuánto Recibió Por Concepto De Aguinaldo El Mes Pasado?,P09H01D
+P10B13A,Activities Performed Simultaneously (Set 4)
+A ¿Recibió Dinero Por  Concepto De Algún Quinceavo Sueldo O Diferido?,P09I01
+P10B13B,Day Code in which the survey is carried out
+Cuánto Recibió Por Concepto De Algún Quinceavo Sueldo O Diferido?,P09I02
+P10B14A,Name of Day of Week in which the Survey is Performed
+Bono Vacacional?,P09I03
+P10B14B,Day In which the Survey is Performed
+Cuánto Recibió Por Concepto De Bono Vacacional?,P09I04
+P10B15A,Month in which the survey is conducted
+"A ¿Recibió Dinero Por Concepto De Bonos De Productividad, Desempeño, Etc.?",P09I05
+P10B15B,Year in which the survey is conducted
+"Cuánto Recibió Por Concepto De Bonos De Productividad, Desempeño, Etc.?",P10A01
+P10B16A,Person Code That Reported On The Activities Of Family Members
+"A ¿Recibió Ropa De Trabajo, Uniformes U Otras Prendas De Vestir Sin Costo?",P10A02
+P10B16B,What Was The Main Activity Of (...) Last Week?
+"Cuánto Le Costaría En Total La Ropa Que Recibió, Si Tuviera Que Comprarla?",P10A03
+P10B17,"In addition to the Main Activity (?.), Last Week:"
+En La Ocupacion De (...) Tiene Derecho A Vacaciones?,P10A04
+P10B18A,"Although (?.) Did not Work Last Week, Did You Have Any Work Etc. With"
+Trabajó Durante Su Período Vacacional?,Income?
+P10B18B,P10A05
+Cuánto Le Pagaron (...) Por Trabajar Durante Su Periodo Vacacional?,What Was The Main Reason Why (?) Did not Work Last Week?
+P10B19A,P10A06
+"A (...) ¿Recibió Alimentos, Víveres O Subsidio De Alimentación? (De Su","Last Week, (...) Did You Do Any Procedure To Search for Work / Install Own"
+Ocupacion?),Deal?
+P10B19B,P10A07
+Cuánto Le Costaría Si Tuviera Que Comprar Los Alimentos Que Recibio?,"In the Last Four Weeks, (?.) Did You Do Any Proceedings To Look For Work?"
+P10B20A,P10B01
+En La Ocupacion De (...) ¿Recibió Vivienda Sin Tener Que Pagarla?,How many jobs did you have (?.) Last Week?
+P10B20B,P10B02B
+Cuánto Le Costaría La Vivienda Por Mes Si Tuviera Que Aquilarla?,What did you do (...) In the Work You Dedicated the Most Hours Last Week? Code
+P10B21A,P10B02B_1D
+A (...) ¿Recibió Transporte Gratuito O Dinero Adicional Para Transporte De Su,What did you do at the job you spent the most hours on the last week you worked? (A
+Trabajo?,digit)
+P10B21B,P10B03B
+Si (...) Tuviera Que Pagar Por Ese Transporte Gratuito Cuánto Le Costaría?,"Code of Economic Activity to Which the Company Is Dedicated, Etc. Where (...)"
+P10B22,Work Last Week
+Cuál Es Su Ingreso Neto O Ganancia Mensual De Su Empresa Despues De Quitar,P10B03B_1D
+Gastos?,What economic activity is mainly devoted to where the last one worked?
+P10B23,week? (One digit)
+"En Los Últimos 12 Meses, ¿Cuál Fue Su Ganacia Mensual Por Ventas De",P10B04
+"Cosechas, Etc.?",In the Work to Which He Dedicated More Hours Last Week Or The
+P10B24A,P10B05
+Emplea O Empleaba Personas En Forma Permanente Por Un Sueldo?,Has a Written Work Contract or Appointment
+P10B24B,P10B06
+Cuántas Personas Emplea?,The Work Contract Or Appointment Is:
+P10B25,P10B07A
+Cuántas Personas Trabajan En La Empresa Donde (...) Trabaja?,"In Total, how many years and continuous months have you been working in this company?"
+P10B026A,(Years)
+Está Usted Vinculado Al Igss Como...?,P10B07B
+P10B026B,"In Total, how many years and continuous months have you been working in this company?"
+Cuánto Le Paga Mensualmente Igss?,(Months)
+P10B027A,P10B08
+En Este Trabajo Cuantas Horas Trabaja (...) Los Lunes?,What Was The Salary Or Monthly Salary Without Discounts Of (...) In This Work?
+P10B027B,P10B09A
+En Este Trabajo Cuantas Horas Trabaja (...) Los Martes?,Last Month (...) Did you work overtime?
+P10B027C,P10B09B
+En Este Trabajo Cuantas Horas Trabaja (...) Los Miercoles?,How many extra hours did you work (...) Last month?
+P10B027D,P10B09C
+En Este Trabajo Cuantas Horas Trabaja (...) Los Jueves?,How Much Do They Pay You (...) For Extra Hour Worked?
+P10B027E,P10B10A
+En Este Trabajo Cuantas Horas Trabaja (...) Los Viernes?,Last Month (...) Did You Receive Money For Commissions Or Tips?
+P10B027F,P10B10B
+En Este Trabajo Cuantas Horas Trabaja (...) Los Sabados?,How much did you receive (...) For the concept of commissions or tips?
+P10B027G,P10B11A
+En Este Trabajo Cuantas Horas Trabaja (...) Los Domingos?,Received Money For Bonus Concept 14 Last Month?
+P10C01,P10B11B
+"Además Del Trabajo Principal, Tenia Segundo Trabajo, Negocio Etc.?",How much did you receive for bonus concept 14 last month?
+P10C02B,P10B12A
+Codigo Del Segundo Trabajo Que Hizo La Semana Pasada,A Did you receive money for the concept of a Christmas bonus last month?
+P10C02B_1D   ¿Qué hizo en el segundo trabajo que tuvo la semana pasada? (Un dígito),P10B12B
+P10C03B,How much did you receive for the concept of Strenna Last Month?
+Codigo De Actividad Economica De La Empresa Del 2Do Trabajo,P10B13A
+P10C03B_1D,A Did You Receive Money For Any Fifteenth Or Deferred Salary?
+¿A qué actividad económica se dedica principalmente en donde trabajó la última,P10B13B
+semana? (Un dígito),How much did you receive for the concept of some fifteenth salary or deferred?
+P10C04,P10B14A
+"En Éste Segundo Trabajo, Usted Es:",Vacation voucher?
+P10C05,P10B14B
+Cuál Fue Su Sueldo Bruto Sin Descuentos Del 2Do Trabajo?,How much did you receive for the Vacation Bonus?
+P10C06A,P10B15A
+"El Mes Pasado Recibió Comisiones, Etc. (2Do Trabajo)","A Did you receive money for Productivity Bonus, Performance, Etc.?"
+P10C06B,P10B15B
+Cuánto Recibio De Comisiones Etc.? (2Do Trabajo),"How much did you receive for the concept of productivity, performance, etc. bonuses?"
+P10C07A,P10B16A
+"Mes Pasado Recibió Alimentos, Víveres, Etc. (2Do Trabajo)","A Did you receive work clothes, uniforms or other garments at no cost?"
+P10C07B,P10B16B
+"Cuánto Recibio De Alimentos, Viveres Etc?(2Do Trabajo)","How much would it cost you in total clothes you received, if you had to buy it?"
+P10C08A,P10B17
+"El Mes Pasado Recibió Vivienda, Transporte O Subsidio? (2Do Trabajo)",In The Occupation Of (...) Do You Have A Right To Vacation?
+P10C08B,P10B18A
+"Cuánto Recibio/Valor De Vivienda, Transporte Etc.? (2Do Trabajo)",Worked During Your Vacation Period?
+P10C09A,P10B18B
+"Recibió Bono 14, Aguinaldo Etc. Del (2Do Trabajo)?",How Much Did They Pay You (...) For Working During Your Vacation Period?
+P10C09B,P10B19A
+Cuánto Recibio  Del Bono 14 Etc. Del (2Do Trabajo)?,"A (...) Did you receive food, food or food subsidies? (From his"
+P10C10A,Occupation?)
+Recibió Dinero De Quinceavo Sueldo Etc. Del (2Do Trabajo)?,P10B19B
+P10C10B,How much would it cost you if you had to buy the food you received?
+Cuánto Recibio De Quinceavo Sueldo Etc. Del (2Do Trabajo)?,P10B20A
+P10C11,In The Occupation Of (...) Did You Receive Housing Without Having To Pay It?
+Normalmente Cuál Es Su Ingreso Neto/Mensual De Su (2Do Trabajo)?,P10B20B
+P10C12,How Much Would Housing Cost You Per Month If You Had to Aquilarla?
+Cuál Fue Su Ganancia Mensual De Venta De Cosechas Etc. (2Do Trabajo)?,P10B21A
+P10C13A,A (...) Did You Receive Free Transportation Or Additional Money For Transportation Of Your
+Emplea Personas En Forma Permante En Su Empresa (2Do Trabajo)?,Job?
+P10C13B,P10B21B
+Cuántas Personas Emplea En Su Empresa (2Do Trabajo)?,If (...) You Had To Pay For That Free Transportation How Much Would It Cost?
+P10C14,P10B22
+Cuántas Personas En Total Trabajan En El Lugar Donde Trabaja (2Do Trabajo),What Is Your Net Income Or Monthly Profit Of Your Company After Removing
+P10C15,Expenses?
+En Ese Segundo Trabajo (...) ¿Cuántas Horas A La Semana Trabaja?,P10B23
+P10D01,"In The Last 12 Months, What Was Your Monthly Profit By Sales Of"
+Ademas De Las Horas Que Trabaja ¿Desea (...) Trabajar Más Horas A La Semana?,"Crops, Etc.?"
+P10D02A,P10B24A
+Desea (...) Trabajar Mas Horas ¿En Su Trabajo Actual?,Employ Or Employ People Permanently For A Salary?
+P10D02B,P10B24B
+Desea (...) Trabajar Mas Horas  ¿En Un Trabajo Adicional?,How many people do you use?
+P10D02C,P10B25
+Desea (...) Trabajar Mas Horas ¿Cambiando De Trabajo?,How Many People Work In The Company Where (...) Do You Work?
+P10D03,P10B026A
+Cuántas Horas Adicionales Puede (...) Trabajar A La Semana?,Are You Linked To The Igss How ...?
+P10D04,P10B026B
+Durante Ultimos 4 Semanas (...) Buscó Trabajar Más Horas De Las Que Trabaja?,How much does Igss pay you monthly?
+P10D05,P10B027A
+Si Le Ofrecieran Un Trabajo Adicional Al Que Tiene O La Posibili,In This Work How Many Hours Do You Work (...) On Mondays?
+P10E01,P10B027B
+Cuántas Semanas Lleva (...) Buscando Trabajo/Instalar Un Negocio?,In This Work How Many Hours Do You Work (...) On Tuesdays?
+P10E02B,P10B027C
+"En Que Ocupacion, Oficio Buscó (...) Trabajo? (Codigo)",In This Work How Many Hours Do You Work (...) On Wednesdays?
+"P10E02B_1D   ¿En qué ocupación,oficio o labor buscó trabajo?",P10B027D
+P10E03,In This Work How Many Hours Do You Work (...) On Thursdays?
+El Trabajo Que Busca (?..) Es A Tiempo Completo O Parcial?,P10B027E
+P10E04,In This Work How Many Hours Do You Work (...) On Fridays?
+Está Buscando Trabajar Como:,P10B027F
+P10E05,In This Work How Many Hours Do You Work (...) On Saturdays?
+Buscó Trabajo Por Primera Vez O Había Trabajado Antes?,P10B027G
+P10F01,In This Work How Many Hours Do You Work (...) On Sundays?
+Cuál Fue La Razón Principal Por La Que No Trabajó La Semana Pasada?,P10C01
+P10F02,"In addition to the Main Job, I had Second Job, Business Etc.?"
+Ha Trabajado (...) Alguna Vez En Su Vida Por Lo Menos Durante 2 Semanas?,P10C02B
+P10F03,Code of the Second Work That Made Last Week
+Cuánto Tiempo Hace Que (...) Trabajó Por Última Vez?,P10C02B_1D What did you do in the second job you had last week? (One digit)
+P10F04,P10C03B
+Despues De Su Ultimo Trabajo (...) Ha Hecho Algún Trámite Para Instalar Su,Code of Economic Activity of the Company of the 2Do Work
+Negocio?,P10C03B_1D
+P10F05,What economic activity is mainly devoted to where the last one worked?
+Ha Buscado Trabajo Alguna Vez En Su Vida?,week? (One digit)
+P10F06,P10C04
+Cuánto Hace Que (?) Buscó Trabajo Por Última Vez?,"In This Second Job, You Are:"
+P10F07A,P10C05
+"Si A (...) Le Ofrecieran Un Trabajo, ¿Lo Aceptaría?",What was your Gross Salary No Discounts on the 2nd Job?
+P10F07B,P10C06A
+En Cuánto Tiempo (...) Podría Empezar A Trabajar?,"Last Month Received Commissions, Etc. (2Do Work)"
+P11A01A,P10C06B
+"A (...) Recibio Dinero Por Alquiler De Habitaciones, Viviendas, Etc.?",How much did you receive from Commissions Etc.? (2Do Work)
+P11A01B,P10C07A
+"Cuanto Recibio (...) Por Alquiler De Habitaciones, Viviendas, Etc.?","Month Past Received Food, Food, Etc. (2Do Work)"
+P11A02A,P10C07B
+A (...) Recibio Dinero Por Concepto De Intereses?,"How much did you receive food, food etc. (2Do Work)"
+P11A02B,P10C08A
+Cuanto Recibio (...) Por Concepto De Intereses?,"Last Month Received Housing, Transportation Or Subsidy? (2Do Work)"
+P11A03A,P10C08B
+A (...) Recibio Dinero Por Concepto De Dividendos Por Acciones?,"How Much Received / Housing Value, Transportation Etc.? (2Do Work)"
+P11A03B,P10B18B
+Cuanto Recibio (...) Por Concepto De Dividendos Por Acciones?,How Much Did They Pay You (...) For Working During Your Vacation Period?
+P11A04A,P10B19A
+A (...) Recibio Dinero De Jubilaciones O Pensiones?,"A (...) Did you receive food, food or food subsidies? (From his"
+P11A04B,Occupation?)
+Cuanto Recibio (...) De Jubilaciones O Pensiones?,P10B19B
+P11A05A,How much would it cost you if you had to buy the food you received?
+Guatemala?,P10B20A
+P11A05B,In The Occupation Of (...) Did You Receive Housing Without Having To Pay It?
+Cuanto Recibio (...) De Ayudas O Donaciones De Personas Ubicadas En,P10B20B
+Guatemala?,How Much Would Housing Cost You Per Month If You Had to Aquilarla?
+P11A06A,P10B21A
+A (...) Recibio Remesas De Personas Que Viven En El Extranjero?,A (...) Did You Receive Free Transportation Or Additional Money For Transportation Of Your
+P11A06B,Job?
+Cuanto Recibio (...) Remesas De Personas Que Viven En El Extranjero?,P10B21B
+P11A07A,If (...) You Had To Pay For That Free Transportation How Much Would It Cost?
+A (...) Recibio Becas De Estudio Y/O Bonos Por Transporte Escolar?,P10B22
+P11A07B,What Is Your Net Income Or Monthly Profit Of Your Company After Removing
+Cuanto Recibio (...) De Becas De Estudio Y/O Bonos Por Transporte Escolar?,Expenses?
+P11A08A,P10B23
+A (...) Recibio Pensión Alimenticia Por Divorcio O Separación?,"In The Last 12 Months, What Was Your Monthly Profit By Sales Of"
+P11A08B,"Crops, Etc.?"
+Cuanto Recibio (...) De Pensión Alimenticia Por Divorcio O Separación?,P10B24A
+P11A09A,Employ Or Employ People Permanently For A Salary?
+"A (...) Recibio Dinero De Indemnizaciones De Seguro De Vida, Accidentes O",P10B24B
+Despido?,How many people do you use?
+P11A09B,P10B25
+"Cuanto Recibio (...) De Indemnizaciones De Seguro De Vida, Accidentes O",How Many People Work In The Company Where (...) Do You Work?
+Despido?,P10B026A
+P11A10A,Are You Linked To The Igss How ...?
+"A (...) Recibio Dinero De Herencias, Loterías O Premios?",P10B026B
+P11A10B,How much does Igss pay you monthly?
+"Cuanto Recibio (...) De Herencias, Loterías O Premios?",P10B027A
+P11B01A,In This Work How Many Hours Do You Work (...) On Mondays?
+A  (...) Recibio Dinero De Trabajos Diferentes A Los Ya Reportados?,P10B027B
+P11B01B,In This Work How Many Hours Do You Work (...) On Tuesdays?
+Cuanto Recibio (...) De Trabajos Diferentes A Los Ya Reportados?,P10B027C
+P11B02A,In This Work How Many Hours Do You Work (...) On Wednesdays?
+"A (...) Recibio Dinero De Ventas De Cosechas O Animales Como: Cerdos, Etc.",P10B027D
+P11B02B,In This Work How Many Hours Do You Work (...) On Thursdays?
+"Cuanto Recibio (...) De Ventas De Cosechas O Animales Como: Cerdos, Etc.",P10B027E
+P11B03A,In This Work How Many Hours Do You Work (...) On Fridays?
+A (...) Recibio Dinero De Negocios Diferentes A Los Ya Reportados?,P10B027F
+P11B03B,In This Work How Many Hours Do You Work (...) On Saturdays?
+Cuanto Recibio (...) De Negocios Diferentes A Los Ya Reportados?,P10B027G
+P11B04A,In This Work How Many Hours Do You Work (...) On Sundays?
+A (...) Recibio Dinero De Otros Ingresos Además De Los Mencionadors,P10C01
+Anteriormente?,"In addition to the Main Job, I had Second Job, Business Etc.?"
+P11B04B,P10C02B
+Cuanto Recibio (...) De Otros Ingresos Además De Los Mencionadors,Code of the Second Work That Made Last Week
+Anteriormente?,P10C02B_1D What did you do in the second job you had last week? (One digit)
+,P10C03B
+,Code of Economic Activity of the Company of the 2Do Work
+,P10C03B_1D
+,What economic activity is mainly devoted to where the last one worked?
+,week? (One digit)
+,P10C04
+,"In This Second Job, You Are:"
+,P10C05
+,What was your Gross Salary No Discounts on the 2nd Job?
+,P10C06A
+,"Last Month Received Commissions, Etc. (2Do Work)"
+,P10C06B
+,How much did you receive from Commissions Etc.? (2Do Work)
+,P10C07A
+,"Month Past Received Food, Food, Etc. (2Do Work)"
+,P10C07B
+,"How much did you receive food, food etc. (2Do Work)"
+,P10C08A
+,"Last Month Received Housing, Transportation Or Subsidy? (2Do Work)"
+,P10C08B
+,"How Much Received / Housing Value, Transportation Etc.? (2Do Work)"
+,P11A03B
+,How much did you receive (...) For the concept of dividends for shares?
+,P11A04A
+,A (...) Received Money From Retirements or Pensions?
+,P11A04B
+,How much did you receive (...) Of Retirements or Pensions?
+,P11A05A
+,Guatemala?
+,P11A05B
+,When You Received (...) Of Aids Or Donations From People Located In
+,Guatemala?
+,P11A06A
+,A (...) Received Remittances From People Living Abroad?
+,P11A06B
+,How Much Did You Receive (...) Remittances From People Living Abroad?
+,P11A07A
+,A (...) Received Scholarships And / or School Transportation Bonuses?
+,P11A07B
+,How much did you receive (...) of Scholarships and / or Bonuses for School Transportation?
+,P11A08A
+,A (...) Received Alimony Pension For Divorce Or Separation?
+,P11A08B
+,How Much Did You Receive (...) From Alimony By Divorce Or Separation?
+,P11A09A
+,"A (...) Received Money From Life Insurance Compensation, Accident Or"
+,Dismissal?
+,P11A09B
+,"When You Received (...) Of Life Insurance Compensation, Accidents Or"
+,Dismissal?
+,P11A10A
+,"A (...) Received Money From Inheritances, Lotteries or Prizes?"
+,P11A10B
+,"How much did you receive (...) Of Inheritances, Lotteries or Prizes?"
+,P11B01A
+,A (...) Did you receive money from works different from those already reported?
+,P11B01B
+,How much did you receive (...) from works different from those already reported?
+,P11B02A
+,"A (...) Received Money From Sales Of Crops Or Animals Such As: Pigs, Etc."
+,P11B02B
+,"How much did you receive (...) from sales of crops or animals such as: pigs, etc."
+,P11B03A
+,A (...) Did You Receive Business Money Different Than Those Already Reported?
+,P11B03B
+,How much did you receive (...) from businesses different from those already reported?
+,P11B04A
+,A (...) Received Money From Other Income In addition to Mentioners
+,Previously?
+,P11B04B
+,How Much You Received (...) Of Other Income In addition To The Mention
+,Previously?
