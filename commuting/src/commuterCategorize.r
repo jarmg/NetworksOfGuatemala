@@ -1,44 +1,46 @@
 require(dplyr)
+require(modeest)
+require(lubridate)
 
-# returns true if date falls on either a Saturday or Sunday. returns false otherwise
-# TODO:
-# output day of week instead 
-isWeekend <- function(x) {
-  if (weekdays(as.Date(x)) == "Saturday" | (weekdays(as.Date(x)) == "Sunday"))
-    return(TRUE)
+
+# time range within a person is assumed to be home
+BEGINTIME = 1 # 1:00am
+ENDTIME = 6 # 6:00am
+
+DATALOCATION = "Projects/guatemala/raw_data/dummySet.csv"
+
+
+# determines the probable place
+# uses ifelse to test each element of vector
+homeOrWork <- function(x) {
+  ifelse(weekdays(as.Date(x)) == "Saturday" | (weekdays(as.Date(x)) == "Sunday") & isNightTime(x), "Home", "Work")
+}
+
+# use this to set the constraints for what is considered night time
+isNightTime <- function(x) {
+  if (hour(x) >= BEGINTIME & hour(x) <= ENDTIME)
+    return (TRUE)
   else
     return(FALSE)
 }
 
+# get the mode of a vector v
+getmode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
 # import call detail records into cdr
-cdr <- read.csv("Projects/guatemala/raw_data/cdr.csv")
-cdr # print to check
+getData <- function() {
+  cdr <- read.csv(DATALOCATION)
+}
 
 
-
-# group by cell tower (CELL_ID) and number of times 
-group_by(cdr, CELL_ID) %>% summarise(num = n())
-
-# group by caller (ANUMBER) and show the mean duration of call
-group_by(cdr, ANUMBER) %>% summarise(meanNumSeconds = mean(SECONDS))
-
-# group by caller (ANUMBER) and say if the call was made on a weekend
-group_by(cdr, ANUMBER) %>% summarise(isWeekend = isWeekend(START_DATE_TIME))
+showHomeAndWorkTowers <- function() {
+  probablePlace <- group_by(cdr,ANUMBER, START_DATE_TIME, CELL_ID) %>% summarise(place = homeOrWork(START_DATE_TIME))
+  workID <- group_by(probablePlace, ANUMBER, place) %>% summarise(cell = getmode(CELL_ID))
+  return(workID)
+}
 
 
-group_by(cdr, ANUMBER) %>% summarise_if(isnumeric, mean, na.rm = TRUE)
-#summarise_if(isWeekend(START_DATE_TIME), mean, na.rm = TRUE)
-
-
-
-
-
-# group by caller (ANUMBER) and number of outgoing calls
-group_by(cdr, ANUMBER) %>% summarise(num = n())
-
-
-# class(weekdays(as.Date(cdr$START_DATE_TIME)))
-
-
-#group_by(cdr, ANUMBER, START_DATE_TIME)  %>% summarise(
 
