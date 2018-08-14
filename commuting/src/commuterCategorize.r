@@ -37,7 +37,8 @@ isItinerant <- function(x) {
 
 
 isWorkTime <- function(x) {
-  if ((hour(x) >= WORK_START_TIME) & (hour(x) <= WORK_END_TIME))
+  source('./timeParser.r')
+  if ((getHour(x) >= WORK_START_TIME) & (getHour(x) <= WORK_END_TIME))
     return(TRUE)
   else
     return(FALSE)
@@ -189,17 +190,17 @@ WORK_START_TIME <- 8 # work usually starts at this time
 WORK_END_TIME <- 18 # work usually ends at this time
 
 
-#main <- function() {
+main <- function() {
   # construct() # set params in this function
   
 # show work and home ids
   cdr <- getData()
   fcdr <- removeRecordsWithNoHomeWorkPair(cdr)
   head(fcdr)
-  fcdr <- ()
+  fcdr <- getDistance(fcdr)
   
   
-#}
+}
 
 
 
