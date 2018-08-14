@@ -1,3 +1,19 @@
+require(dplyr)
+require(modeest)
+require(lubridate)
+library(XML)
+library(bitops)
+library(RCurl)
+
+# time range within a person is assumed to be home
+BEGINTIME <- 1 # 1:00am
+ENDTIME <- 6 # 6:00am
+
+CDR_DATA <- "Projects/guatemala/raw_data/extrasmall.csv"
+TOWER_DATA <- "Projects/guatemala/raw_data/tower_data.csv"
+
+WORK_START_TIME <- 8 # work usually starts at this time
+WORK_END_TIME <- 18 # work usually ends at this time
 
 
 
@@ -37,13 +53,12 @@ isItinerant <- function(x) {
 
 
 isWorkTime <- function(x) {
-  source('./timeParser.r')
+  source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
   if ((getHour(x) >= WORK_START_TIME) & (getHour(x) <= WORK_END_TIME))
     return(TRUE)
   else
     return(FALSE)
 }
-
 
 
 # determines the probable place
@@ -53,6 +68,7 @@ isWorkTime <- function(x) {
 homeOrWork <- function(x) {
   ifelse(!isWorkTime(x), "Home", "Work")
 }
+
 
 
 
@@ -146,13 +162,14 @@ removeRecordsWithNoHomeWorkPair <- function(data) {
 
   origNum <- nrow(data) # get orig num records
   
-  filt_cdr <- showHomeAndWorkTowers(data) %>% filter(!is.na(HOME_ID) & !is.na(WORK_ID)) #redefine cdr with only pairs
+  filt_cdr <- showHomeAndWorkTowers(data) %>% 
+    filter(!is.na(HOME_ID) & !is.na(WORK_ID)) #redefine cdr with only pairs
 
-  newNum <- nrow(fcdr) # get new num records after removing records w/o home and work locs
+  newNum <- nrow(filt_cdr) # get new num records after removing records w/o home and work locs
   
-  paste("raw data: ", origNum, " record(s)", sep="")
-  paste("filtered data: ", newNum, " record(s)", sep="")
-  paste("percentage removed", 100 - (origNum/newNum))
+  print(paste("raw data: ", origNum, " record(s)", sep=""))
+  print(paste("filtered data: ", newNum, " record(s)", sep=""))
+  print(paste("percentage removed", 100 - (origNum/newNum)))
   
   return(filt_cdr)
 }
@@ -171,36 +188,23 @@ getData <- function() {
 
 
 
-# TODO: write a constructor/function below which imports required libraries and sets final variables
-require(dplyr)
-require(modeest)
-require(lubridate)
-library(XML)
-library(bitops)
-library(RCurl)
-
-# time range within a person is assumed to be home
-BEGINTIME <- 1 # 1:00am
-ENDTIME <- 6 # 6:00am
-
-CDR_DATA <- "Projects/guatemala/raw_data/dummySet.csv"
-TOWER_DATA <- "Projects/guatemala/raw_data/tower_data.csv"
-
-WORK_START_TIME <- 8 # work usually starts at this time
-WORK_END_TIME <- 18 # work usually ends at this time
-
-
 main <- function() {
   # construct() # set params in this function
   
 # show work and home ids
   cdr <- getData()
-  fcdr <- removeRecordsWithNoHomeWorkPair(cdr)
+  head(cdr)
+  profvis({
+  fcdr <- removeRecordsWithNoHomeWorkPair(cdr)})
   head(fcdr)
   fcdr <- getDistance(fcdr)
-  
+  head(fcdr)
   
 }
+#library(profvis)
+#profvis({main()})
+main()
+
 
 
 
