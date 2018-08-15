@@ -2,26 +2,44 @@
 
 
 
+# makes a decreasing sorted vector of all unique vals
+makeModeVecUniques <- function (v) with(rle(sort(v)), values[order(lengths, decreasing = TRUE)])
+
+
+
 # makes a sorted mode vector. will be useful for getting the second most common element
-#makeModeVector <- function (v) with(rle(sort(v)), values[order(lengths, decreasing = TRUE)])
-#getMode <- function(x) {
-  #v = makeModeVector(x)
-  #return(v[1])
-#}
+# if the most active tower during a customer’s respective timeframe criteria has less than 30% more activity than the second-most-active tower, then the record is removed.
+isItinerant <- function(cellIDs) {
 
+    if (length(cellIDs) == 1) {
+	return(FALSE) 
+    }
 
+    newVec <- as.vector(cellIDs)
+    modeVecUniques <- makeModeVecUniques(newVec)     
 
+   
+    numInstancesOfMostActiveTower <- length(which(cellIDs == modeVecUniques[1]))
+    numInstancesOfSecondMostActiveTower <- sum(cellIDs == modeVecUniques[2] )
 
+    print(paste("num instances most act is ", numInstancesOfMostActiveTower))
 
-# in progress
-isItinerant <- function(x) {
-  # TODO
-  # from paper:
-  # If that cell has less than 30 percent more activity than the next-most-active cell during the same period, 
-  # it is assumed that the user is itinerant and no home location is assigned.
-  ifelse()
+    if (is.na(numInstancesOfSecondMostActiveTower) | (numInstancesOfSecondMostActiveTower == 0))
+	return(FALSE)
+
+    print(paste("num instances 2nd most act is ", numInstancesOfSecondMostActiveTower))
+
+    tot <- (numInstancesOfMostActiveTower) + (numInstancesOfSecondMostActiveTower)
+    diffInPercent <- (numInstancesOfSecondMostActiveTower) / (tot)
+
+    print(paste("percent active is ", 1 - diffInPercent))
+
+    if (diffInPercent < 0.30) {
+	print(paste("ANUMBER with this cellID is itinerant", cellIDs))
+	return(FALSE)
+    }
+    return(TRUE) 
 }
-
 
 
 isWorkTime <- function(x, threshs) {
@@ -44,6 +62,7 @@ homeOrWork <- function(callStartTime, threshs) {
 
 # get the mode of a vector v
 getMode <- function(v) {
+    #getModeVector(v)
   uniqv <- unique(v)
   uniqv[which.max(tabulate(match(v, uniqv)))]
 }
@@ -52,6 +71,12 @@ getMode <- function(v) {
 getModeByLabel <- function(CELL_ID, PLACE, label) {
   filt <- data.frame(CELL_ID, PLACE) %>%
     filter(PLACE == label) 
+
+  if(isItinerant(filt$CELL_ID)) {
+      #return() # returns <NA> (I think)
+      print("found itinerant record")
+  }
+
   mode = getMode(filt$CELL_ID)
   return(mode)
 }
@@ -64,7 +89,6 @@ getHomeID <- function(fcdr, number) {
   ID = filt$HOME_ID
   return(as.character(ID))
 }
-
 
 getWorkID <- function(fcdr, number) {
   filt <- fcdr %>%
@@ -122,7 +146,7 @@ removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
   # filter out ANUMBERS that do not have pairs
   # get the new count and report the percentage removed
   
-  print("Removing ambiguous records...")
+  print("Removing records with no home/work pairs...")
   origNum <- nrow(data) # get orig num records
   
   filt_cdr <- showHomeAndWorkTowers(data, towers, threshs) %>% 
@@ -158,7 +182,7 @@ getData <- function(paths) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/extrasmallDummy.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   paths <- c(CDR_DATA, TOWER_DATA)
   
@@ -188,6 +212,7 @@ loadPacks <- function() {
   library(RCurl)
 }
 
+    
 
 main <- function() {
   loadPacks() # install (if necessary) and load packages
@@ -199,19 +224,8 @@ main <- function() {
   towers <- dataList$towers
   
   fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
-  
   fcdr_dist <- getDistance(fcdr, towers)
   
   return(fcdr_dist)
 }
-
-
-#profvis({main()})
-#main()
-
-#rm(list=ls())
-
-
-
-
 
