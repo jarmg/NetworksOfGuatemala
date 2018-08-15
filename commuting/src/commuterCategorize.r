@@ -1,19 +1,3 @@
-require(dplyr)
-require(modeest)
-require(lubridate)
-library(XML)
-library(bitops)
-library(RCurl)
-
-# time range within a person is assumed to be home
-BEGINTIME <- 1 # 1:00am
-ENDTIME <- 6 # 6:00am
-
-CDR_DATA <- "Projects/guatemala/raw_data/extrasmall.csv"
-TOWER_DATA <- "Projects/guatemala/raw_data/tower_data.csv"
-
-WORK_START_TIME <- 8 # work usually starts at this time
-WORK_END_TIME <- 18 # work usually ends at this time
 
 
 
@@ -27,19 +11,7 @@ WORK_END_TIME <- 18 # work usually ends at this time
 
 
 
-# can probably delete, but check first if parts will be useful
-#showHomeAndWorkTowers <- function() {
- # probablePlace <- group_by(cdr,ANUMBER, START_DATE_TIME, CELL_ID) %>% summarise(PLACE = homeOrWork(START_DATE_TIME)) %>%
-  #  group_by(ANUMBER, PLACE) %>% summarise(CELL_ID = getMode(CELL_ID)) %>%
-   # merge(towers, by = "CELL_ID") %>%
-  #return()
-#}
 
-
-
-
-
-##############################
 
 # in progress
 isItinerant <- function(x) {
@@ -52,9 +24,9 @@ isItinerant <- function(x) {
 
 
 
-isWorkTime <- function(x) {
+isWorkTime <- function(x, threshs) {
   source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
-  if ((getHour(x) >= WORK_START_TIME) & (getHour(x) <= WORK_END_TIME))
+  if ((getHour(x) >= threshs[1]) & (getHour(x) <= threshs[2]))
     return(TRUE)
   else
     return(FALSE)
@@ -65,11 +37,9 @@ isWorkTime <- function(x) {
 # home = (cell_id in which the individual is most active after 6pm) & !isItinerant()
 # work = !home
 # uses ifelse to test each element of vector
-homeOrWork <- function(x) {
-  ifelse(!isWorkTime(x), "Home", "Work")
+homeOrWork <- function(callStartTime, threshs) {
+  ifelse(!isWorkTime(callStartTime, threshs), "Home", "Work")
 }
-
-
 
 
 # get the mode of a vector v
@@ -77,7 +47,6 @@ getMode <- function(v) {
   uniqv <- unique(v)
   uniqv[which.max(tabulate(match(v, uniqv)))]
 }
-
 
 
 getModeByLabel <- function(CELL_ID, PLACE, label) {
@@ -106,7 +75,7 @@ getWorkID <- function(number) {
 }
 
 
-getCoords <- function(tower_ID) {
+getCoords <- function(tower_ID, towers) {
   coords <- filter(towers, CELL_ID == tower_ID) %>%
    select(LATITUDE, LONGITUDE)
   lat <- coords[1,1]
@@ -127,26 +96,19 @@ drivingDistance <- function(origin,destination){
   km <- distance/1000.0 # from meters to km
   return(km) 
 }
-drivingDistance("37.193489,-121.07395" , "37.151616,-121.046586")
+
 
 # new distance function:
-getDistance <- function(fcdr) {
-  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID(ANUMBER)), getCoords(getWorkID(ANUMBER))))
+getDistance <- function(fcdr, towers) {
+  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID(ANUMBER), towers), getCoords(getWorkID(ANUMBER), towers)))
   return(dist)
 }
 
 
 
-head(fcdr)
-getCoords("704023009418073")
-getCoords("704020907407526")
-drivingDistance("14.63617000,-90.58765000","14.95378000,-90.81781000")
-
-
-
-showHomeAndWorkTowers <- function(data) {
+showHomeAndWorkTowers <- function(data, towers, threshs) {
   probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
-    summarise(PLACE = homeOrWork(START_DATE_TIME)) %>%
+    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
     group_by(ANUMBER) %>%
     summarise(HOME_ID = getModeByLabel(CELL_ID, PLACE, "Home"), WORK_ID = getModeByLabel(CELL_ID, PLACE, "Work")) %>%
     return()
@@ -154,16 +116,18 @@ showHomeAndWorkTowers <- function(data) {
 
 
 # in progress
-removeRecordsWithNoHomeWorkPair <- function(data) {
+removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
   # TODO: 
   # get original count of unique ANUMBERS
   # filter out ANUMBERS that do not have pairs
   # get the new count and report the percentage removed
-
+  
+  print("Removing ambiguous records...")
   origNum <- nrow(data) # get orig num records
   
-  filt_cdr <- showHomeAndWorkTowers(data) %>% 
+  filt_cdr <- showHomeAndWorkTowers(data, towers, threshs) %>% 
     filter(!is.na(HOME_ID) & !is.na(WORK_ID)) #redefine cdr with only pairs
+  
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home and work locs
   
@@ -175,35 +139,78 @@ removeRecordsWithNoHomeWorkPair <- function(data) {
 }
 
 
-# import call detail records into cdr_raw
-# import tower locations into towers
-# merge data into one table: cdr
-getData <- function() {
-  cdr_raw <- read.csv(CDR_DATA)
-  #cdr_raw <- head(cdr_raw, -650000) #use for testing big set
-  towers <- read.csv(TOWER_DATA)
-  cdr <- merge(cdr_raw,towers,by="CELL_ID")
-  return (cdr)
+
+# load data and merge CDR with tower info
+getData <- function(paths) {
+  cdr_raw <- read.csv(paths[1]) # import call detail records
+  print("Loaded raw data")
+  towers <- read.csv(paths[2]) # import tower locations
+  print("Loaded tower data")
+  cdr <- merge(cdr_raw,towers,by="CELL_ID") # merge data into one table
+  print("Merged tower and cell data")
+  
+  # make a list of two data frames (cdr and towers)
+  df.cdr <- data.frame(cdr) 
+  df.towers <- data.frame(towers) 
+  return(list("cdr"=df.cdr, "towers"=df.towers))
+  
 }
 
+# init file paths
+initPaths <- function() {
+  CDR_DATA <- "Projects/guatemala/raw_data/extrasmallDummy.csv"
+  TOWER_DATA <- "Projects/guatemala/raw_data/tower_data.csv"
+  paths <- c(CDR_DATA, TOWER_DATA)
+  
+  return(paths)
+}
+
+initThresholds <- function() {
+# work time thresholds
+  WORK_START_TIME <- 8 # work usually starts at this time
+  WORK_END_TIME <- 18 # work usually ends at this time
+  threshs <- c(WORK_START_TIME, WORK_END_TIME)
+}
+
+
+# check if packs installed and load them
+loadPacks <- function() {
+  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis")
+  new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+  if(length(new.packages)) install.packages(new.packages)
+  
+  # load the packs
+  library(dplyr)
+  library(modeest)
+  library(lubridate)
+  library(XML)
+  library(bitops)
+  library(RCurl)
+}
 
 
 main <- function() {
-  # construct() # set params in this function
+  loadPacks() # install (if necessary) and load packages
+  paths <- initPaths() # init file paths
+  threshs <- initThresholds() # init threshold vals
   
-# show work and home ids
-  cdr <- getData()
-  head(cdr)
-  profvis({
-  fcdr <- removeRecordsWithNoHomeWorkPair(cdr)})
-  head(fcdr)
-  fcdr <- getDistance(fcdr)
-  head(fcdr)
+  dataList <- getData(paths)
+  cdr <- dataList$cdr
+  towers <- dataList$towers
   
+  fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
+  
+  fcdr_dist <- getDistance(fcdr, towers)
+  
+  return(fcdr_dist)
 }
-#library(profvis)
+
+
 #profvis({main()})
-main()
+#main()
+
+#rm(list=ls())
+
 
 
 
