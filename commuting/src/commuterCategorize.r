@@ -57,7 +57,7 @@ getModeByLabel <- function(CELL_ID, PLACE, label) {
 }
 
 
-getHomeID <- function(number) {
+getHomeID <- function(fcdr, number) {
   filt <- fcdr %>%
     filter(ANUMBER == number)
   
@@ -66,7 +66,7 @@ getHomeID <- function(number) {
 }
 
 
-getWorkID <- function(number) {
+getWorkID <- function(fcdr, number) {
   filt <- fcdr %>%
     filter(ANUMBER == number)
   
@@ -100,7 +100,7 @@ drivingDistance <- function(origin,destination){
 
 # new distance function:
 getDistance <- function(fcdr, towers) {
-  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID(ANUMBER), towers), getCoords(getWorkID(ANUMBER), towers)))
+  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID(fcdr, ANUMBER), towers), getCoords(getWorkID(fcdr, ANUMBER), towers)))
   return(dist)
 }
 
@@ -158,8 +158,8 @@ getData <- function(paths) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "Projects/guatemala/raw_data/extrasmallDummy.csv"
-  TOWER_DATA <- "Projects/guatemala/raw_data/tower_data.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/extrasmallDummy.csv"
+  TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   paths <- c(CDR_DATA, TOWER_DATA)
   
   return(paths)
