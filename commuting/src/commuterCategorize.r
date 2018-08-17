@@ -72,10 +72,10 @@ getModeByLabel <- function(CELL_ID, PLACE, label) {
   filt <- data.frame(CELL_ID, PLACE) %>%
     filter(PLACE == label) 
 
-  if(isItinerant(filt$CELL_ID)) {
+  #if(isItinerant(filt$CELL_ID)) {
       #return() # returns <NA> (I think)
-      print("found itinerant record")
-  }
+      #print("found itinerant record")
+  #}
 
   mode = getMode(filt$CELL_ID)
   return(mode)
@@ -182,7 +182,7 @@ getData <- function(paths) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   paths <- c(CDR_DATA, TOWER_DATA)
   
@@ -199,7 +199,7 @@ initThresholds <- function() {
 
 # check if packs installed and load them
 loadPacks <- function() {
-  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis")
+  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "tidyr")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)) install.packages(new.packages)
   
@@ -210,6 +210,7 @@ loadPacks <- function() {
   library(XML)
   library(bitops)
   library(RCurl)
+  library(tidyr)
 }
 
     
@@ -224,8 +225,9 @@ main <- function() {
   towers <- dataList$towers
   
   fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
-  fcdr_dist <- getDistance(fcdr, towers)
+  print(fcdr)
+  #fcdr_dist <- getDistance(fcdr, towers)
   
-  return(fcdr_dist)
+  return(fcdr)
 }
 
