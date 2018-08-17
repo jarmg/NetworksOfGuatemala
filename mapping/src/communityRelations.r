@@ -1,10 +1,14 @@
 
 incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
     
-    # try this instead of for loop
-    #incdMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
-
     newMat <- mat
+
+    # try this instead of for loop
+   # newMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
+
+
+    #lapply(unique(Raw$SPP), makePlot, data = Raw)
+
 
    for (i in 1:nrow(validRecs)) { 
 
@@ -16,7 +20,25 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
 	   newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
    }
 
-    return(newMat)
+   df <- as.data.frame(newMat)
+   #df[apply(newMat,1,function(x)any(!is.na(x))),]
+   print(class(df))
+
+   # remove rows which are all NA 
+   df <- df[!(rowSums(is.na(df))==NCOL(df)),] 
+
+   # remove cols which are all NA 
+   df <- df[, !(colSums(is.na(df))==NROW(df))] 
+
+
+ 
+   #df[na.omit(df), ]
+
+
+   #df <- df %>% drop_na(rnor, cfam)
+
+
+    return(df)
 }
 
 getRecsWithKnownHomes <- function(validBRecs, allARecs) {
@@ -57,6 +79,7 @@ getAllHomeRecs <- function(homeIDs, cdr) {
 
 
 getUniqueHome_IDs <- function(dframe) {
+    
     uniqueHomes <- unique(dframe$HOME_ID)
     return(uniqueHomes)
 }
@@ -103,19 +126,7 @@ loadSources <- function() {
     print("Success")
 }
 
-testAddToMat <- function(homeIDs, mat) {
 
-    newMat <- mat
-    #newMat[homeIDs$HOME_ID[1], homeIDs$HOME_ID[3]] <- newMat[homeIDs$HOME_ID[1], homeIDs$HOME_ID[3]] + 1
-   
-   if (!is.na(newMat["704023002627112", "704023009418073"]))
-    newMat["704023002627112", "704023009418073"] <- newMat["704023002627112", "704023009418073"] + 1
-else
-newMat["704023002627112", "704023009418073"] <- 1
-    return(newMat)
-
-
-}
 
 main <- function() {
     loadSources()
@@ -128,27 +139,25 @@ main <- function() {
     allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
     validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
     validRecs <- getRecsWithKnownHomes(validBRecs, allHomeRecs)
+
+    #useThisForMatrix <- getAllHomeIDs(validRecs, towers, threshs)
     
     print("Printing final CDR of all valid numbers")
     print(validRecs)
 
-    
+    print("Printing homeIDs. originally used to make matrix")
+    print(homeIDs)
 
-    
-
-    
+    print("printing useThisForMatrix. Try to use this instead for matrix")
+    #print(useThisForMatrix)
+       
     mat <- createMatrix(homeIDs) # create matrix using HOME_ID 
     
-
-
-
-    #mat["704023002627112", "704023009418073"] <- mat["704023002627112", "704023009418073"] + 1
-    print(mat)
-
     incMat <- incrementMatrixElems(validRecs, homeIDs, mat)
-    #print(testMat)
-    print(incMat)
 
-    #countCallsByCity() # increment element in matrix for each call
+    #print(incMat)
+    write.table(incMat, file="mymatrix.txt", row.names=TRUE, col.names=TRUE, sep =",") 
+
+    
 }
 
