@@ -1,26 +1,19 @@
 
 incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
-    #currentElm <- mat[getHomeID(allHomeRecs, validRecs$ANUMBER),getHomeID(allHomeRecs, validRecs$BNUMBER)]
-
-   #incdMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
+    
+    # try this instead of for loop
+    #incdMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
 
     newMat <- mat
-    
 
    for (i in 1:nrow(validRecs)) { 
 
-       #currentElm <- newMat["704023002627112", "704023002627112"] WORKS
-       #currentElm <- getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))
-
-       print("current elm is ")
-       print(currentElm)
+       currentElm <- newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))]
 
        if (is.na(currentElm))
 	   newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
        else
 	   newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
-
-       #newMat[ <- dataFrame[index, ]
    }
 
     return(newMat)
