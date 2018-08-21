@@ -72,22 +72,36 @@ getModeByLabel <- function(CELL_ID, PLACE, label) {
   filt <- data.frame(CELL_ID, PLACE) %>%
     filter(PLACE == label) 
 
-  if(isItinerant(filt$CELL_ID)) {
+  #if(isItinerant(filt$CELL_ID)) {
       #return() # returns <NA> (I think)
-      print("found itinerant record")
-  }
+      #print("found itinerant record")
+  #}
 
   mode = getMode(filt$CELL_ID)
   return(mode)
 }
 
 
-getHomeID <- function(fcdr, number) {
+# options: tower, city, state
+getHomeID <- function(option, fcdr, number) {
   filt <- fcdr %>%
     filter(ANUMBER == number)
-  
-  ID = filt$HOME_ID
-  return(as.character(ID))
+
+print("filt is ")
+print(filt)
+ 
+    if (option == "tower") 
+      ID <- filt$HOME_ID
+
+    else if (option == "city") 
+	ID <- filt$CITY
+
+    else if (option == "state")
+	ID <- filt$STATE
+    else
+	stop("Must specifiy option in param 1 of getHomeID. Choices: tower, city, state")
+
+      return(as.character(ID))
 }
 
 getWorkID <- function(fcdr, number) {
@@ -96,6 +110,21 @@ getWorkID <- function(fcdr, number) {
   
   ID = filt$WORK_ID
   return(as.character(ID))
+}
+
+
+# in progress
+# option: either "city" or "state"
+getGeoInfoByCoords <- function(option, lat, lon) {
+
+    geo_information <- revgeo(lat,lon,output="frame")
+
+    if(option == "city")
+	return(geo_information$city)
+    else if(option == "state")
+	return(geo_information$state)
+    else
+	stop("Error in getGeoInfoByCoords() call. Must specifiy option for first param. Option choices: city or state")
 }
 
 
@@ -124,7 +153,7 @@ drivingDistance <- function(origin,destination){
 
 # new distance function:
 getDistance <- function(fcdr, towers) {
-  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID(fcdr, ANUMBER), towers), getCoords(getWorkID(fcdr, ANUMBER), towers)))
+  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID("tower", fcdr, ANUMBER), towers), getCoords(getWorkID(fcdr, ANUMBER), towers)))
   return(dist)
 }
 
@@ -139,19 +168,48 @@ showHomeAndWorkTowers <- function(data, towers, threshs) {
 }
 
 
-# in progress
+# options for label: tower, city, state
+showHomeByLabel <- function(label, data, towers, threshs) {
+    
+    if (label == "tower") {
+	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    group_by(ANUMBER) %>%
+	    summarise(HOME_ID = getModeByLabel(CELL_ID, PLACE, "Home")) %>%
+	    return()
+    }
+
+    else if (label == "city") {
+	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CITY) %>% 
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    group_by(ANUMBER) %>%
+	    summarise(HOME_ID = getModeByLabel(CITY, PLACE, "Home")) %>%
+	    return()
+    }
+
+
+    else if (label == "state") {
+	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, STATE) %>% 
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    group_by(ANUMBER) %>%
+	    summarise(HOME_ID = getModeByLabel(STATE, PLACE, "Home")) %>%
+	    return()
+    }
+
+
+}
+
+
+
+
+
 removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
-  # TODO: 
-  # get original count of unique ANUMBERS
-  # filter out ANUMBERS that do not have pairs
-  # get the new count and report the percentage removed
-  
+    
   print("Removing records with no home/work pairs...")
   origNum <- nrow(data) # get orig num records
   
   filt_cdr <- showHomeAndWorkTowers(data, towers, threshs) %>% 
     filter(!is.na(HOME_ID) & !is.na(WORK_ID)) #redefine cdr with only pairs
-  
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home and work locs
   
@@ -161,6 +219,25 @@ removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
   
   return(filt_cdr)
 }
+
+removeRecordsWithNoHome <- function(data, towers, threshs) {
+    
+  print("Removing records with no home...")
+  origNum <- nrow(data) # get orig num records
+  
+  filt_cdr <- showHomeByLabel("state",data, towers, threshs) %>% 
+    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE")) #redefine cdr showing only recs with homes
+
+  newNum <- nrow(filt_cdr) # get new num records after removing records w/o home 
+  
+  print(paste("raw data: ", origNum, " record(s)", sep=""))
+  print(paste("filtered data: ", newNum, " record(s)", sep=""))
+  print(paste("percentage removed", 100 - (origNum/newNum)))
+  
+  return(filt_cdr)
+}
+
+
 
 
 
@@ -182,7 +259,7 @@ getData <- function(paths) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   paths <- c(CDR_DATA, TOWER_DATA)
   
@@ -199,7 +276,7 @@ initThresholds <- function() {
 
 # check if packs installed and load them
 loadPacks <- function() {
-  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis")
+  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)) install.packages(new.packages)
   
@@ -212,9 +289,37 @@ loadPacks <- function() {
   library(RCurl)
 }
 
-    
+# input is a two-column dframe with ANUMBER HOME_ID
+groupByHomeLoc <- function(dframe) {
 
-main <- function() {
+    groupedFrame <- group_by(dframe, HOME_ID) %>%
+	#summarise(numAnums = count(dframe)) %>%
+	tally() %>%
+	return()
+
+}
+
+plotByHomeID <- function(dframe) {
+
+	
+    plot(x, axes = FALSE,
+    #axis(side = 1, at = c(1,5,10))
+
+    #axis(side = 2, at = c(1,3,7,10))
+
+    #box()
+    main="Number of Callers by Home Location",
+    xlab="Home IDs",
+    ylab="Number of Callers",
+    type="b",
+    col="blue")
+    lines(x,col="red")
+    fill=c("blue")
+
+}
+
+
+mainCommute <- function() {
   loadPacks() # install (if necessary) and load packages
   paths <- initPaths() # init file paths
   threshs <- initThresholds() # init threshold vals
@@ -222,10 +327,20 @@ main <- function() {
   dataList <- getData(paths)
   cdr <- dataList$cdr
   towers <- dataList$towers
+
+  #print("datalist is:")
+  #print(head(dataList))
+
   
-  fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
-  fcdr_dist <- getDistance(fcdr, towers)
+  #fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
+
+  fcdr <- removeRecordsWithNoHome(cdr, towers, threshs)
+  print(fcdr)
+
+  #fcdr_dist <- getDistance(fcdr, towers)
+  cdrForPlotting<- groupByHomeLoc(fcdr)
+  plot <- plotByHomeID(cdrForPlotting)
   
-  return(fcdr_dist)
+  return(cdrForPlotting)
 }
 
