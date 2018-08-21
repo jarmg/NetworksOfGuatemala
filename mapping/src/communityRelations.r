@@ -3,21 +3,26 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
     
     newMat <- mat
 
+    print(class(validRecs))
+    print("validRecs is")
+    print(validRecs)
+
+
     # try this instead of for loop
    # newMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
 
 
     #lapply(unique(Raw$SPP), makePlot, data = Raw)
 
-
    for (i in 1:nrow(validRecs)) { 
 
-       currentElm <- newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))]
+       currentElm <- newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))]
 
+    print("got here")
        if (is.na(currentElm))
-	   newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
+	   newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
        else
-	   newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID(allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
+	   newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
    }
 
    df <- as.data.frame(newMat)
@@ -66,6 +71,8 @@ filterByBinA <- function(homeRecs) {
 # return a filtered cdr with all records for each anumber
 # homeIDs is a dframe of unique ANUMBERS which have homes assigned
 getAllHomeRecs <- function(homeIDs, cdr) {
+
+    print("got here")
     
     #fcdr <- group_by(homeIDs) %>% 
 	#summarise(records = getAllRecsByANUMBER(homeIDs$ANUMBER, cdr))
@@ -89,12 +96,15 @@ getUniqueHome_IDs <- function(dframe) {
 createMatrix <- function(dframe) {
     uniqueHomes <- getUniqueHome_IDs(dframe)
     n <- length(uniqueHomes)
+
     
     mat <- matrix(, nrow = n , ncol = n)
+    
     
     colnames(mat) <- uniqueHomes[1:ncol(mat)]
     rownames(mat) <- uniqueHomes[1:nrow(mat)]
 
+   print(mat) 
     return(mat)
 }
 
@@ -128,14 +138,23 @@ loadSources <- function() {
 
 
 
-main <- function() {
+mainMapping <- function() {
     loadSources()
     loadPacks()
     threshs <- initThresholds() # init threshold vals
     dataList <- getData(initPaths())
+
     cdr <- dataList$cdr
     towers <- dataList$towers
-    homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
+    #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
+
+
+    homeIDs <- removeRecordsWithNoHome(cdr, towers, threshs)
+    
+
+    #homeIDs <- mainCommute() # from commuterCategorize
+
+    
     allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
     validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
     validRecs <- getRecsWithKnownHomes(validBRecs, allHomeRecs)
@@ -157,7 +176,6 @@ main <- function() {
 
     #print(incMat)
     write.table(incMat, file="mymatrix.txt", row.names=TRUE, col.names=TRUE, sep =",") 
-
-    
+    return(incMat)
 }
 
