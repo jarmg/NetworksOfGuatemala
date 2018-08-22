@@ -3,27 +3,18 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
     
     newMat <- mat
 
-    print("allhomerecs is")
-    print(allHomeRecs)
-
-
-    print("validrecs is")
-    print(validRecs)
-
-
     # try this instead of for loop
    # newMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
 
 
     #lapply(unique(Raw$SPP), makePlot, data = Raw)
 
+    print("allHomeRecs is")
+    print(allHomeRecs)
+
    for (i in 1:nrow(validRecs)) { 
-
-       print("OPTIONS$HOME_TYPE is:")
-       print(OPTIONS$HOME_TYPE)
-
+       
        currentElm <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))]
-       print("got here!")
 
        if (is.na(currentElm))
 	   newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
@@ -33,21 +24,12 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
 
    df <- as.data.frame(newMat)
    #df[apply(newMat,1,function(x)any(!is.na(x))),]
-   print(class(df))
 
    # remove rows which are all NA 
    df <- df[!(rowSums(is.na(df))==NCOL(df)),] 
 
    # remove cols which are all NA 
    df <- df[, !(colSums(is.na(df))==NROW(df))] 
-
-
- 
-   #df[na.omit(df), ]
-
-
-   #df <- df %>% drop_na(rnor, cfam)
-
 
     return(df)
 }
@@ -67,8 +49,8 @@ filterByBinA <- function(homeRecs) {
     validBRecs <- homeRecs %>%
 	filter(grepl(paste(homeRecs$BNUMBER, collapse="|"), homeRecs$ANUMBER)) 
     
-    print("Printing filtered CDR of all BNUMBERS who appear as BNUMBERs in the above table but appear as ANUMBERs here. This means we have their HOME_ID")
-    print(validBRecs)
+    #print("Printing filtered CDR of all BNUMBERS who appear as BNUMBERs in the above table but appear as ANUMBERs here. This means we have their HOME_ID")
+    #print(validBRecs)
 
     return(validBRecs)
 }
@@ -78,14 +60,12 @@ filterByBinA <- function(homeRecs) {
 # homeIDs is a dframe of unique ANUMBERS which have homes assigned
 getAllHomeRecs <- function(homeIDs, cdr) {
 
-    print("got here")
-    
     #fcdr <- group_by(homeIDs) %>% 
 	#summarise(records = getAllRecsByANUMBER(homeIDs$ANUMBER, cdr))
     fcdr <- cdr %>%
 	filter(grepl(paste(homeIDs$ANUMBER, collapse="|"), cdr$ANUMBER)) 
-    print("Printing all outgoing call recs of ANUMBERs who have HOME_IDs")
-    print(fcdr)
+    #print("Printing all outgoing call recs of ANUMBERs who have HOME_IDs")
+    #print(fcdr)
     
     return(fcdr)
 }
@@ -103,14 +83,11 @@ createMatrix <- function(dframe) {
     uniqueHomes <- getUniqueHome_IDs(dframe)
     n <- length(uniqueHomes)
 
-    
     mat <- matrix(, nrow = n , ncol = n)
-    
     
     colnames(mat) <- uniqueHomes[1:ncol(mat)]
     rownames(mat) <- uniqueHomes[1:nrow(mat)]
 
-   print(mat) 
     return(mat)
 }
 
@@ -154,6 +131,8 @@ mainMapping <- function() {
     towers <- dataList$towers
     #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
 
+    origNumRecs <- nrow(cdr)
+
     homeIDs <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
     
     #homeIDs <- mainCommute() # from commuterCategorize
@@ -161,18 +140,18 @@ mainMapping <- function() {
     allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
     validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
     validRecs <- getRecsWithKnownHomes(validBRecs, allHomeRecs)
+    numValidRecs <- nrow(validRecs)
 
-    #useThisForMatrix <- getAllHomeIDs(validRecs, towers, threshs)
-    
-           
+    print(paste("Original number of records: ", origNumRecs))
+    print(paste("Number of records for which there exist HOME_IDs and an ANUMBER for every BNUMBER: ", numValidRecs)) 
+    print(paste("Percentage removed: ", 100 - (numValidRecs/origNumRecs)))
+
     mat <- createMatrix(homeIDs) # create matrix using HOME_ID 
-    print("mat is")
-    print(mat)
-    
+        
     incMat <- incrementMatrixElems(validRecs, homeIDs, mat, OPTIONS)
 
-    #print(incMat)
-    write.table(incMat, file="mymatrix.txt", row.names=TRUE, col.names=TRUE, sep =",") 
+    # write to csv file
+    write.table(incMat, file="mymatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
     return(incMat)
 }
 

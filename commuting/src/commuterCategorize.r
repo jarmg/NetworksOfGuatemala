@@ -70,8 +70,6 @@ getMode <- function(v) {
 getModeByLabel <- function(CELL_ID, PLACE, label) {
   filt <- data.frame(CELL_ID, PLACE) %>%
     filter(PLACE == label) 
-print("filt is")
-print(filt)
 
   #if(isItinerant(filt$CELL_ID)) {
       #return() # returns <NA> (I think)
@@ -84,23 +82,26 @@ print(filt)
 
 
 # options: tower, city, state
+# Note: I think options can be deleted here since, 
+# at this point, the ID will always be whatever is in the HOME_ID column
 getHomeID <- function(HOME_TYPE, fcdr, number) {
   filt <- fcdr %>%
     filter(ANUMBER == number)
 
-print("filt is ")
-print(filt)
+	#option <- HOME_TYPE
+
+	ID <- filt$HOME_ID
  
-    if (option == 1) 
-      ID <- filt$HOME_ID
+    #if (option == 1) 
+    #  ID <- filt$HOME_ID
 
-    else if (option == 2) 
-	ID <- filt$CITY
+    #else if (option == 2) 
+#	ID <- filt$CITY
 
-    else if (option == 3)
-	ID <- filt$STATE
-    else
-	stop("Must specifiy option in param 1 of getHomeID. Choices: tower, city, state")
+#    else if (option == 3)
+#	ID <- filt$STATE
+#    else
+#	stop("Must specifiy option in param 1 of getHomeID. Choices: tower, city, state")
 
       return(as.character(ID))
 }
@@ -174,8 +175,6 @@ showHomeByLabel <- function(data, towers, OPTIONS) {
    
     label <- OPTIONS$HOME_TYPE[1]
     
-   print("label is:" )
-   print(label)
     if (label == 1) { # home_type is tower
 	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
 	    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
@@ -194,10 +193,7 @@ showHomeByLabel <- function(data, towers, OPTIONS) {
 
 
     else if (label == 3) { # home_type is state
-
-	print("table is")
-	print(data)
-
+	
 	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, STATE) %>% 
 	    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
 	    group_by(ANUMBER) %>%
@@ -238,12 +234,12 @@ removeRecordsWithNoHome <- function(data, towers, OPTIONS) {
 
   
   filt_cdr <- showHomeByLabel(data, towers, OPTIONS) %>% 
-    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE")) #redefine cdr showing only recs with homes
+    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") & (HOME_ID != "TO BE DETERMINED")) #redefine cdr showing only recs with homes
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home 
   
   print(paste("raw data: ", origNum, " record(s)", sep=""))
-  print(paste("filtered data: ", newNum, " record(s)", sep=""))
+  print(paste("num records with homes: ", newNum, " record(s)", sep=""))
   print(paste("percentage removed", 100 - (origNum/newNum)))
   
   return(filt_cdr)
@@ -267,7 +263,7 @@ getData <- function(PATHS) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   PATHS <- c(CDR_DATA, TOWER_DATA)
   
@@ -285,6 +281,8 @@ initThresholds <- function() {
 
 # MANUALLY SET ALL PARAMS/OPTIONS HERE
 # Return a dataframe of all params
+# The dframe is like a hashmap where the column names are
+# keys and the elements in the row are values
 setOptions<- function() {
  
   WORK_START <- 8 # set work start time here
@@ -301,8 +299,6 @@ setOptions<- function() {
 
   return(optionsFrame)
 }
-
-
 
 
 # check if packs installed and load them
