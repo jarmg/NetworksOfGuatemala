@@ -1,10 +1,13 @@
 
-incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
+incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
     
     newMat <- mat
 
-    print(class(validRecs))
-    print("validRecs is")
+    print("allhomerecs is")
+    print(allHomeRecs)
+
+
+    print("validrecs is")
     print(validRecs)
 
 
@@ -16,13 +19,16 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat) {
 
    for (i in 1:nrow(validRecs)) { 
 
-       currentElm <- newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))]
+       print("OPTIONS$HOME_TYPE is:")
+       print(OPTIONS$HOME_TYPE)
 
-    print("got here")
+       currentElm <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))]
+       print("got here!")
+
        if (is.na(currentElm))
-	   newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
+	   newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
        else
-	   newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID("tower", allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID("tower", allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
+	   newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
    }
 
    df <- as.data.frame(newMat)
@@ -137,23 +143,20 @@ loadSources <- function() {
 }
 
 
-
 mainMapping <- function() {
     loadSources()
     loadPacks()
-    threshs <- initThresholds() # init threshold vals
+    #threshs <- initThresholds() # init threshold vals
+    OPTIONS <- setOptions()
     dataList <- getData(initPaths())
 
     cdr <- dataList$cdr
     towers <- dataList$towers
     #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
 
-
-    homeIDs <- removeRecordsWithNoHome(cdr, towers, threshs)
+    homeIDs <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
     
-
     #homeIDs <- mainCommute() # from commuterCategorize
-
     
     allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
     validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
@@ -161,18 +164,12 @@ mainMapping <- function() {
 
     #useThisForMatrix <- getAllHomeIDs(validRecs, towers, threshs)
     
-    print("Printing final CDR of all valid numbers")
-    print(validRecs)
-
-    print("Printing homeIDs. originally used to make matrix")
-    print(homeIDs)
-
-    print("printing useThisForMatrix. Try to use this instead for matrix")
-    #print(useThisForMatrix)
-       
+           
     mat <- createMatrix(homeIDs) # create matrix using HOME_ID 
+    print("mat is")
+    print(mat)
     
-    incMat <- incrementMatrixElems(validRecs, homeIDs, mat)
+    incMat <- incrementMatrixElems(validRecs, homeIDs, mat, OPTIONS)
 
     #print(incMat)
     write.table(incMat, file="mymatrix.txt", row.names=TRUE, col.names=TRUE, sep =",") 

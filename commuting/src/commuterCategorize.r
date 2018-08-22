@@ -42,9 +42,8 @@ isItinerant <- function(cellIDs) {
 }
 
 
-isWorkTime <- function(x, threshs) {
-  source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
-  if ((getHour(x) >= threshs[1]) & (getHour(x) <= threshs[2]))
+isWorkTime <- function(callStartTime, OPTIONS) {
+    if ((getHour(callStartTime) >= OPTIONS$WORK_START_TIME) & (getHour(callStartTime) <= OPTIONS$WORK_END_TIME))
     return(TRUE)
   else
     return(FALSE)
@@ -55,8 +54,8 @@ isWorkTime <- function(x, threshs) {
 # home = (cell_id in which the individual is most active after 6pm) & !isItinerant()
 # work = !home
 # uses ifelse to test each element of vector
-homeOrWork <- function(callStartTime, threshs) {
-  ifelse(!isWorkTime(callStartTime, threshs), "Home", "Work")
+homeOrWork <- function(callStartTime, OPTIONS) {
+  ifelse(!isWorkTime(callStartTime, OPTIONS), "Home", "Work")
 }
 
 
@@ -71,6 +70,8 @@ getMode <- function(v) {
 getModeByLabel <- function(CELL_ID, PLACE, label) {
   filt <- data.frame(CELL_ID, PLACE) %>%
     filter(PLACE == label) 
+print("filt is")
+print(filt)
 
   #if(isItinerant(filt$CELL_ID)) {
       #return() # returns <NA> (I think)
@@ -83,20 +84,20 @@ getModeByLabel <- function(CELL_ID, PLACE, label) {
 
 
 # options: tower, city, state
-getHomeID <- function(option, fcdr, number) {
+getHomeID <- function(HOME_TYPE, fcdr, number) {
   filt <- fcdr %>%
     filter(ANUMBER == number)
 
 print("filt is ")
 print(filt)
  
-    if (option == "tower") 
+    if (option == 1) 
       ID <- filt$HOME_ID
 
-    else if (option == "city") 
+    else if (option == 2) 
 	ID <- filt$CITY
 
-    else if (option == "state")
+    else if (option == 3)
 	ID <- filt$STATE
     else
 	stop("Must specifiy option in param 1 of getHomeID. Choices: tower, city, state")
@@ -153,15 +154,15 @@ drivingDistance <- function(origin,destination){
 
 # new distance function:
 getDistance <- function(fcdr, towers) {
-  dist <- group_by(fcdr, ANUMBER) %>% summarise(distCommute = drivingDistance(getCoords(getHomeID("tower", fcdr, ANUMBER), towers), getCoords(getWorkID(fcdr, ANUMBER), towers)))
+  dist <- group_by(fcdr, ANUMBER) %>% 
+      summarise(distCommute = drivingDistance(getCoords(getHomeID(OPTIONS$HOME_TYPE, fcdr, ANUMBER), towers), getCoords(getWorkID(fcdr, ANUMBER), towers)))
   return(dist)
 }
 
 
-
-showHomeAndWorkTowers <- function(data, towers, threshs) {
+showHomeAndWorkTowers <- function(data, towers, OPTIONS) {
   probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
-    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
     group_by(ANUMBER) %>%
     summarise(HOME_ID = getModeByLabel(CELL_ID, PLACE, "Home"), WORK_ID = getModeByLabel(CELL_ID, PLACE, "Work")) %>%
     return()
@@ -169,32 +170,42 @@ showHomeAndWorkTowers <- function(data, towers, threshs) {
 
 
 # options for label: tower, city, state
-showHomeByLabel <- function(label, data, towers, threshs) {
+showHomeByLabel <- function(data, towers, OPTIONS) {
+   
+    label <- OPTIONS$HOME_TYPE[1]
     
-    if (label == "tower") {
+   print("label is:" )
+   print(label)
+    if (label == 1) { # home_type is tower
 	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
-	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
 	    group_by(ANUMBER) %>%
 	    summarise(HOME_ID = getModeByLabel(CELL_ID, PLACE, "Home")) %>%
 	    return()
     }
 
-    else if (label == "city") {
+    else if (label == 2) { # home_type is city
 	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, CITY) %>% 
-	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
 	    group_by(ANUMBER) %>%
 	    summarise(HOME_ID = getModeByLabel(CITY, PLACE, "Home")) %>%
 	    return()
     }
 
 
-    else if (label == "state") {
+    else if (label == 3) { # home_type is state
+
+	print("table is")
+	print(data)
+
 	probablePlace <- group_by(data, ANUMBER, START_DATE_TIME, STATE) %>% 
-	    summarise(PLACE = homeOrWork(START_DATE_TIME, threshs)) %>%
+	    summarise(PLACE = homeOrWork(START_DATE_TIME, OPTIONS)) %>%
 	    group_by(ANUMBER) %>%
 	    summarise(HOME_ID = getModeByLabel(STATE, PLACE, "Home")) %>%
 	    return()
     }
+
+
 
 
 }
@@ -203,12 +214,12 @@ showHomeByLabel <- function(label, data, towers, threshs) {
 
 
 
-removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
+removeRecordsWithNoHomeWorkPair <- function(data, towers, OPTIONS) {
     
   print("Removing records with no home/work pairs...")
   origNum <- nrow(data) # get orig num records
   
-  filt_cdr <- showHomeAndWorkTowers(data, towers, threshs) %>% 
+  filt_cdr <- showHomeAndWorkTowers(data, towers, OPTIONS) %>% 
     filter(!is.na(HOME_ID) & !is.na(WORK_ID)) #redefine cdr with only pairs
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home and work locs
@@ -220,12 +231,13 @@ removeRecordsWithNoHomeWorkPair <- function(data, towers, threshs) {
   return(filt_cdr)
 }
 
-removeRecordsWithNoHome <- function(data, towers, threshs) {
+removeRecordsWithNoHome <- function(data, towers, OPTIONS) {
     
   print("Removing records with no home...")
   origNum <- nrow(data) # get orig num records
+
   
-  filt_cdr <- showHomeByLabel("state",data, towers, threshs) %>% 
+  filt_cdr <- showHomeByLabel(data, towers, OPTIONS) %>% 
     filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE")) #redefine cdr showing only recs with homes
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home 
@@ -238,14 +250,11 @@ removeRecordsWithNoHome <- function(data, towers, threshs) {
 }
 
 
-
-
-
 # load data and merge CDR with tower info
-getData <- function(paths) {
-  cdr_raw <- read.csv(paths[1]) # import call detail records
+getData <- function(PATHS) {
+  cdr_raw <- read.csv(PATHS[1]) # import call detail records
   print("Loaded raw data")
-  towers <- read.csv(paths[2]) # import tower locations
+  towers <- read.csv(PATHS[2]) # import tower locations
   print("Loaded tower data")
   cdr <- merge(cdr_raw,towers,by="CELL_ID") # merge data into one table
   print("Merged tower and cell data")
@@ -254,17 +263,17 @@ getData <- function(paths) {
   df.cdr <- data.frame(cdr) 
   df.towers <- data.frame(towers) 
   return(list("cdr"=df.cdr, "towers"=df.towers))
-  
 }
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
-  paths <- c(CDR_DATA, TOWER_DATA)
+  PATHS <- c(CDR_DATA, TOWER_DATA)
   
-  return(paths)
+  return(PATHS)
 }
+
 
 initThresholds <- function() {
 # work time thresholds
@@ -274,8 +283,33 @@ initThresholds <- function() {
 }
 
 
+# MANUALLY SET ALL PARAMS/OPTIONS HERE
+# Return a dataframe of all params
+setOptions<- function() {
+ 
+  WORK_START <- 8 # set work start time here
+  WORK_END <- 18 # set work end time here 
+ 
+  # use HOME_TYPE to define how to classify HOME_ID 
+  # opts: tower: 1, city: 2, state: 3 
+  HOME_CLASSIFY_DEF <- 3   
+
+  optionsFrame <- data.frame("WORK_START_TIME", "WORK_END_TIME", "HOME_TYPE")
+  optionsFrame$WORK_START_TIME <- WORK_START
+  optionsFrame$WORK_END_TIME <- WORK_END
+  optionsFrame$HOME_TYPE <- HOME_CLASSIFY_DEF
+
+  return(optionsFrame)
+}
+
+
+
+
 # check if packs installed and load them
 loadPacks <- function() {
+
+    source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
+
   list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)) install.packages(new.packages)
@@ -296,11 +330,9 @@ groupByHomeLoc <- function(dframe) {
 	#summarise(numAnums = count(dframe)) %>%
 	tally() %>%
 	return()
-
 }
 
 plotByHomeID <- function(dframe) {
-
 	
     plot(x, axes = FALSE,
     #axis(side = 1, at = c(1,5,10))
@@ -315,31 +347,29 @@ plotByHomeID <- function(dframe) {
     col="blue")
     lines(x,col="red")
     fill=c("blue")
-
 }
 
 
 mainCommute <- function() {
   loadPacks() # install (if necessary) and load packages
-  paths <- initPaths() # init file paths
-  threshs <- initThresholds() # init threshold vals
-  
-  dataList <- getData(paths)
+  PATHS <- initPaths() # init file paths
+  #threshs <- initThresholds() # init threshold vals
+  OPTIONS <- setOptions() # dframe with all params/options
+
+   
+  dataList <- getData(PATHS)
   cdr <- dataList$cdr
   towers <- dataList$towers
 
   #print("datalist is:")
   #print(head(dataList))
-
   
   #fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
 
-  fcdr <- removeRecordsWithNoHome(cdr, towers, threshs)
-  print(fcdr)
-
+  fcdr <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
+  
   #fcdr_dist <- getDistance(fcdr, towers)
   cdrForPlotting<- groupByHomeLoc(fcdr)
-  plot <- plotByHomeID(cdrForPlotting)
   
   return(cdrForPlotting)
 }
