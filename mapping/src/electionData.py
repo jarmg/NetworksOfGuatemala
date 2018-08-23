@@ -3,6 +3,10 @@ import depsAndMunis
 deps = depsAndMunis.deps
 munis = depsAndMunis.munis
 
+f = open('elecData2015.csv','a')
+f.write("DEPT,MUNI,UNE_NUM_VOTES,PERC_UNE,FCN_NUM_VOTES,PERC_FCN\n") 
+
+
 def download_muni_data(api_url):
     import requests
     data = requests.post(api_url)
@@ -25,33 +29,39 @@ def download_data():
 
             #print(download_muni_data(url))
 
-
-# Write/append all of the following to a csv:
-# DEPT,MUNI,UNE_NUM_VOTES,PERC_UNE,FCN_NUM_VOTES,PER_FCN
+            # Write/append all of the following to a csv:
+            # DEPT,MUNI,UNE_NUM_VOTES,PERC_UNE,FCN_NUM_VOTES,PER_FCN
 
             # the name of the dept
-            print(deps[dept])
+            dep = (deps[dept])
 
             #the name of the muni 
-            print(munis[str(dept)][muni])
+            mun = (munis[str(dept)][muni])
 
             # num votes for first party (UNE)
-            print(download_muni_data(url)['resultados'][0]['votos'])
+            numVotesUNE = (download_muni_data(url)['resultados'][0]['votos'])
 
             # percentage who voted for first party
-            print(download_muni_data(url)['resultados'][0]['porcentaje'])
+            percVotesUNE = (download_muni_data(url)['resultados'][0]['porcentaje'])
 
             # num votes for second party (FCN NATION)
-            print(download_muni_data(url)['resultados'][1]['votos'])
+            numVotesFCN = (download_muni_data(url)['resultados'][1]['votos'])
+        
 
             # percentage who voted for first party
-            print(download_muni_data(url)['resultados'][1]['porcentaje'])
+            percVotesFCN = (download_muni_data(url)['resultados'][1]['porcentaje'])
 
-            print('\n')
+            line = dep + "," + mun + "," + numVotesUNE + "," + percVotesUNE + "," + numVotesFCN + "," + percVotesFCN + "\n"
+
+            f.write(line)
+
+
+
 
 
 def main():
     download_data()
+    f.close()
 
 
 if __name__ == "__main__":
