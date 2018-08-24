@@ -91,6 +91,9 @@ getHomeID <- function(HOME_TYPE, fcdr, number) {
 	#option <- HOME_TYPE
 
 	ID <- filt$HOME_ID
+#print("homeID is:")
+#print(ID)
+
  
     #if (option == 1) 
     #  ID <- filt$HOME_ID
@@ -254,18 +257,23 @@ getData <- function(PATHS) {
   print("Loaded tower data")
   cdr <- merge(cdr_raw,towers,by="CELL_ID") # merge data into one table
   print("Merged tower and cell data")
+  elecData <- read.csv(PATHS[3]) # import 2015 secondary election data  
+  print("Loaded election data")
+
   
   # make a list of two data frames (cdr and towers)
   df.cdr <- data.frame(cdr) 
   df.towers <- data.frame(towers) 
-  return(list("cdr"=df.cdr, "towers"=df.towers))
+  df.elect <- data.frame(elecData)
+  return(list("cdr"=df.cdr, "towers"=df.towers, "elecData"=df.elect))
 }
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
-  PATHS <- c(CDR_DATA, TOWER_DATA)
+  ELECTION_DATA <- "../../mapping/data/elecData2015.csv"
+  PATHS <- c(CDR_DATA, TOWER_DATA, ELECTION_DATA)
   
   return(PATHS)
 }
@@ -290,7 +298,7 @@ setOptions<- function() {
  
   # use HOME_TYPE to define how to classify HOME_ID 
   # opts: tower: 1, city: 2, state: 3 
-  HOME_CLASSIFY_DEF <- 3   
+  HOME_CLASSIFY_DEF <- 2   
 
   optionsFrame <- data.frame("WORK_START_TIME", "WORK_END_TIME", "HOME_TYPE")
   optionsFrame$WORK_START_TIME <- WORK_START

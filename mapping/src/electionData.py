@@ -1,4 +1,7 @@
 import depsAndMunis
+#import unidecode
+import unicodedata
+import re
 
 deps = depsAndMunis.deps
 munis = depsAndMunis.munis
@@ -6,6 +9,9 @@ munis = depsAndMunis.munis
 f = open('elecData2015.csv','a')
 f.write("DEPT,MUNI,UNE_NUM_VOTES,PERC_UNE,FCN_NUM_VOTES,PERC_FCN\n") 
 
+def strip_accents(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s)
+                  if unicodedata.category(c) != 'Mn')
 
 def download_muni_data(api_url):
     import requests
@@ -33,23 +39,32 @@ def download_data():
             # DEPT,MUNI,UNE_NUM_VOTES,PERC_UNE,FCN_NUM_VOTES,PER_FCN
 
             # the name of the dept
-            dep = (deps[dept])
+            dep = (deps[dept]).upper()
+            dep = strip_accents(dep) # remove accents
+            dep = re.sub('[^ A-Za-z0-9]+', '', dep) # remove special characters
+
+            print(dep)
 
             #the name of the muni 
-            mun = (munis[str(dept)][muni])
+            mun = (munis[str(dept)][muni]).upper()
+            mun = strip_accents(mun) # remove accents
+            mun = re.sub('[^ A-Za-z0-9]+', '', mun) # remove special characters
+            print(mun)
 
             # num votes for first party (UNE)
             numVotesUNE = (download_muni_data(url)['resultados'][0]['votos'])
 
             # percentage who voted for first party
             percVotesUNE = (download_muni_data(url)['resultados'][0]['porcentaje'])
+            percVotesUNE = percVotesUNE.rstrip(u'%') # remove perc sign
 
             # num votes for second party (FCN NATION)
             numVotesFCN = (download_muni_data(url)['resultados'][1]['votos'])
-        
 
             # percentage who voted for first party
             percVotesFCN = (download_muni_data(url)['resultados'][1]['porcentaje'])
+            percVotesFCN = percVotesFCN.rstrip(u'%') # remove perc sign
+
 
             line = dep + "," + mun + "," + numVotesUNE + "," + percVotesUNE + "," + numVotesFCN + "," + percVotesFCN + "\n"
 

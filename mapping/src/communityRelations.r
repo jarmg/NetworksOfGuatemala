@@ -1,4 +1,120 @@
 
+getStatsByHomeID <- function(homeID, elecData, OPTIONS) {
+
+    # if home is tower 
+    if (OPTIONS$HOME_TYPE == 1) { 	
+	stop("This function is not yet defined for tower to tower communitiy mapping")
+    }
+
+    # if home is municipality
+    else if (OPTIONS$HOME_TYPE == 2) {     
+	#print("Getting election stats by municipality")
+	#print("elecData$MUNI is:")
+	#select(elecData, MUNI) %>%
+	    #filter(rownames, MUNI == "MIXCO") %>%
+	
+    
+	#temp<-filter(elecData, MUNI == "Mixco")
+	
+	stats <- filter(elecData, MUNI == homeID)
+	#stats <- elecData[elecData$MUNI == homeID, ]
+
+	return(stats)
+    }
+
+    # if home is department 
+    else if (OPTIONS$HOME_TYPE == 3) {
+		stats <- filter(elecData, DEPT == homeID & MUNI == "Nivel Departamental")
+
+    }
+
+    return(stats)
+}
+
+getStatsByMuni <- function(muni, elecData) {
+    stats <- filter(elecData, MUNI == muni)
+    return(stats)
+}
+
+writeSimilarityVals <- function(jvp_mat, elecData, OPTIONS) {
+
+    # V = 100 - |(A_1 - A_2|
+       
+    for (i in 1:nrow(jvp_mat)) {
+	rowName <- rownames(jvp_mat)[i]
+	for (j in 1:ncol(jvp_mat)) {
+
+	    colName <- colnames(jvp_mat)[j]
+	    currentElm <- jvp_mat[i,j]
+	    
+	    print("current pair is")
+	    print(paste(rowName, colName, sep=","))
+
+	    muni1 <- getStatsByMuni(rowName, elecData)
+	    muni1_perc_UNE <- muni1$PERC_UNE[1]
+	    
+	    muni2 <- getStatsByMuni(colName, elecData)
+	    muni2_perc_UNE <- muni2$PERC_UNE[1]
+
+	    val <- (100 - abs(muni1_perc_UNE - muni2_perc_UNE))
+
+	    jvp_mat[i,j] <- val 
+	    val <- 0 # can maybe delete this
+	}
+    }
+    return(jvp_mat)
+}
+
+
+
+
+
+similarityCheck <- function(elecData, validRecs, allHomeRecs, binMat, OPTIONS) {
+   
+    print("binMat is")
+    print(binMat)
+
+    for (i in 1:nrow(binMat)) {
+	for (j in 1:ncol(binMat)) {
+
+	    rowName <- rownames(binMat[i])
+	    colName <- colnames(binMat[j])
+	    currentElm <- binMat[i,j]
+	    print("currentElm is")
+	    print(currentElm)
+	    
+	    if (!is.na(currentElm) & !is.null(currentElm)) {
+		binMat[i,j] <- getSimilarityVal(rowName, colName, elecData, OPTIONS)
+	    }
+	}
+    }
+
+
+    print("dframe is:")
+    print(dframe)
+
+
+   #df <- as.data.frame(newMat)
+
+    return(dframe)
+}
+
+
+# in progress. not yet used
+isRelated <- function(c1, c2, mat) {
+
+    #if has >= 1
+    # related
+
+    if (!is.na(mat[c1,c2]))
+	return(TRUE)
+    else
+	return(FALSE)
+}
+
+
+
+
 incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
     
     newMat <- mat
@@ -8,9 +124,6 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
 
 
     #lapply(unique(Raw$SPP), makePlot, data = Raw)
-
-    print("allHomeRecs is")
-    print(allHomeRecs)
 
    for (i in 1:nrow(validRecs)) { 
        
@@ -30,6 +143,7 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
 
    # remove cols which are all NA 
    df <- df[, !(colSums(is.na(df))==NROW(df))] 
+
 
     return(df)
 }
@@ -71,6 +185,36 @@ getAllHomeRecs <- function(homeIDs, cdr) {
 }
 
 
+getUniqueLabels <- function(elecData, OPTIONS) {
+   
+    if (OPTIONS$HOME_TYPE == 1) { # home_ID is tower
+       stop("getUniqueMunis() not yet defined for this category")
+    }
+   
+    else if (OPTIONS$HOME_TYPE == 2) { # home_ID is muni
+	uniqueLabels <- unique(elecData$MUNI) # should already be unique.. redundant?
+	return(uniqueLabels)
+    }
+
+    else if (OPTIONS$HOME_TYPE == 3) { # home_id is dept
+	uniqueLabels <- unique(elecData$DEPT) # should already be unique.. redundant?
+	return(uniqueLabels)
+    }
+}
+
+create_JVP_matrix <- function(elecData, OPTIONS) {
+    uniqueLabels <- getUniqueLabels(elecData, OPTIONS)
+    n <- length(uniqueLabels)
+
+    jvp_mat <- matrix(, nrow = n , ncol = n)
+    
+    colnames(jvp_mat) <- uniqueLabels[1:ncol(jvp_mat)]
+    rownames(jvp_mat) <- uniqueLabels[1:nrow(jvp_mat)]
+
+    return(jvp_mat)
+}
+
+
 getUniqueHome_IDs <- function(dframe) {
     
     uniqueHomes <- unique(dframe$HOME_ID)
@@ -79,7 +223,7 @@ getUniqueHome_IDs <- function(dframe) {
 
 
 # create an NxN labeled matrix where N is HOME_ID
-createMatrix <- function(dframe) {
+createHomeIDMatrix <- function(dframe) {
     uniqueHomes <- getUniqueHome_IDs(dframe)
     n <- length(uniqueHomes)
 
@@ -107,8 +251,8 @@ getAllHomeIDs <- function(data, towers, threshs) {
   print(paste("filtered data: ", newNum, " record(s)", sep=""))
   print(paste("percentage removed", 100 - (origNum/newNum)))
 
-  print("Printing all ANUMBERS who have HOME_IDs")
-  print(filt_cdr)
+  #print("Printing all ANUMBERS who have HOME_IDs")
+  #print(filt_cdr)
   
   return(filt_cdr)
 }
@@ -120,6 +264,14 @@ loadSources <- function() {
 }
 
 
+makeBinaryMatrix <- function(mat) {
+
+    # change all values >= 1 to 1 to make binary
+    mat[] <- +(mat >= 1)
+
+    return(mat)
+}
+
 mainMapping <- function() {
     loadSources()
     loadPacks()
@@ -129,6 +281,13 @@ mainMapping <- function() {
 
     cdr <- dataList$cdr
     towers <- dataList$towers
+    elecData <- dataList$elecData
+
+    print("elecData$MUNI is")
+    print(elecData$MUNI)
+
+    #print("elecData is: ")
+    #print(elecData)
     #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
 
     origNumRecs <- nrow(cdr)
@@ -146,12 +305,22 @@ mainMapping <- function() {
     print(paste("Number of records for which there exist HOME_IDs and an ANUMBER for every BNUMBER: ", numValidRecs)) 
     print(paste("Percentage removed: ", 100 - (numValidRecs/origNumRecs)))
 
-    mat <- createMatrix(homeIDs) # create matrix using HOME_ID 
-        
-    incMat <- incrementMatrixElems(validRecs, homeIDs, mat, OPTIONS)
+    home_ID_mat <- createHomeIDMatrix(homeIDs) # create matrix using HOME_ID 
+    jvp_mat <- create_JVP_matrix(elecData, OPTIONS)
+            
+    # increment matrix elems: +1 for each call between communities 
+    incMat <- incrementMatrixElems(validRecs, homeIDs, home_ID_mat, OPTIONS)
+    communication_Mat <- makeBinaryMatrix(incMat)
 
+    jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
+
+
+    write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
+
+
+    #head(relationMatrix)
     # write to csv file
-    write.table(incMat, file="mymatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
-    return(incMat)
+    #write.table(incMat, file="mymatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
+    return(jvp_mat)
 }
 
