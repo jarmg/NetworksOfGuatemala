@@ -270,7 +270,7 @@ getData <- function(PATHS) {
 
 # init file paths
 initPaths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   ELECTION_DATA <- "../../mapping/data/elecData2015.csv"
   PATHS <- c(CDR_DATA, TOWER_DATA, ELECTION_DATA)

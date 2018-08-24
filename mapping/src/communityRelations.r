@@ -126,6 +126,13 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
     #lapply(unique(Raw$SPP), makePlot, data = Raw)
 
    for (i in 1:nrow(validRecs)) { 
+       print("current rowname is:")
+       print(getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])))
+
+       print("current colname is:")
+       print(getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i])))
+
+       
        
        currentElm <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))]
 
@@ -139,10 +146,10 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
    #df[apply(newMat,1,function(x)any(!is.na(x))),]
 
    # remove rows which are all NA 
-   df <- df[!(rowSums(is.na(df))==NCOL(df)),] 
+   #df <- df[!(rowSums(is.na(df))==NCOL(df)),] 
 
    # remove cols which are all NA 
-   df <- df[, !(colSums(is.na(df))==NROW(df))] 
+   #df <- df[, !(colSums(is.na(df))==NROW(df))] 
 
 
     return(df)
@@ -272,6 +279,11 @@ makeBinaryMatrix <- function(mat) {
     return(mat)
 }
 
+
+#names of other nmunis
+#|
+# vec of percentages for a muni ->
+
 mainMapping <- function() {
     loadSources()
     loadPacks()
@@ -305,22 +317,36 @@ mainMapping <- function() {
     print(paste("Number of records for which there exist HOME_IDs and an ANUMBER for every BNUMBER: ", numValidRecs)) 
     print(paste("Percentage removed: ", 100 - (numValidRecs/origNumRecs)))
 
-    home_ID_mat <- createHomeIDMatrix(homeIDs) # create matrix using HOME_ID 
+    #home_ID_mat <- createHomeIDMatrix(homeIDs) # create matrix using HOME_ID 
+
+
     jvp_mat <- create_JVP_matrix(elecData, OPTIONS)
+
+    home_ID_mat <- jvp_mat
+    print("dims jvp_mat is:")
+    print(dim(home_ID_mat))
+    print(colnames(home_ID_mat)[3])
+
+    print("dims home_id_mat is:")
+    print(dim(jvp_mat))
+    print(colnames(jvp_mat)[3])
+
             
     # increment matrix elems: +1 for each call between communities 
     incMat <- incrementMatrixElems(validRecs, homeIDs, home_ID_mat, OPTIONS)
-    communication_Mat <- makeBinaryMatrix(incMat)
+    binary_mat <- makeBinaryMatrix(incMat)
 
-    jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
+    # write vals into jvp_mat 
+    #jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
 
-
-    write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
-
+    # write jvp_mat to file
+    #write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
 
     #head(relationMatrix)
     # write to csv file
     #write.table(incMat, file="mymatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
-    return(jvp_mat)
-}
+    write.table(binary_mat, file="binary_matrix.csv", row.names=TRUE, col.names=NA, sep =",") 
 
+    return(binary_mat)
+
+}
