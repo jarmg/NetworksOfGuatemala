@@ -1,6 +1,52 @@
+#getDistanceByMunis <- function(muni1, muni2, map) {
+
+#}
+
+
+#cacheDistances <- function(
+
+# works
+readMatCsv <- function(option) {
+    if (option == 1)
+	mat <- read.csv("jvpMat.csv", row.names = 1)
+    else if (option == 2)
+	mat <- read.csv("commMat.csv", row.names = 1)
+    else
+	stop("Must specify an option.\n1: joint voting patterns\n2: communication patterns")
+    
+    return(mat)
+}
+
+
+# works
+makePairedListFromMatrix <- function(mat) {
+    # make the paired list 
+    matAsPairedList <- as.matrix(mat) # make sure not dframe
+    matAsPairedList <- melt(matAsPairedList) # mat row/col pairs to row/row pairs
+
+    return(matAsPairedList)
+}
+
+
+# works
+appendCommValsToJvpList <- function(jvpList, commList) {
+    jvpList <- cbind(jvpList, binList[3])
+    return(jvpList)
+}
+
+
+# works
+plotRegLine <- function(jvpList) {
+
+    comm <- jvpList[,4] # comm vec
+    jvp <- jvpList[,3] # voting vec
+
+    plot(comm, jvp)
+    abline(lm(jvp~comm), col = "red") # regression line (y~x)
+}
+
 
 getStatsByHomeID <- function(homeID, elecData, OPTIONS) {
-
     # if home is tower 
     if (OPTIONS$HOME_TYPE == 1) { 	
 	stop("This function is not yet defined for tower to tower communitiy mapping")
@@ -16,7 +62,7 @@ getStatsByHomeID <- function(homeID, elecData, OPTIONS) {
     
 	#temp<-filter(elecData, MUNI == "Mixco")
 	
-	stats <- filter(elecData, MUNI == homeID)
+	stats <- filter(elecData, MUNI == homeID & MUNI != "NIVEL DEPARTAMENTAL")
 	#stats <- elecData[elecData$MUNI == homeID, ]
 
 	return(stats)
@@ -24,7 +70,7 @@ getStatsByHomeID <- function(homeID, elecData, OPTIONS) {
 
     # if home is department 
     else if (OPTIONS$HOME_TYPE == 3) {
-		stats <- filter(elecData, DEPT == homeID & MUNI == "Nivel Departamental")
+		stats <- filter(elecData, DEPT == homeID & MUNI == "NIVEL DEPARTAMENTAL")
 
     }
 
@@ -66,9 +112,6 @@ writeSimilarityVals <- function(jvp_mat, elecData, OPTIONS) {
 }
 
 
-
-
-
 similarityCheck <- function(elecData, validRecs, allHomeRecs, binMat, OPTIONS) {
    
     print("binMat is")
@@ -101,6 +144,7 @@ similarityCheck <- function(elecData, validRecs, allHomeRecs, binMat, OPTIONS) {
 
 
 # in progress. not yet used
+# set a filter here for determining whether two communities are related
 isRelated <- function(c1, c2, mat) {
 
     #if has >= 1
@@ -113,15 +157,12 @@ isRelated <- function(c1, c2, mat) {
 }
 
 
-
-
 incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
     
     newMat <- mat
 
     # try this instead of for loop
    # newMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
-
 
     #lapply(unique(Raw$SPP), makePlot, data = Raw)
 
@@ -131,7 +172,6 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
 
        print("current colname is:")
        print(getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i])))
-
        
        
        currentElm <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))]
@@ -145,18 +185,20 @@ incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
    df <- as.data.frame(newMat)
    #df[apply(newMat,1,function(x)any(!is.na(x))),]
 
-   # remove rows which are all NA 
-   #df <- df[!(rowSums(is.na(df))==NCOL(df)),] 
-
-   # remove cols which are all NA 
-   #df <- df[, !(colSums(is.na(df))==NROW(df))] 
-
-
     return(df)
 }
 
-getRecsWithKnownHomes <- function(validBRecs, allARecs) {
+# remove cols which are all NA 
+removeColsWithAllNAs <- function(df) {
+   return(df[, !(colSums(is.na(df))==NROW(df))])
+}
 
+# remove rows which are all NA 
+removeRowsWithAllNAs <- function(df) {
+   return(df[!(rowSums(is.na(df))==NCOL(df)),])
+}
+
+getRecsWithKnownHomes <- function(validBRecs, allARecs) {
     validRecs <- allARecs %>%
 	filter(grepl(paste(validBRecs$ANUMBER, collapse="|"), allARecs$BNUMBER)) 
     
@@ -280,10 +322,7 @@ makeBinaryMatrix <- function(mat) {
 }
 
 
-#names of other nmunis
-#|
-# vec of percentages for a muni ->
-
+# reads raw data and generates csv files for comm and jvp
 mainMapping <- function() {
     loadSources()
     loadPacks()
@@ -295,18 +334,11 @@ mainMapping <- function() {
     towers <- dataList$towers
     elecData <- dataList$elecData
 
-    print("elecData$MUNI is")
-    print(elecData$MUNI)
-
-    #print("elecData is: ")
-    #print(elecData)
     #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
 
     origNumRecs <- nrow(cdr)
 
     homeIDs <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
-    
-    #homeIDs <- mainCommute() # from commuterCategorize
     
     allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
     validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
@@ -319,34 +351,23 @@ mainMapping <- function() {
 
     #home_ID_mat <- createHomeIDMatrix(homeIDs) # create matrix using HOME_ID 
 
-
     jvp_mat <- create_JVP_matrix(elecData, OPTIONS)
 
     home_ID_mat <- jvp_mat
-    print("dims jvp_mat is:")
-    print(dim(home_ID_mat))
-    print(colnames(home_ID_mat)[3])
-
-    print("dims home_id_mat is:")
-    print(dim(jvp_mat))
-    print(colnames(jvp_mat)[3])
-
             
     # increment matrix elems: +1 for each call between communities 
     incMat <- incrementMatrixElems(validRecs, homeIDs, home_ID_mat, OPTIONS)
     binary_mat <- makeBinaryMatrix(incMat)
 
     # write vals into jvp_mat 
-    #jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
+    jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
 
     # write jvp_mat to file
     #write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
 
-    #head(relationMatrix)
     # write to csv file
-    #write.table(incMat, file="mymatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
-    write.table(binary_mat, file="binary_matrix.csv", row.names=TRUE, col.names=NA, sep =",") 
+    write.table(jvp_mat, file="jvpMat.csv", row.names=TRUE, col.names=NA, sep =",") 
+    write.table(binary_mat, file="commMat.csv", row.names=TRUE, col.names=NA, sep =",") 
 
-    return(binary_mat)
-
+    return(0)
 }

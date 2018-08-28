@@ -1,11 +1,5 @@
-
-
-
-
 # makes a decreasing sorted vector of all unique vals
 makeModeVecUniques <- function (v) with(rle(sort(v)), values[order(lengths, decreasing = TRUE)])
-
-
 
 # makes a sorted mode vector. will be useful for getting the second most common element
 # if the most active tower during a customer’s respective timeframe criteria has less than 30% more activity than the second-most-active tower, then the record is removed.
@@ -237,7 +231,7 @@ removeRecordsWithNoHome <- function(data, towers, OPTIONS) {
 
   
   filt_cdr <- showHomeByLabel(data, towers, OPTIONS) %>% 
-    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") & (HOME_ID != "TO BE DETERMINED")) #redefine cdr showing only recs with homes
+    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") & (HOME_ID != "TO BE DETERMINED" & (HOME_ID != "NIVEL DEPARTAMENTAL"))) #redefine cdr showing only recs with homes
 
   newNum <- nrow(filt_cdr) # get new num records after removing records w/o home 
   
@@ -314,7 +308,7 @@ loadPacks <- function() {
 
     source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
 
-  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap")
+  list.of.packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap", "reshape")
   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
   if(length(new.packages)) install.packages(new.packages)
   
@@ -325,6 +319,7 @@ loadPacks <- function() {
   library(XML)
   library(bitops)
   library(RCurl)
+  library(reshape)
 }
 
 # input is a two-column dframe with ANUMBER HOME_ID
@@ -372,7 +367,7 @@ mainCommute <- function() {
 
   fcdr <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
   
-  #fcdr_dist <- getDistance(fcdr, towers)
+  fcdr_dist <- getDistance(fcdr, towers)
   cdrForPlotting<- groupByHomeLoc(fcdr)
   
   return(cdrForPlotting)
