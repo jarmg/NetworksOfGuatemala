@@ -1,41 +1,47 @@
-# makes a decreasing sorted vector of all unique vals
+# Makes a decreasing sorted vector of all unique vals
 make_mode_vec_uniques <- function (v) with(rle(sort(v)), values[order(lengths, decreasing = TRUE)])
 
-# makes a sorted mode vector. will be useful for getting the second most common element
-# if the most active tower during a customer’s respective timeframe criteria has less than 30% more activity than the second-most-active tower, then the record is removed.
-is_itinerant <- function(cell_ids) {
+# IN PROGRESS
+# Makes a sorted mode vector. 
+# Will be useful for obtaining the second most common element 
+# if the most active tower during a customer’s respective timeframe criteria 
+# has less than 30% more activity than the second-most-active tower, 
+# then the record is removed.
+#is_itinerant <- function(cell_ids) {
 
-    if (length(cell_ids) == 1) {
-	return(FALSE) 
-    }
-
-    new_vec <- as.vector(cell_ids)
-    mode_vec_uniques <- make_mode_vec_uniques(new_vec)     
-   
-    num_instances_most_active_tower <- length(which(cell_ids == mode_vec_uniques[1]))
-    num_instances_second_most_active_tower <- sum(cell_ids == mode_vec_uniques[2] )
-
-    print(paste("num instances most act is ", num_instances_most_active_tower))
-
-    if (is.na(num_instances_second_most_active_tower) | (num_instances_second_most_active_tower == 0))
-	return(FALSE)
-
-    print(paste("num instances 2nd most act is ", num_instances_second_most_active_tower))
-
-    tot <- (num_instances_most_active_tower) + (num_instances_second_most_active_tower)
-    diff_in_percent <- (num_instances_second_most_active_tower) / (tot)
-
-    print(paste("percent active is ", 1 - diff_in_percent))
-
-    if (diff_in_percent < 0.30) {
-	print(paste("ANUMBER with this cellID is itinerant", cell_ids))
-	return(FALSE)
-    }
-    return(TRUE) 
-}
+#    if (length(cell_ids) == 1) {
+#	return(FALSE) 
+#    }
+#    new_vec <- as.vector(cell_ids)
+#    mode_vec_uniques <- make_mode_vec_uniques(new_vec)     
+#    num_instances_most_active_tower <- length(which(cell_ids == mode_vec_uniques[1]))
+#    num_instances_second_most_active_tower <- sum(cell_ids == mode_vec_uniques[2] )
+#    print(paste("num instances most act is ", num_instances_most_active_tower))
+#    if (is.na(num_instances_second_most_active_tower) | (num_instances_second_most_active_tower == 0))
+#	return(FALSE)
+#    print(paste("num instances 2nd most act is ", num_instances_second_most_active_tower))
+#    tot <- (num_instances_most_active_tower) + (num_instances_second_most_active_tower)
+#    diff_in_percent <- (num_instances_second_most_active_tower) / (tot)
+#    print(paste("percent active is ", 1 - diff_in_percent))
+#    if (diff_in_percent < 0.30) {
+#	print(paste("ANUMBER with this cellID is itinerant", cell_ids))
+#	return(FALSE)
+#    }
+#    return(TRUE) 
+#}
 
 
 is_work_time <- function(call_start_time, k_options) {
+    # Determines whether a call_start_time occurs during typical work hours. 
+    #
+    # Args:
+    #   call_start_time: The time at the start of a call for a given record.
+    #   k_options: The data frame containing a set of user-defined
+    #              constants.
+    #
+    # Returns:
+    #   TRUE if during work time, FALSE otherwise
+    
     if ((get_hour(call_start_time) >= k_options$k_work_start) & (get_hour(call_start_time) <= k_options$k_work_end))
     return(TRUE)
   else
@@ -43,83 +49,118 @@ is_work_time <- function(call_start_time, k_options) {
 }
 
 
-# determines the probable place
-# home = (cell_id in which the individual is most active after 6pm) & !isItinerant()
-# work = !home
-# uses ifelse to test each element of vector
 home_or_work <- function(call_start_time, k_options) {
-  ifelse(!is_work_time(call_start_time, k_options), "Home", "Work")
+    # Determines whether a given call time occurs during work or home hours.
+    #
+    # Args:
+    #   call_start_time: The time at the start of a call for a given record.
+    #   k_options: The data frame containing a set of user-defined
+    #              constants.
+    #
+    # Returns:
+    #  Since ifelse tests conditions for each vector, it writes "Home" or
+    #  "Work" to each element accordingly.
+
+    ifelse(!is_work_time(call_start_time, k_options), "Home", "Work")
 }
 
-# get the mode of a vector v
 get_mode <- function(v) {
-    #getModeVector(v)
-  uniqv <- unique(v)
-  uniqv[which.max(tabulate(match(v, uniqv)))]
+    # Gets the mode of vector v
+
+    uniqv <- unique(v)
+    uniqv[which.max(tabulate(match(v, uniqv)))]
+    return(uniqv)
 }
 
 get_mode_by_label <- function(CELL_ID, PLACE, label) {
-  filt <- data.frame(CELL_ID, PLACE) %>%
-    filter(PLACE == label) 
+    # Gets the mode of a set of CELL_IDs to determine which is the most likely
+    # home/work id.
+    #
+    # Args:
+    #   CELL_ID: The current set of CELL_IDs.
+    #   PLACE: Used to filter the set of CELL_IDs by home or work.
+    #   label: The label which informs which PLACE by which to filter.
+    #
+    # Returns:
+    #   The mode.
 
-  #if(isItinerant(filt$CELL_ID)) {
-      #return() # returns <NA> (I think)
-      #print("found itinerant record")
-  #}
+    filt <- data.frame(CELL_ID, PLACE) %>%
+	filter(PLACE == label) 
+
+    #if(isItinerant(filt$CELL_ID)) {
+    #return() # returns <NA> (I think)
+    #print("found itinerant record")
+    #}
 
   mode = get_mode(filt$CELL_ID)
-
-  print("mode is")
-  print(mode)
-
+  
   return(mode)
 }
 
+# TODO: Can use get_id_by_label instead?
 get_home_id <- function(HOME_TYPE, fcdr, number) {
-  filt <- fcdr %>%
-    filter(ANUMBER == number)
+    # Gets the home_id of a given number.
+    #
+    # Args:
+    #   HOME_TYPE: The user-defined home type (muni, dept, or cell_id).
+    #   fcdr: The filtered cdr data frame.
+    #   number: The number for which to get home_id (ANUMBER or BNUMBER).
+    #
+    # Returns:
+    #   The home_id.
 
+    filt <- fcdr %>%
+	filter(ANUMBER == number)
     ID <- filt$HOME_ID
-
     return(as.character(ID))
 }
 
+# TODO: Can use get_id_by_label instead?
 get_work_id <- function(fcdr, number) {
-  filt <- fcdr %>%
-    filter(ANUMBER == number)
+    # Same as get_home_id but work_id.
   
-  ID = filt$WORK_ID
-  return(as.character(ID))
+    filt <- fcdr %>%
+	filter(ANUMBER == number)
+    ID = filt$WORK_ID
+    return(as.character(ID))
 }
 
-# in progress
+# IN PROGRESS
 # option: either "city" or "state"
-get_geo_info_by_coords <- function(option, lat, lon) {
+#get_geo_info_by_coords <- function(option, lat, lon) {
+#    geo_information <- revgeo(lat, lon, output = "frame")
+#    if(option == "city")
+#	return(geo_information$city)
+#    else if(option == "state")
+#	return(geo_information$state)
+#    else
+#	stop("Error in getGeoInfoByCoords() call.\n
+#	      Must specifiy option for first param.\n 
+#	      Option choices: city or state")
+#}
 
-    geo_information <- revgeo(lat, lon, output = "frame")
-
-    if(option == "city")
-	return(geo_information$city)
-    else if(option == "state")
-	return(geo_information$state)
-    else
-	stop("Error in getGeoInfoByCoords() call.\n
-	      Must specifiy option for first param.\n 
-	      Option choices: city or state")
-}
 
 get_coords <- function(tower_id, towers) {
-  coords <- filter(towers, CELL_ID == tower_id) %>%
-   select(LATITUDE, LONGITUDE)
-  lat <- coords[1, 1]
-  lon <- coords[1, 2]
-  return(paste(lat, lon, sep = ","))
+    # Gets the lat/lon coords for a given tower.
+    #
+    # Args:
+    #   tower_id: The tower whose lat/lon coords are to be obtained.
+    #   towers: The data frame consisting of all towers and lat/lons.
+    #
+    # Returns:
+    #   The coordinates of the tower.
+  
+    coords <- filter(towers, CELL_ID == tower_id) %>%
+	select(LATITUDE, LONGITUDE)
+    lat <- coords[1, 1]
+    lon <- coords[1, 2]
+    return(paste(lat, lon, sep = ","))
 }
 
-# calculates driving distance in km between two points
-# from https://stackoverflow.com/questions/16863018/getting-driving-distance-between-two-points-lat-lon-using-r-and-google-map-ap€‹
+
+# Calculates driving distance in km between two points
+# From https://stackoverflow.com/questions/16863018/getting-driving-distance-between-two-points-lat-lon-using-r-and-google-map-ap€‹
 driving_distance <- function(origin, destination){
-  
   xml.url <- paste0('http://maps.googleapis.com/maps/api/distancematrix/xml?origins=',origin,'&destinations=',destination,'&mode=driving&sensor=false')
   xmlfile <- xmlParse(getURL(xml.url))
   dist <- xmlValue(xmlChildren(xpathApply(xmlfile,"//distance")[[1]])$value)
@@ -130,30 +171,61 @@ driving_distance <- function(origin, destination){
 }
 
 
-# new distance function:
 get_distance <- function(fcdr, towers) {
-  dist <- group_by(fcdr, ANUMBER) %>% 
-      summarise(distCommute = driving_distance(get_coords(get_home_id(k_options$HOME_TYPE, fcdr, ANUMBER), towers), get_coords(get_work_id(fcdr, ANUMBER), towers)))
+    # Creates a data frame containing the distances between home and work
+    # towers.
+    #
+    # Args:
+    #   fcdr: The filtered cdr.
+    #   towers: The data frame consisting of all tower data. 
+    #
+    # Returns:
+    #   The data frame of fcdr with an added column of driving distances
+    #   between home and work.
+  
+    dist <- group_by(fcdr, ANUMBER) %>% 
+	summarise(distCommute = driving_distance(get_coords(get_home_id(k_options$HOME_TYPE, fcdr, ANUMBER), towers), get_coords(get_work_id(fcdr, ANUMBER), towers)))
   return(dist)
 }
 
+
 show_home_and_work_towers <- function(data, towers, k_options) {
-  probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
-    summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
-    group_by(ANUMBER) %>%
-    summarise(HOME_ID = get_mode_by_label(CELL_ID, PLACE, "Home"),
+    # Creates a data frame which shows the home/work towers for each
+    # ANUMBER.
+    #
+    # Args:
+    #   data: The cdr.
+    #   towers: The tower data.
+    #   k_options: The data frame containing a set of user-defined
+    #              constants.
+    #
+    # Returns:
+    #   The data frame with all home and work towers for each ANUMBER.
+  
+    probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
+    
+	summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
+	group_by(ANUMBER) %>%
+	summarise(HOME_ID = get_mode_by_label(CELL_ID, PLACE, "Home"),
 	      WORK_ID = get_mode_by_label(CELL_ID, PLACE, "Work")) %>%
-    return()
+	return()
 }
 
 
-# options for label: tower, city, state
 show_home_by_label <- function(data, towers, k_options) {
-   
+    # Shows the type of home_id based on user-defined constant.
+    #
+    # Args:
+    #   data: The cdr.
+    #   towers: The tower data.
+    #   k_options: The data frame containing a set of user-defined
+    #              constants.
+    #
+    # Returns:
+    #   The filtered cdr with the homes and works shown for each ANUMBER. 
+
     label <- k_options$k_home_type[1]
-    print("label is:")
-    print(label)
-   
+       
     # if home_type is tower
     if (label == 1) { 	
 	probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
@@ -185,67 +257,93 @@ show_home_by_label <- function(data, towers, k_options) {
 }
 
 remove_records_with_no_home_work_pair <- function(data, towers, k_options) {
-    
-  print("Removing records with no home/work pairs...")
-  orig_num <- nrow(data) # get orig num records
+    # Removes all records that do not have home/work pairs.
+    #
+    # Args:
+    #   data: The cdr.
+    #   towers: The tower data.
+    #   k_options: k_options: The data frame containing a set of user-defined
+    #              constants.
+    #
+    # Returns:
+    #   The filtered cdr containing only records that have home/work pairs.
+
   
-  #redefine cdr with only pairs
-  filt_cdr <- show_home_and_work_towers(data, towers, k_options) %>% 
-    filter(!is.na(HOME_ID) & !is.na(WORK_ID)) 
+    print("Removing records with no home/work pairs...")
+    orig_num <- nrow(data) # get orig num records
+  
+    #redefine cdr with only pairs
+    filt_cdr <- show_home_and_work_towers(data, towers, k_options) %>% 
+	filter(!is.na(HOME_ID) & !is.na(WORK_ID)) 
 
-  # get new num records after removing records w/o home and work locs
-  new_num <- nrow(filt_cdr)
+    # get new num records after removing records w/o home and work locs
+    new_num <- nrow(filt_cdr)
 
-  print(paste("raw data: ", orig_num, " record(s)", sep = ""))
-  print(paste("filtered data: ", new_num, " record(s)", sep = ""))
-  print(paste("percentage removed", 100 - (orig_num / new_num)))
+    print(paste("raw data: ", orig_num, " record(s)", sep = ""))
+    print(paste("filtered data: ", new_num, " record(s)", sep = ""))
+    print(paste("percentage removed", 100 - (orig_num / new_num)))
   
   return(filt_cdr)
 }
+
 
 remove_records_with_no_home <- function(data, towers, k_options) {
+    # Removes all records that do not have home_ids.
+    #
+    # Args:
+    #   See above.
+    #
+    # Returns:
+    #   The filtered cdr containing only records that have homes.
     
-  print("Removing records with no home...")
-  orig_num <- nrow(data) # get orig num records
+    print("Removing records with no home...")
+    orig_num <- nrow(data) # get orig num records
 
-  print("home_id is")
-  print(data$HOME_ID)
+    print("home_id is")
+    print(data$HOME_ID)
+  
+    #redefine cdr showing only recs with homes
+    filt_cdr <- show_home_by_label(data, towers, k_options) %>%
+	filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") &
+	       (HOME_ID != "TO BE DETERMINED" &
+		(HOME_ID != "NIVEL DEPARTAMENTAL")))
+  
+    # get new num records after removing records w/o home 
+    new_num <- nrow(filt_cdr)
 
-  #redefine cdr showing only recs with homes
-  filt_cdr <- show_home_by_label(data, towers, k_options) %>%
-    filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") &
-	   (HOME_ID != "TO BE DETERMINED" &
-	    (HOME_ID != "NIVEL DEPARTAMENTAL")))
-print("hey")
-  # get new num records after removing records w/o home 
-  new_num <- nrow(filt_cdr)
-
-  print(paste("raw data: ", orig_num, " record(s)", sep = ""))
-  print(paste("num records with homes: ", new_num, " record(s)", sep = ""))
-  print(paste("percentage removed", 100 - (orig_num / new_num)))
+    print(paste("raw data: ", orig_num, " record(s)", sep = ""))
+    print(paste("num records with homes: ", new_num, " record(s)", sep = ""))
+    print(paste("percentage removed", 100 - (orig_num / new_num)))
   
   return(filt_cdr)
 }
 
 
-# load data and merge CDR with tower info
 get_data <- function(PATHS) {
-  cdr_raw <- read.csv(PATHS[1]) # import call detail records
-  print("Loaded raw data")
-  towers <- read.csv(PATHS[2]) # import tower locations
-  print("Loaded tower data")
-  cdr <- merge(cdr_raw, towers, by="CELL_ID") # merge data into one table
-  print("Merged tower and cell data")
-  elec_data <- read.csv(PATHS[3]) # import 2015 secondary election data  
-  print("Loaded election data")
+    # Load all data into a vector of data frames.
+    #
+    # Args:
+    #   PATHS: The vector of paths containing user-defined file paths.
+    # 
+    # Returns:
+    #   A list of three data frames (cdr, towers, and elec_data). 
 
+    cdr_raw <- read.csv(PATHS[1]) # import call detail records
+    print("Loaded raw data")
+    towers <- read.csv(PATHS[2]) # import tower locations
+    print("Loaded tower data")
+    cdr <- merge(cdr_raw, towers, by="CELL_ID") # merge data into one table
+    print("Merged tower and cell data")
+    elec_data <- read.csv(PATHS[3]) # import 2015 secondary election data  
+    print("Loaded election data")
   
-  # make a list of two data frames (cdr and towers)
-  df.cdr <- data.frame(cdr) 
-  df.towers <- data.frame(towers) 
-  df.elec_data <- data.frame(elec_data)
-  return(list("cdr" = df.cdr, "towers" = df.towers, "elec_data" = df.elec_data))
+    # make a list of three data frames (cdr, towers, elec_data)
+    df.cdr <- data.frame(cdr) 
+    df.towers <- data.frame(towers) 
+    df.elec_data <- data.frame(elec_data)
+    return(list("cdr" = df.cdr, "towers" = df.towers, "elec_data" = df.elec_data))
 }
+
 
 # init file paths
 init_paths <- function() {
@@ -257,33 +355,30 @@ init_paths <- function() {
   return(PATHS)
 }
 
-# MANUALLY SET ALL PARAMS/OPTIONS HERE
-# Return a dataframe of all params
-# The dframe is like a hashmap where the column names are
-# keys and the elements in the row are values
+
 set_options<- function() {
+    # Creates a data frame of user-defined constants to be used in other
+    # functions. Manually set all params here.
  
-  k_work_start_time <- 8 # set work start time here
-  k_work_end_time <- 18 # set work end time here 
- 
-  # use HOME_TYPE to define how to classify HOME_ID 
-  # opts: tower: 1, city: 2, state: 3 
-  k_home_id_type <- 2   
+    k_work_start_time <- 8 # set work start time here
+    k_work_end_time <- 18 # set work end time here 
+  
+    # use k_home_id_type to define how to classify home_id
+    # opts: tower: 1, city: 2, state: 3 
+    k_home_id_type <- 2   
 
-  k_options_frame <- data.frame("k_work_start", "k_work_end", "k_home_type")
-  k_options_frame$k_work_start <- k_work_start_time
-  k_options_frame$k_work_end <- k_work_end_time 
-  k_options_frame$k_home_type <- k_home_id_type
+    k_options_frame <- data.frame("k_work_start", "k_work_end", "k_home_type")
+    k_options_frame$k_work_start <- k_work_start_time
+    k_options_frame$k_work_end <- k_work_end_time 
+    k_options_frame$k_home_type <- k_home_id_type
 
-  return(k_options_frame)
+    return(k_options_frame)
 }
 
 
 # check if packs installed and load them
 load_packs <- function() {
-
     source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
-
   list_of_packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap", "reshape")
   new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
   if(length(new_packages)) install.packages(new_packages)
@@ -298,30 +393,29 @@ load_packs <- function() {
   library(reshape)
 }
 
-# input is a two-column dframe with ANUMBER HOME_ID
+# dframe is a two-column dframe with ANUMBER HOME_ID
+# Returns a data frame whose columns are "HOME_ID" and "n", where n is the
+# number of callers who have that home_id.
 group_by_home_loc <- function(dframe) {
-
     groupedFrame <- group_by(dframe, HOME_ID) %>%
 	tally() %>%
 	return()
 }
 
-# in progress
-plot_by_home_id <- function(dframe) {
-	
-    plot(x, axes = FALSE,
+
+# IN PROGRESS
+#plot_by_home_id <- function(dframe) {
+    #plot(x, axes = FALSE,
     #axis(side = 1, at = c(1,5,10))
-
     #axis(side = 2, at = c(1,3,7,10))
-
-    main="Number of Callers by Home Location",
-    xlab="Home IDs",
-    ylab="Number of Callers",
-    type="b",
-    col="blue")
-    lines(x,col="red")
-    fill=c("blue")
-}
+    #main="Number of Callers by Home Location",
+    #xlab="Home IDs",
+    #ylab="Number of Callers",
+    #type="b",
+    #col="blue")
+    #lines(x,col="red")
+    #fill=c("blue")
+#}
 
 main_commute <- function() {
   load_packs() # install (if necessary) and load packages
@@ -333,9 +427,7 @@ main_commute <- function() {
   towers <- data_list$towers
 
   #fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
-  print("cdr is:")
-  print(head(cdr))
-
+  
   fcdr <- remove_records_with_no_home(cdr, towers, k_options)
   
   #fcdr_dist <- get_distance(fcdr, towers)
