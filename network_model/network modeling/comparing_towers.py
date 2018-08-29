@@ -177,6 +177,48 @@ def write_dict_to_file(data, file_name):
         file.write(pickle.dumps(data))
 
 
+##the below function has been commented out as it needs to be modified to account for
+##us now knowing how to decipher tigo cell_ids
+
+        
+##def compare_data(data1, data2):
+##    try:
+##        longer_data = data1 if len(data1) >= len(data2) else data2
+##        shorter_data = data1 if longer_data != data1 else data2
+##        positive_results = 0
+##        count = 0
+##        frequencies = {'GSM': 1900, 'UMTS': 850, 'LTE': 850}
+##        distances = dict()
+##        for freq in frequencies.keys():
+##            max_signal_loss = int(get_signal_loss(frequencies[freq], 100))
+##            distance = 0
+##            for x in xrange(1, 100, 1):
+##                dist, signal_loss = get_distance(frequencies[freq], float(x) / 1)
+##                if round(signal_loss) == round(max_signal_loss / 2):
+##                     print(frequencies[freq])
+##                     print(get_distance(frequencies[freq], float(x) / 1))
+##                     distance = convert_miles_to_km(round(dist * 1000))
+##                     break
+##             distances[freq] = distance
+##        tower_matches = dict()
+##        for data_long in longer_data:
+##            towers = list()
+##            count += 1
+##            if count % 100 == 0:
+##                print(count)
+##                print(positive_results)
+##            for data_short in shorter_data:
+##                distance = distances[data_short[0]]
+##                if distance_between_coords(float(data_long[1]), float(data_long[2]), float(data_short[1]), float(data_short[2])) <= distance:
+##                    towers.append(data_short)
+##                    positive_results += 1
+##            tower_matches[data_long[0]] = towers
+##        return positive_results, tower_matches     
+##    except:
+##        print("invalid parameters entered into compare_data")
+##        return 0
+
+
 def main():
     tigo_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\Cells.csv")
     open_cell_id_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\open_cell_id.csv")

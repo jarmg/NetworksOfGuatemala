@@ -5,13 +5,14 @@ import ast
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import math
 
 
-#gem columns: 0 = latitude, 1 = longitude, 2 = altitude, 3 = accuracy, 4 = department, 5 = municipality, 6 = household salary, 7 = JG2, 8 = age, 9 = JG6, 10 = gender
+#gem column codes: 0 = latitude, 1 = longitude, 2 = altitude, 3 = accuracy, 4 = department, 5 = municipality, 6 = household salary, 7 = JG2, 8 = age, 9 = JG6, 10 = gender
 #total_towers_within_range.txt is the output of the total_towers_within_range function in network_analysis.py saved to a txt file
 
+#below are what the codes for each column in gem represent for the data being used
 #0 = latitude
 #1 = longitude
 #2 = altitude
@@ -140,7 +141,7 @@ def flag_data(data, flagged_numbers):
 
 
 def log(data, base):
-    ##apply log function to a list of the inputed base
+    ##apply log function to a list with the inputed base for the log
     modified_data = list()
     try:
         for element in data:
@@ -244,7 +245,7 @@ def main():
     income_logged = log(income, 10)
     towers_logged = log(towers, 10)
     
-    demographics = combine_lists([towers, income, age, gender, marital_status, religion])
+    demographics = combine_lists([towers, income, age, gender, marital_status, religion]) #combines whatever variables you want into a list of lists so that it can be inputed into a model
     demographics = sm.add_constant(demographics)
     #stats(towers_logged, demographics, 'lsr') #does a least squares regression with the first variable as the predictor and the second variable as the response
     #stats(towers_logged, demographics, 'gls')

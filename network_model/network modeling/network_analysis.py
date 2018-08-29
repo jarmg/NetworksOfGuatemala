@@ -1,6 +1,6 @@
 import csv
 import math
-
+import pickle
 
 def open_csv(name): 
     with open(name) as f:
@@ -242,6 +242,11 @@ def total_towers_within_range(gps_data, cell_coords):
     print(len(towers))
 
 
+def write_dict_to_file(data, file_name):
+    with open(file_name, "w") as file:
+        file.write(pickle.dumps(data))
+
+
 def main():
     cell_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\cells.csv")
     cell_data = clean_cell_data(cell_data)
@@ -258,7 +263,8 @@ def main():
     gps_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\gps_data.csv")
     gps_data = clean_gps_data(gps_data)
     #tower_distances = tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_data)
-    total_towers_within_range(gps_data, cell_coords)
+    towers_range_data = total_towers_within_range(gps_data, cell_coords)
+    write_dict_to_file(towers_range_data, 'total_towers_within_range.txt')
 
 
 main()
