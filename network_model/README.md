@@ -16,6 +16,8 @@
   - Use the data from comparing the towers to determine the possible range of each tower based on the technology in the towers
     - The function for determining tower range has been written and is ready to be implemented (the get_distance function which relies on the get_signal_loss function)
     - The commented out compare_data function implements the above function to determine towers that match each other between each dataset, however, this function was written before the Tigo cell_ids were figured out, thus it needs to change to account for that
+
+
 **data_analysis_gem.py**
 - Requirements:
   - AST 0.0.2
@@ -35,6 +37,8 @@
   - Add a return value to the stats function so that it returns the predictor for the model
     - With this, a function can be added that combines the various different regression techniques into a stacked regression model
   - Expand the model by accounting for network performance with the tower data from comparing_towers.py
+
+
 **dta_prep.py**
 - Requirements:
   - lapop_2014.dta
@@ -47,6 +51,8 @@
   - This program is from the lapop_explorer and has not been modified, thus it has the same functionality as that program
 - Planned Functionality:
   - If needed, use the lapop dta files with this, however, the lapop data that seems useful has been saved into a csv file and is easilt readable in Python as it is
+
+
 **income_vs_tower_frequency.py**
 - Requirements:
   - Same as data_analysis_gem.py except for of matplotlib 2.2.3 which is required for this program
@@ -57,6 +63,8 @@
   - N/A
 - Planned Functionality:
   - N/A
+
+
 **network_analysis.py**
 - Requirements:
   - gps_data.csv
