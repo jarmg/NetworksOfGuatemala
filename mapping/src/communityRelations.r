@@ -1,373 +1,379 @@
 #getDistanceByMunis <- function(muni1, muni2, map) {
 
-#}
-
-
 #cacheDistances <- function(
 
-# works
-readMatCsv <- function(option) {
+read_mat_csv <- function(option) {
+    # Reads a csv file and returns a matrix as a data frame.
+    #
+    # Args:
+    #   option: Use '1' to read joint voting matrix.
+    #           Use '2' to read commuting matrix.
+    #
+    # Returns:
+    #   The matrix as a data frame.
     if (option == 1)
-	mat <- read.csv("jvpMat.csv", row.names = 1)
+	mat <- read.csv("jvp_mat.csv", row.names = 1)
     else if (option == 2)
-	mat <- read.csv("commMat.csv", row.names = 1)
+	mat <- read.csv("comm_mat.csv", row.names = 1)
     else
-	stop("Must specify an option.\n1: joint voting patterns\n2: communication patterns")
+	stop("Must specify an option.\n1: joint voting patterns\n
+	     2: communication patterns")
     
     return(mat)
 }
 
+make_paired_list_from_matrix <- function(mat) {
+    # Converts matrix elements to a list of pairs.
+    #
+    # Args:
+    #   mat: The matrix to be converted.
+    # 
+    # Returns:
+    #   The paired list of values.
+    
+    # make the paired list
+    mat_as_paired_list <- as.matrix(mat) # make sure not dframe
 
-# works
-makePairedListFromMatrix <- function(mat) {
-    # make the paired list 
-    matAsPairedList <- as.matrix(mat) # make sure not dframe
-    matAsPairedList <- melt(matAsPairedList) # mat row/col pairs to row/row pairs
-
-    return(matAsPairedList)
+    # mat row/col pairs to row/row pairs
+    mat_as_paired_list <- melt(mat_as_paired_list)
+    
+    return(mat_as_paired_list)
 }
 
+append_comm_vals_to_jvp_list <- function(jvp_list, comm_list) {
+    # Appends commuting data column to joint voting pattern list.
+    #
+    # Args:
+    #   jvp_list: The joint voting pattern list.
+    #   comm_list: The commuting list.
+    # 
+    # Returns:
+    #   The merged list containing both jvp and comm data.
 
-# works
-appendCommValsToJvpList <- function(jvpList, commList) {
-    jvpList <- cbind(jvpList, binList[3])
-    return(jvpList)
+    jvp_list <- cbind(jvp_list, comm_list[3])
+    return(jvp_list)
 }
 
-
-# works
-plotRegLine <- function(jvpList) {
-
-    comm <- jvpList[,4] # comm vec
-    jvp <- jvpList[,3] # voting vec
+plot_reg_line <- function(jvp_list) {
+    # Generates a scatter plot with a linear regression line.
+    #
+    # Args:
+    #   jvp_list: The list containing muni pairs and their
+    #             corresponding jvp and comm data
+    #
+    # Returns:
+    #   Returns NULL. 
+    
+    comm <- jvp_list[, 4] # comm vec
+    jvp <- jvp_list[, 3] # voting vec
 
     plot(comm, jvp)
-    abline(lm(jvp~comm), col = "red") # regression line (y~x)
+    abline(lm(jvp~comm), col = "red")  # regression line (y~x)
+    return(NULL)
 }
 
-
-getStatsByHomeID <- function(homeID, elecData, OPTIONS) {
-    # if home is tower 
-    if (OPTIONS$HOME_TYPE == 1) { 	
+get_stats_by_home_id <- function(home_id, elec_data, k_options) {
+    # Filters election data based on user defined home classification
+    
+    
+    # if home is tower
+    if (k_options$k_home_type == 1) { 	
 	stop("This function is not yet defined for tower to tower communitiy mapping")
     }
 
     # if home is municipality
-    else if (OPTIONS$HOME_TYPE == 2) {     
-	#print("Getting election stats by municipality")
-	#print("elecData$MUNI is:")
-	#select(elecData, MUNI) %>%
-	    #filter(rownames, MUNI == "MIXCO") %>%
-	
-    
-	#temp<-filter(elecData, MUNI == "Mixco")
-	
-	stats <- filter(elecData, MUNI == homeID & MUNI != "NIVEL DEPARTAMENTAL")
-	#stats <- elecData[elecData$MUNI == homeID, ]
-
+    else if (k_options$k_home_type == 2) {
+	stats <- filter(elec_data, MUNI == homeID & MUNI != "NIVEL DEPARTAMENTAL")
 	return(stats)
     }
 
-    # if home is department 
-    else if (OPTIONS$HOME_TYPE == 3) {
-		stats <- filter(elecData, DEPT == homeID & MUNI == "NIVEL DEPARTAMENTAL")
-
+    # if home is department
+    else if (k_options$k_home_type == 3) {
+		stats <- filter(elec_data, DEPT == home_id & MUNI == "NIVEL DEPARTAMENTAL")
+    return(stats)
     }
+}
 
+get_stats_by_muni <- function(muni, elec_data) {
+    stats <- filter(elec_data, MUNI == muni)
     return(stats)
 }
 
-getStatsByMuni <- function(muni, elecData) {
-    stats <- filter(elecData, MUNI == muni)
-    return(stats)
-}
-
-writeSimilarityVals <- function(jvp_mat, elecData, OPTIONS) {
+write_similarity_vals <- function(jvp_mat, elec_data, k_options) {
 
     # V = 100 - |(A_1 - A_2|
-       
+
     for (i in 1:nrow(jvp_mat)) {
-	rowName <- rownames(jvp_mat)[i]
+	row_name <- rownames(jvp_mat)[i]
 	for (j in 1:ncol(jvp_mat)) {
 
-	    colName <- colnames(jvp_mat)[j]
-	    currentElm <- jvp_mat[i,j]
-	    
+	    col_name <- colnames(jvp_mat)[j]
+
 	    print("current pair is")
-	    print(paste(rowName, colName, sep=","))
+	    print(paste(row_name, col_name, sep = ","))
 
-	    muni1 <- getStatsByMuni(rowName, elecData)
-	    muni1_perc_UNE <- muni1$PERC_UNE[1]
-	    
-	    muni2 <- getStatsByMuni(colName, elecData)
-	    muni2_perc_UNE <- muni2$PERC_UNE[1]
+	    muni1 <- get_stats_by_muni(row_name, elec_data)
+	    muni1_perc_une <- muni1$PERC_UNE[1]
 
-	    val <- (100 - abs(muni1_perc_UNE - muni2_perc_UNE))
+	    muni2 <- get_stats_by_muni(col_name, elec_data)
+	    muni2_perc_une <- muni2$PERC_UNE[1]
 
-	    jvp_mat[i,j] <- val 
-	    val <- 0 # can maybe delete this
+	    val <- (100 - abs(muni1_perc_une - muni2_perc_une))
+
+	    jvp_mat[i,j] <- val
+	    val <- 0  # can maybe delete this
 	}
     }
     return(jvp_mat)
 }
 
 
-similarityCheck <- function(elecData, validRecs, allHomeRecs, binMat, OPTIONS) {
-   
-    print("binMat is")
-    print(binMat)
+similarity_check <- function(elec_data, valid_recs,
+			     all_home_recs, bin_mat, k_options) {
 
-    for (i in 1:nrow(binMat)) {
-	for (j in 1:ncol(binMat)) {
+    for (i in 1:nrow(bin_mat)) {
+	for (j in 1:ncol(bin_mat)) {
 
-	    rowName <- rownames(binMat[i])
-	    colName <- colnames(binMat[j])
-	    currentElm <- binMat[i,j]
-	    print("currentElm is")
-	    print(currentElm)
-	    
-	    if (!is.na(currentElm) & !is.null(currentElm)) {
-		binMat[i,j] <- getSimilarityVal(rowName, colName, elecData, OPTIONS)
+	    row_name <- rownames(bin_mat[i])
+	    col_name <- colnames(bin_mat[j])
+	    current_elm <- bin_mat[i,j]
+	    	    
+	    if (!is.na(current_elm) & !is.null(current_elm)) {
+		bin_mat[i,j] <- get_similarity_val(row_name, col_name, elec_data, k_options)
 	    }
 	}
     }
-
-
-    print("dframe is:")
-    print(dframe)
-
-
-   #df <- as.data.frame(newMat)
+    #df <- as.data.frame(new_mat)
 
     return(dframe)
 }
 
-
 # in progress. not yet used
 # set a filter here for determining whether two communities are related
-isRelated <- function(c1, c2, mat) {
+is_related <- function(comm1, comm2, mat) {
 
-    #if has >= 1
-    # related
-
-    if (!is.na(mat[c1,c2]))
+    if (!is.na(mat[comm1, comm2]))
 	return(TRUE)
     else
 	return(FALSE)
 }
 
+increment_matrix_elems <- function(valid_recs, all_home_recs, mat, k_options) {
+    new_mat <- mat
+      
+    for (i in 1:nrow(valid_recs)) {
+       current_elm <- new_mat[get_home_id(k_options$k_home_type,
+					  all_home_recs,
+					  as.character(valid_recs$ANUMBER[i])),
+	                                  get_home_id(k_options$k_home_type,
+			                  all_home_recs, 
+			                  as.character(valid_recs$BNUMBER[i]))]
 
-incrementMatrixElems <- function(validRecs, allHomeRecs, mat, OPTIONS) {
-    
-    newMat <- mat
-
-    # try this instead of for loop
-   # newMat <- by(validRecs, seq_len(nrow(validRecs)), function(incMatEl) ifelse(is.na(currentElm)), 1, currentElm + 1)
-
-    #lapply(unique(Raw$SPP), makePlot, data = Raw)
-
-   for (i in 1:nrow(validRecs)) { 
-       print("current rowname is:")
-       print(getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])))
-
-       print("current colname is:")
-       print(getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i])))
-       
-       
-       currentElm <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))]
-
-       if (is.na(currentElm))
-	   newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] <-  1
+       if (is.na(current_elm))
+	   new_mat[get_home_id(k_options$k_home_type,
+			       all_home_recs,
+			       as.character(valid_recs$ANUMBER[i])),
+	                       get_home_id(k_options$k_home_type,
+			       all_home_recs,
+			       as.character(valid_recs$BNUMBER[i]))] <- 1
        else
-	   newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] <- newMat[getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$ANUMBER[i])), getHomeID(OPTIONS$HOME_TYPE, allHomeRecs, as.character(validRecs$BNUMBER[i]))] + 1
+	   new_mat[get_home_id(k_options$k_home_type,
+			       all_home_recs,
+			       as.character(valid_recs$ANUMBER[i])),
+	                       get_home_id(k_options$k_home_type,
+			       all_home_recs,
+			       as.character(valid_recs$BNUMBER[i]))] <- 
+			       new_mat[get_home_id(k_options$k_home_type, 
+                               all_home_recs,
+			       as.character(valid_recs$ANUMBER[i])),
+	                       get_home_id(k_options$k_home_type,
+			       all_home_recs, 
+			       as.character(valid_recs$BNUMBER[i]))] + 1
    }
 
-   df <- as.data.frame(newMat)
-   #df[apply(newMat,1,function(x)any(!is.na(x))),]
+   df <- as.data.frame(new_mat)
 
-    return(df)
+   return(df)
 }
 
 # remove cols which are all NA 
-removeColsWithAllNAs <- function(df) {
-   return(df[, !(colSums(is.na(df))==NROW(df))])
+remove_cols_with_all_nas <- function(df) {
+   return(df[, !(colSums(is.na(df)) == NROW(df))])
 }
 
 # remove rows which are all NA 
-removeRowsWithAllNAs <- function(df) {
-   return(df[!(rowSums(is.na(df))==NCOL(df)),])
+remove_rows_with_all_nas <- function(df) {
+   return(df[!(rowSums(is.na(df)) == NCOL(df)), ])
 }
 
-getRecsWithKnownHomes <- function(validBRecs, allARecs) {
-    validRecs <- allARecs %>%
-	filter(grepl(paste(validBRecs$ANUMBER, collapse="|"), allARecs$BNUMBER)) 
-    
-    return(validRecs)
-}
+get_recs_with_known_homes <- function(valid_bnum_recs, all_anum_recs) {
+    valid_recs <- all_anum_recs %>%
+	filter(grepl(paste(valid_bnum_recs$ANUMBER, collapse = "|"),
+		     all_anum_recs$BNUMBER))
 
+    return(valid_recs)
+}
 
 # return a dframe where all BNUMBERS are present as ANUMBERs in the CDR
-filterByBinA <- function(homeRecs) {
+filter_by_bnum_in_a <- function(home_recs) {
 
-    validBRecs <- homeRecs %>%
-	filter(grepl(paste(homeRecs$BNUMBER, collapse="|"), homeRecs$ANUMBER)) 
-    
-    #print("Printing filtered CDR of all BNUMBERS who appear as BNUMBERs in the above table but appear as ANUMBERs here. This means we have their HOME_ID")
-    #print(validBRecs)
+    valid_bnum_recs <- home_recs %>%
+	filter(grepl(paste(home_recs$BNUMBER, collapse="|"),
+		     home_recs$ANUMBER))
 
-    return(validBRecs)
+    return(valid_bnum_recs)
 }
-
 
 # return a filtered cdr with all records for each anumber
 # homeIDs is a dframe of unique ANUMBERS which have homes assigned
-getAllHomeRecs <- function(homeIDs, cdr) {
+get_all_home_recs <- function(home_ids, cdr) {
 
-    #fcdr <- group_by(homeIDs) %>% 
-	#summarise(records = getAllRecsByANUMBER(homeIDs$ANUMBER, cdr))
     fcdr <- cdr %>%
-	filter(grepl(paste(homeIDs$ANUMBER, collapse="|"), cdr$ANUMBER)) 
-    #print("Printing all outgoing call recs of ANUMBERs who have HOME_IDs")
-    #print(fcdr)
-    
+	filter(grepl(paste(home_ids$ANUMBER, collapse = "|"), cdr$ANUMBER))
+
     return(fcdr)
 }
 
 
-getUniqueLabels <- function(elecData, OPTIONS) {
-   
-    if (OPTIONS$HOME_TYPE == 1) { # home_ID is tower
-       stop("getUniqueMunis() not yet defined for this category")
-    }
-   
-    else if (OPTIONS$HOME_TYPE == 2) { # home_ID is muni
-	uniqueLabels <- unique(elecData$MUNI) # should already be unique.. redundant?
-	return(uniqueLabels)
+get_unique_labels <- function(elec_data, k_options) {
+
+    # home_id is tower
+    if (k_options$k_home_type == 1) {
+	stop("getUniqueMunis() not yet defined for this category")
     }
 
-    else if (OPTIONS$HOME_TYPE == 3) { # home_id is dept
-	uniqueLabels <- unique(elecData$DEPT) # should already be unique.. redundant?
-	return(uniqueLabels)
+    # home_id is muni
+    else if (k_options$k_home_type == 2) {
+	unique_labels <- unique(elec_data$MUNI)
+	return(unique_labels)
+    }
+
+    # if home_id is dept
+    else if (k_options$k_home_type == 3) {
+	unique_labels <- unique(elec_data$DEPT)
+	return(unique_labels)
     }
 }
 
-create_JVP_matrix <- function(elecData, OPTIONS) {
-    uniqueLabels <- getUniqueLabels(elecData, OPTIONS)
-    n <- length(uniqueLabels)
+create_jvp_matrix <- function(elec_data, k_options) {
+    unique_labels <- get_unique_labels(elec_data, k_options)
+    n <- length(unique_labels)
 
-    jvp_mat <- matrix(, nrow = n , ncol = n)
-    
-    colnames(jvp_mat) <- uniqueLabels[1:ncol(jvp_mat)]
-    rownames(jvp_mat) <- uniqueLabels[1:nrow(jvp_mat)]
+    jvp_mat <- matrix(, nrow = n, ncol = n)
+
+    colnames(jvp_mat) <- unique_labels[1:ncol(jvp_mat)]
+    rownames(jvp_mat) <- unique_labels[1:nrow(jvp_mat)]
 
     return(jvp_mat)
 }
 
-
-getUniqueHome_IDs <- function(dframe) {
-    
-    uniqueHomes <- unique(dframe$HOME_ID)
-    return(uniqueHomes)
+get_unique_home_ids <- function(dframe) {
+    unique_homes <- unique(dframe$HOME_ID)
+    return(unique_homes)
 }
 
-
 # create an NxN labeled matrix where N is HOME_ID
-createHomeIDMatrix <- function(dframe) {
-    uniqueHomes <- getUniqueHome_IDs(dframe)
-    n <- length(uniqueHomes)
+create_home_id_matrix <- function(dframe) {
+    unique_homes <- get_unique_home_ids(dframe)
+    n <- length(unique_homes)
 
-    mat <- matrix(, nrow = n , ncol = n)
-    
-    colnames(mat) <- uniqueHomes[1:ncol(mat)]
-    rownames(mat) <- uniqueHomes[1:nrow(mat)]
+    mat <- matrix(, nrow = n, ncol = n)
+
+    colnames(mat) <- unique_homes[1:ncol(mat)]
+    rownames(mat) <- unique_homes[1:nrow(mat)]
 
     return(mat)
 }
 
 # create a dframe of only records with home addresses
-getAllHomeIDs <- function(data, towers, threshs) {
-    
+get_all_home_ids <- function(data, towers, threshs) {
+
   print("Removing records with no home/work pairs...")
-  origNum <- nrow(data) # get orig num records
-  
-  filt_cdr <- showHomeAndWorkTowers(data, towers, threshs) %>% 
-    filter(!is.na(HOME_ID) & (HOME_ID!= ("TO BE DETERMINED"))) 
+  orig_num <- nrow(data)  # get orig_num records
+
+  filt_cdr <- show_home_and_work_towers(data, towers, threshs) %>%
+    filter(!is.na(HOME_ID) & (HOME_ID != ("TO BE DETERMINED")))
   filt_cdr$WORK_ID <- NULL
 
-  newNum <- nrow(filt_cdr) # get new num records after removing records w/o home and work locs
-  
-  print(paste("raw data: ", origNum, " record(s)", sep=""))
-  print(paste("filtered data: ", newNum, " record(s)", sep=""))
-  print(paste("percentage removed", 100 - (origNum/newNum)))
+  # get new_num records after removing records w/o home and work locs
+  new_num <- nrow(filt_cdr)
 
-  #print("Printing all ANUMBERS who have HOME_IDs")
-  #print(filt_cdr)
-  
+  print(paste("raw data: ", orig_num, " record(s)", sep = ""))
+  print(paste("filtered data: ", new_num, " record(s)", sep = ""))
+  print(paste("percentage removed", 100 - (orig_num / new_num)))
+
   return(filt_cdr)
 }
 
-loadSources <- function() {
+load_sources <- function() {
     print("Loading sources")
     source("../../commuting/src/commuterCategorize.r")
     print("Success")
 }
 
-
-makeBinaryMatrix <- function(mat) {
+make_binary_matrix <- function(mat) {
 
     # change all values >= 1 to 1 to make binary
-    mat[] <- +(mat >= 1)
+    mat[] <- + (mat >= 1)
 
     return(mat)
 }
 
 
 # reads raw data and generates csv files for comm and jvp
-mainMapping <- function() {
-    loadSources()
-    loadPacks()
-    #threshs <- initThresholds() # init threshold vals
-    OPTIONS <- setOptions()
-    dataList <- getData(initPaths())
+main_mapping <- function() {
+    load_sources()
+    load_packs()
 
-    cdr <- dataList$cdr
-    towers <- dataList$towers
-    elecData <- dataList$elecData
+    # init constant vals
+    k_options <- set_options()
+    data_list <- get_data(init_paths())
 
-    #homeIDs <- getAllHomeIDs(cdr, towers, threshs) # records with home addresses
+    cdr <- data_list$cdr
+    towers <- data_list$towers
+    elec_data <- data_list$elec_data
+    print("elec_data is:")
+    print(head(elec_data))
 
-    origNumRecs <- nrow(cdr)
+    orig_numm_recs <- nrow(cdr)
 
-    homeIDs <- removeRecordsWithNoHome(cdr, towers, OPTIONS)
-    
-    allHomeRecs <- getAllHomeRecs(homeIDs, cdr) # CDR with all ANUMS who have homes
-    validBRecs<- filterByBinA(allHomeRecs) # return a dframe where all BNUMBERS also present as ANUMBER
-    validRecs <- getRecsWithKnownHomes(validBRecs, allHomeRecs)
-    numValidRecs <- nrow(validRecs)
+    home_ids <- remove_records_with_no_home(cdr, towers, k_options)
 
-    print(paste("Original number of records: ", origNumRecs))
-    print(paste("Number of records for which there exist HOME_IDs and an ANUMBER for every BNUMBER: ", numValidRecs)) 
-    print(paste("Percentage removed: ", 100 - (numValidRecs/origNumRecs)))
+    # CDR with all ANUMS who have homes
+    all_home_recs <- get_all_home_recs(home_ids, cdr)
 
-    #home_ID_mat <- createHomeIDMatrix(homeIDs) # create matrix using HOME_ID 
+    # return a dframe where all BNUMBERS also present as ANUMBER
+    valid_bnum_recs <- filter_by_bnum_in_a(all_home_recs)
+    valid_recs <- get_recs_with_known_homes(valid_bnum_recs, all_home_recs)
+    num_valid_recs <- nrow(valid_recs)
 
-    jvp_mat <- create_JVP_matrix(elecData, OPTIONS)
+    print(paste("Original number of records: ", orig_numm_recs))
+    print(paste("Number of records for which there exist home_ids and an ANUMBER
+		for every BNUMBER: ", num_valid_recs))
+    print(paste("Percentage removed: ",
+		100 - (num_valid_recs / orig_numm_recs)))
 
-    home_ID_mat <- jvp_mat
-            
-    # increment matrix elems: +1 for each call between communities 
-    incMat <- incrementMatrixElems(validRecs, homeIDs, home_ID_mat, OPTIONS)
-    binary_mat <- makeBinaryMatrix(incMat)
+    jvp_mat <- create_jvp_matrix(elec_data, k_options)
+print("jvp_mat is:")
+print(jvp_mat)
+    home_id_mat <- jvp_mat
 
-    # write vals into jvp_mat 
-    jvp_mat <- writeSimilarityVals(jvp_mat, elecData, OPTIONS) 
+    # increment matrix elems: +1 for each call between communities
+    inc_mat <- increment_matrix_elems(valid_recs, home_ids, home_id_mat, k_options)
+    binary_mat <- make_binary_matrix(inc_mat)
+
+    # write vals into jvp_mat
+    jvp_mat <- write_similarity_vals(jvp_mat, elec_data, k_options)
 
     # write jvp_mat to file
-    #write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA, sep =",") 
+    #write.table(jvp_mat, file="jvpmatrix.csv", row.names=TRUE, col.names=NA,
+    #sep =",")
 
     # write to csv file
-    write.table(jvp_mat, file="jvpMat.csv", row.names=TRUE, col.names=NA, sep =",") 
-    write.table(binary_mat, file="commMat.csv", row.names=TRUE, col.names=NA, sep =",") 
+    write.table(jvp_mat, file = "jvp_mat.csv",
+		row.names = TRUE, col.names = NA, sep = ",")
+    write.table(binary_mat, file = "comm.mat.csv",
+		row.names = TRUE, col.names = NA, sep = ",")
 
     return(0)
 }
