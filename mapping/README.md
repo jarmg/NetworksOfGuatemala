@@ -37,11 +37,11 @@ muni1 who voted for a political party, and A\_2 is the percentage of people
 from muni2 who voted for that same political party.
 
 Open an interactive R terminal, and type:
-**jvp <- read\_mat\_csv(1)**
-**comm <- read\_mat\_csv(2)**
-**jvp\_list <- make\_paired\_list\_from\_matrix(jvp)**
-**comm\_list <- make\_paired\_list\_from\_matrix(comm)**
-**jvp\_list <- append\_comm\_vals\_to\_jvp\_list(jvp\_list, comm\_list)**
+**jvp <- read\_mat\_csv(1)**<br>
+**comm <- read\_mat\_csv(2)**<br>
+**jvp\_list <- make\_paired\_list\_from\_matrix(jvp)**<br>
+**comm\_list <- make\_paired\_list\_from\_matrix(comm)**<br>
+**jvp\_list <- append\_comm\_vals\_to\_jvp\_list(jvp\_list, comm\_list)**<br>
 jvp\_list now contains all of the data and can be subsetted to generate
 plots.
 
