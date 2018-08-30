@@ -85,7 +85,8 @@ def open_csv(name):
 
 def clean_tigo_data(data):
     ##remove incomplete data
-    return filter(lambda (a, b, c): b != "TBD" and b != "NA" and c != "TBD" and c != "NA", data)
+    invalids = set(['TBD', 'NA'])
+    return filter(lambda (cell, lat, lon): set([lat, lon]).isdisjoint(invalids), data)
 
 
 def clean_open_cell_id_data(data):
@@ -106,13 +107,14 @@ def get_columns(data, cols):
 
 
 def distance_between_coords(lat1, lon1, lat2, lon2):
+    ##source: http://en.wikipedia.org/wiki/Lat-lon
     lat_mid = (lat1 + lat2) / 2
     lon_mid = (lon1 + lon2) / 2
-    meters_per_deg_lat = 111132.954 - 559.822 * math.cos(2 * lat_mid) + 1.175 * math.cos(4 * lat_mid)
-    meters_per_deg_lon = (3.14159265359 / 180) * 6367449 * math.cos(lat_mid)
+    m_per_deg_lat = 111132.954 - 559.822 * math.cos(2 * lat_mid) + 1.175 * math.cos(4 * lat_mid)
+    m_per_deg_lon = (3.14159265359 / 180) * 6367449 * math.cos(lat_mid)
     delta_lat = math.fabs(lat1 - lat2)
     delta_lon = math.fabs(lon1 - lon2)
-    return math.sqrt(math.pow(delta_lat * meters_per_deg_lat, 2) + math.pow(delta_lon * meters_per_deg_lon, 2))
+    return math.sqrt((delta_lat * m_per_deg_lat)**2 + (delta_lon * m_per_deg_lon)** 2)
 
 
 def long_cid_to_short_cid(long_cid):
@@ -140,11 +142,13 @@ def num_to_bin_str(num):
 
 def put_cell_id_together(cell):
     #puts together open_cell_id data into tigo's format for cell_ids
-    return cell[1] + '0' + cell[2] + cell[3] + str(long_cid_to_short_cid(int(cell[4])))
+    short_cid = str(long_cid_to_short_cid(int(cell[4])))
+    return cell[1] + '0' + cell[2] + cell[3] + short_cid
 
 
 def get_cells_in_area(open_cell_id_data):
-    ##makes a dictionary where the key is the area number and the value is another dictionary where the keys are lte/gsm/umts
+    ##makes a dictionary where the key is the area number and the value
+    ##is another dictionary where the keys are lte/gsm/umts
     ##and the values are lists of the cells in that area with that technology
     areas = dict()
     for cell in open_cell_id_data:
@@ -164,8 +168,10 @@ def get_cells_in_area(open_cell_id_data):
 
 
 def match_tigo_data(tigo, open_cell_id_areas):
-    ##makes a dictionary where the key is the area number and the value is another dictionary where the keys are lte/gsm/umts
-    ##and the values are lists of the cells in that area with that technology that also exist in open_cell_id
+    ##makes a dictionary where the key is the area number and the
+    ##value is another dictionary where the keys are lte/gsm/umts
+    ##and the values are lists of the cells in that area with that
+    ##technology that also exist in open_cell_id
     tigo_match_data = dict()
     tigo_cell_ids = [element[0] for element in tigo]
     for area in open_cell_id_areas.keys():
@@ -187,48 +193,6 @@ def match_tigo_data(tigo, open_cell_id_areas):
 def write_dict_to_file(data, file_name):
     with open(file_name, "w") as file:
         file.write(pickle.dumps(data))
-
-
-##the below function has been commented out as it needs to be modified to account for
-##us now knowing how to decipher tigo cell_ids
-
-        
-##def compare_data(data1, data2):
-##    try:
-##        longer_data = data1 if len(data1) >= len(data2) else data2
-##        shorter_data = data1 if longer_data != data1 else data2
-##        positive_results = 0
-##        count = 0
-##        frequencies = {'GSM': 1900, 'UMTS': 850, 'LTE': 850}
-##        distances = dict()
-##        for freq in frequencies.keys():
-##            max_signal_loss = int(get_signal_loss(frequencies[freq], 100))
-##            distance = 0
-##            for x in xrange(1, 100, 1):
-##                dist, signal_loss = get_distance(frequencies[freq], float(x) / 1)
-##                if round(signal_loss) == round(max_signal_loss / 2):
-##                     print(frequencies[freq])
-##                     print(get_distance(frequencies[freq], float(x) / 1))
-##                     distance = convert_miles_to_km(round(dist * 1000))
-##                     break
-##             distances[freq] = distance
-##        tower_matches = dict()
-##        for data_long in longer_data:
-##            towers = list()
-##            count += 1
-##            if count % 100 == 0:
-##                print(count)
-##                print(positive_results)
-##            for data_short in shorter_data:
-##                distance = distances[data_short[0]]
-##                if distance_between_coords(float(data_long[1]), float(data_long[2]), float(data_short[1]), float(data_short[2])) <= distance:
-##                    towers.append(data_short)
-##                    positive_results += 1
-##            tower_matches[data_long[0]] = towers
-##        return positive_results, tower_matches     
-##    except:
-##        print("invalid parameters entered into compare_data")
-##        return 0
 
 
 def main():

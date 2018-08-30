@@ -66,7 +66,8 @@ def parse_dep_muni_data(data):
 
 
 def decode_gps_data(data):
-    ##convert the numerical values that represent departments and municipalities into their actual names
+    ##convert the numerical values that represent departments
+    ##and municipalities into their actual names
     departments = open_csv("data\\departments.csv")
     municipalities = open_csv("data\\municipalities.csv")
     dep_dict = parse_dep_muni_data(departments)
@@ -91,8 +92,11 @@ def decode_gps_data(data):
 
 
 def get_state_data(data):
-    ##make a dictionary where the department/state is the key and the value is a list containing a list of cities, a list of latitudes, a list of longitudes, and a list of cell IDs
-    ##there are 22 states out of 22 possibilities and 337 cities out of 340 possibilities in this data set
+    ##make a dictionary where the department/state is the key
+    ##and the value is a list containing a list of cities, a
+    ##list of latitudes, a list of longitudes, and a list of cell IDs
+    ##there are 22 states out of 22 possibilities and 337 cities
+    ##out of 340 possibilities in this data set
     states = dict()
     states[data[0][3]] = [[data[0][4]], [float(data[0][1])], [float(data[0][2])], [data[0][0]]]
     for call in data[1:]:
@@ -112,7 +116,9 @@ def get_state_data(data):
 
 
 def get_city_data(data):
-    ##make a dictionary where the city/municipality is the key and the value is a list of the state, a list of latitudes, a list of longitudes, and a list of cell IDs
+    ##make a dictionary where the city/municipality is the key and
+    ##the value is a list of the state, a list of latitudes, a list
+    ##of longitudes, and a list of cell IDs
     cities = dict()
     cities[data[0][4]] = [data[0][3], [float(data[0][1])], [float(data[0][2])], [data[0][0]]]
     for call in data[1:]:
@@ -128,7 +134,8 @@ def get_city_data(data):
 
 
 def get_avg_coords(locations):
-    ##average the coordinates of whatever is inputed, guaranteed to work on city and state data, however, has not been tested on anything else
+    ##average the coordinates of whatever is inputed, guaranteed to
+    ##work on city and state data, however, has not been tested on anything else
     avg_coords = dict()
     for key in locations.keys():
         cell_data = locations[key]
@@ -139,7 +146,8 @@ def get_avg_coords(locations):
 
 
 def get_closest_location(coordinates, lat, lon):
-    ##get the approximate closest city/state/tower to an inputed latitude and longitude
+    ##get the approximate closest city/state/tower to an inputed latitude
+    ##and longitude
     coord = [lat, lon]
     closest_location = ""
     closest_coords = [float("inf"), float("inf")]
@@ -158,7 +166,8 @@ def get_closest_location(coordinates, lat, lon):
 
 
 def coords_to_metric(lat1, lon1, lat2, lon2):
-    ##the limitations of this formula is that it is within 0.6 meters accurate for 100 kilometers longitudinally and 1 centimeter accurate for 100 kilometers latitudinally
+    ##the limitations of this formula is that it is within 0.6 meters accurate for 100
+    ##kilometers longitudinally and 1 centimeter accurate for 100 kilometers latitudinally
     ##source: http://en.wikipedia.org/wiki/Lat-lon
     lat_mid = (lat1 + lat2) / 2
     lon_mid = (lon1 + lon2) / 2
@@ -170,21 +179,25 @@ def coords_to_metric(lat1, lon1, lat2, lon2):
 
 
 def distance_between_locations(locations, avg_coords):
-    ##generates a dictionary where the keys are locations and the values are lists that contain the name of other locations and the metric distance between this location and the key location
+    ##generates a dictionary where the keys are locations and the values are lists that
+    ##contain the name of other locations and the metric distance between this location and the key location
     distances = dict()
     for location in locations.keys():
         dist_from_loc = list()
         for other_location in locations.keys():
             if other_location != location:
                 dist_from_loc.append(other_location)
-                dist_from_loc.append(coords_to_metric(avg_coords[location][0], avg_coords[location][1], avg_coords[other_location][0], avg_coords[other_location][1]))
+                metric_distance = coords_to_metric(avg_coords[location][0], avg_coords[location][1], avg_coords[other_location][0], avg_coords[other_location][1])
+                dist_from_loc.append(metric_distance)
         distances[location] = dist_from_loc
     return distances
 
 
 def tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_data):
-    ##get the distances of all towers from gps_data and return a dictionary where an index of the person is the key of the distances
-    ##dictionary and the value is the ten closest towers to them (the number of towers can be changed by adding more values to closest_towers)
+    ##get the distances of all towers from gps_data and return a dictionary
+    ##where an index of the person is the key of the distances
+    ##dictionary and the value is the ten closest towers to them
+    ##(the number of towers can be changed by adding more values to closest_towers)
     distances = dict()
     index = 0
     closest_cities_dict = dict()
@@ -223,7 +236,9 @@ def tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_da
 
 
 def total_towers_within_range(gps_data, cell_coords):
-    ##return a dictionary of all towers within a certain range to each person where the index of the person is the key and the value is the list of towers
+    ##return a dictionary of all towers within a certain
+    ##range to each person where the index of the person
+    ##is the key and the value is the list of towers
     towers = dict()
     index = 0
     for person in gps_data:
