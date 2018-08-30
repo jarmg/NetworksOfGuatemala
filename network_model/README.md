@@ -8,7 +8,7 @@
 - Current Functionality:
   - Opens and cleans relevant data to be used for comparing towers between Tigo and Open Cell ID
   - Gets all cells in each area from the Open Cell ID data and organizes them by technology 
-    - This is organized as a dictionary where the keys are the area values and the values are dictionaries that contain the technology (either GSM, LTE, or UMTS) as the key and a list of all cells in that area using that technology as the value 
+    - This is organized as a dictionary where the keys are the area values (values that represent a certain geographical area) and the values are dictionaries that contain the technology (either GSM, LTE, or UMTS) as the key and a list of all cells in that area using that technology as the value 
   - Gets all cells from the Open Cell ID data that are also in the Tigo data and organizes them in a manner similar to the dictionary described above
 - Planned Functionality: 
   - Compare the dictionaries above to determine how many towers are shared between the two datasets and determine if there are patterns in the towers that are in the Open Cell ID data but not in the Tigo data
