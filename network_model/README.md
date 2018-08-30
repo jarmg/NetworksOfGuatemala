@@ -52,18 +52,6 @@
   - If needed, use the lapop dta files with this, however, the lapop data that seems useful has been saved into a csv file and is easily readable in Python as it is
 
 
-**income_vs_tower_frequency.py**
-- Requirements:
-  - Same as data_analysis_gem.py except for of matplotlib 2.2.3 which is required for this program
-- Purpose:
-  - This is an older, less modular, and messier version of data_analysis_gem.py
-  - This program is here as reference and has no current purpose as it has been outdated by the improved data_analysis_gem.py
-- Current Functionality:
-  - N/A
-- Planned Functionality:
-  - N/A
-
-
 **network_analysis.py**
 - Requirements:
   - gps_data.csv
