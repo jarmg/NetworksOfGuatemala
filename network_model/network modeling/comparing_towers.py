@@ -13,43 +13,61 @@ def get_signal_loss(freq, dist):
 
 
 def get_distance_approximation(freq, desired_signal):
-    ##get the distance from the cell tower for which which signal loss is very close in value to desired_signal at a certain frequency
-    ##ex. if desired_signal is 0, then the zero-point distance is found, however, desired_signal must always be greater than 0
-    ##as negative signal is not possible
+    
+    ##the function works by taking the maximum possible distance value that the
+    ##formula in get_signal_loss accepts and decreasing this value until it results
+    ##in a signal_loss less than the desired_signal and then oscillating the distance
+    ##with increasingly smaller values until it hones in on the distance value that
+    ##results in the desired_signal
+    
     if desired_signal < 0:
         desired_signal = 0
-    dist = Decimal(100) #max value possible for distance
-    dist_change_factor = 0.1 #the factor used for determining how much to change distance by
-    change_add_index = True #used for determining whether to change the index of prev_two_adds
-    increase_power = 0 #the amount by which to increase the power by which dist is reduced by
-    signal_loss = Decimal(100000) #default value
-    prev_two_adds = [False, True] #used for when signal_loss is oscillating around desired_signal as it helps determine when to add to increase_power
+    dist = Decimal(100)
+    ##max value possible for distance
+    dist_change_factor = 0.1
+    ##the factor used for determining how much to change distance by
+    change_add_index = True
+    ##used for determining whether to change the index of prev_two_adds
+    increase_power = 0
+    ##the amount by which to increase the power by which dist is reduced by
+    signal_loss = Decimal(100000)
+    ##default value
+    prev_two_adds = [False, True]
+    ##used for when signal_loss is oscillating around desired_signal as it
+    ##helps determine when to add to increase_power
     while math.fabs(signal_loss) > 0.00000000000000001 + desired_signal:
         ##small amount added to prevent desired_signal from possibly equaling zero
-        signal_loss = Decimal(get_signal_loss(freq, dist)) #gets the signal loss for freq and current dist value
+        signal_loss = Decimal(get_signal_loss(freq, dist))
+        ##gets the signal loss for freq and current dist value
         add = False
-        if signal_loss < desired_signal: #if the signal_loss is less than the desired_signal then add to distance to increase signal_loss in the next iteration of the loop
+        if signal_loss < desired_signal:
+            ##if the signal_loss is less than the desired_signal then add to
+            ##distance to increase signal_loss in the next iteration of the loop
             add = True
         cont = True
         power = 0
         while cont:
             if dist <= Decimal(dist_change_factor) / Decimal(math.pow(10, power)):
                 ##determine by how much dist can be reduced
-                ##ex. if dist = 15.4, then it will reduce dist by 0.1; if dist = 0.35, then it will reduce dist by 0.01
+                ##ex. if dist = 15.4, then it will reduce dist by 0.1; if dist = 0.35,
+                ##then it will reduce dist by 0.01
                 power += 1
             else:
                 cont = False
         increase_power += 1 if add == prev_two_adds[1] and add != prev_two_adds[0] else 0
-        ##if signal_loss is oscillating around desired_signal, then increase the amount by which dist will be reduced
+        ##if signal_loss is oscillating around desired_signal, then increase the
+        ##amount by which dist will be reduced
         amount_to_change = Decimal(dist_change_factor) / Decimal(math.pow(10, power + increase_power))
         ##determine by amount that dist will change by
         dist += amount_to_change if add is True else amount_to_change * -1
-        ##add or subtract from dist depending on if signal_loss is less than or greater than desired_signal
+        ##add or subtract from dist depending on if signal_loss is
+        ##less than or greater than desired_signal
         if change_add_index == True:
             prev_two_adds[0] = add
         else:
             prev_two_adds[1] = add
-    return dist.quantize(Decimal('1.000000000000000000000000')), signal_loss #returns the distance for which signal_loss is very close in value to desired_signal
+    return dist.quantize(Decimal('1.000000000000000000000000')), signal_loss
+    ##returns the distance for which signal_loss is very close in value to desired_signal
 
 
 def convert_miles_to_km(distance):
@@ -60,23 +78,24 @@ def open_csv(name):
     with open(name) as f:
         reader = csv.reader(f)
         data = list(reader)
-    data = data[1:] #remove column names
+    data = data[1:]
+    ##remove column names
     return data
 
 
 def clean_tigo_data(data):
-    #remove incomplete data
+    ##remove incomplete data
     return filter(lambda (a, b, c): b != "TBD" and b != "NA" and c != "TBD" and c != "NA", data)
 
 
 def clean_open_cell_id_data(data):
-    #remove non-tigo data
-    #2 represents towers on Tigo's network
-    return filter(lambda (a, b, c, d, e, f, g): c == '2', data)
+    ##remove non-tigo data
+    tigo_id = data[2]
+    return filter(lambda (a, b, c, d, e, f, g): c == tigo_id, data)
 
 
 def get_columns(data, cols):
-    #cols should be a list of the indices of the columns wanted from data
+    ##cols should be a list of the indices of the columns wanted from data
     mod_data = list()
     for x in data:
         holder = list()
@@ -107,7 +126,8 @@ def num_to_bin(num):
 
 
 def num_to_bin_str(num):
-    ##return the binary representation of a number (split up by groups of four bits for readability)
+    ##return the binary representation of a number (split up by groups of four
+    ##bits for readability)
     binary_str = str(bin(int(num)))[2:]
     mod_str = ""
     for x in range(0, len(binary_str)):

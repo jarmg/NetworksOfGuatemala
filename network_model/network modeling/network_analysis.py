@@ -209,10 +209,7 @@ def tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_da
         except ValueError:
             continue
         for x in range(0, len(closest_cities)):
-            try:
-                all_available_towers.append(city_data[closest_cities[x][0]][3])
-            except ValueError:
-                continue
+            all_available_towers.append(city_data[closest_cities[x][0]][3])
         for cell in cell_coords.keys():
             if cell in all_available_towers:
                 for x in range(0, 10):
