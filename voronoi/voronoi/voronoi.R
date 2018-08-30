@@ -16,14 +16,19 @@ library(nlme)
 suppressPackageStartupMessages(library(googleVis))
 
 
-f <- readOGR(dsn="/Users/alexa/Desktop/Guatemala/map/GTM_adm2.shp")
+#generates a voronoi diagram that represents a base idea of Tigo's cellular network coverage
+#using a shape file of Guatemala and the latitudes and longitudes of Tigo's towers
+
+
+f <- readOGR(dsn="map/GTM_adm2.shp")
 
 
 f2=f[f$OBJTYPE!="Havflate"]
 guatemala=gUnaryUnion(f2)
 
 
-towers <- read.csv("/Users/alexa/Desktop/Guatemala/data/lon_lat_v2.csv", sep=",")
+towers <- read.csv("/Users/alexa/Desktop/Guatemala/data/lon_lat_v2.csv", sep=",") 
+#file path location needs to be changed depending on where this file is for the user
 towers <- transform(towers, LON=as.numeric(LON), LAT=as.numeric(LAT))
 towers <- na.omit(object = towers)
 

@@ -54,7 +54,7 @@ def clean_gps_data(data):
             to_be_removed.append(gps)
     while(len(to_be_removed) > 0):
         data.remove(to_be_removed.pop())
-    data = change_gps_data(data)
+    data = decode_gps_data(data)
     return data
 
 def parse_dep_muni_data(data):
@@ -65,10 +65,10 @@ def parse_dep_muni_data(data):
     return loc_data
 
 
-def change_gps_data(data):
+def decode_gps_data(data):
     ##convert the numerical values that represent departments and municipalities into their actual names
-    departments = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\departments.csv")
-    municipalities = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\municipalities.csv")
+    departments = open_csv("data\\departments.csv")
+    municipalities = open_csv("data\\municipalities.csv")
     dep_dict = parse_dep_muni_data(departments)
     muni_dict = parse_dep_muni_data(municipalities)
     zona = list()
@@ -237,9 +237,7 @@ def total_towers_within_range(gps_data, cell_coords):
                 count += 1
         towers[index] = count
         index += 1
-    print(towers)
-    print(len(cell_coords))
-    print(len(towers))
+    return towers
 
 
 def write_dict_to_file(data, file_name):

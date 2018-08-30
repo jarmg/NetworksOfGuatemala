@@ -1,10 +1,8 @@
-import warnings
 import csv
 import itertools
 import math
 import pickle
-from decimal import *
-warnings.filterwarnings("ignore")
+import decimal
 
 
 def get_signal_loss(freq, dist):
@@ -73,6 +71,7 @@ def clean_tigo_data(data):
 
 def clean_open_cell_id_data(data):
     #remove non-tigo data
+    #2 represents towers on Tigo's network
     return filter(lambda (a, b, c, d, e, f, g): c == '2', data)
 
 
@@ -124,11 +123,11 @@ def put_cell_id_together(cell):
     return cell[1] + '0' + cell[2] + cell[3] + str(long_cid_to_short_cid(int(cell[4])))
 
 
-def get_cells_in_area(open_cell_id):
+def get_cells_in_area(open_cell_id_data):
     ##makes a dictionary where the key is the area number and the value is another dictionary where the keys are lte/gsm/umts
     ##and the values are lists of the cells in that area with that technology
     areas = dict()
-    for cell in open_cell_id:
+    for cell in open_cell_id_data:
         cell.append(put_cell_id_together(cell))
         if cell[3] not in areas.keys():
             areas[cell[3]] = {cell[0]: [cell]}
