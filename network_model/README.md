@@ -4,7 +4,7 @@
     - Available in the data folder
   - Cells.csv
 - Purpose:
-  - Compares Tigo data from Cells.csv to the data from open_cell_id.csv (file location needs to be changed)
+  - Compares Tigo data from Cells.csv to the data from open_cell_id.csv
 - Current Functionality:
   - Opens and cleans relevant data to be used for comparing towers between Tigo and Open Cell ID
   - Gets all cells in each area from the Open Cell ID data and organizes them by technology 
@@ -62,7 +62,6 @@
     - contains the codes for departments in one column and the department those codes represent in another column
   - municipalities.csv
     - contains the codes for municipalities in one column and the municipalities those codes represent in another column
-  - All file locations need to be updated
 - Purpose:
   - Calculates how many towers are within a certain range of those who responded to the GEM survey (total_towers_within_range function) and writes to the file total_towers_within_range.txt
   - Calculates the closest n towers to those who responded to the GEM survey (tower_distances_from_gps_data function)
