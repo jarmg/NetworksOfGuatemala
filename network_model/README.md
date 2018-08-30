@@ -50,7 +50,7 @@
   - Current Functionality:
   - This program is from the lapop_explorer and has not been modified, thus it has the same functionality as that program
 - Planned Functionality:
-  - If needed, use the lapop dta files with this, however, the lapop data that seems useful has been saved into a csv file and is easilt readable in Python as it is
+  - If needed, use the lapop dta files with this, however, the lapop data that seems useful has been saved into a csv file and is easily readable in Python as it is
 
 
 **income_vs_tower_frequency.py**
