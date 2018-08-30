@@ -61,7 +61,7 @@
   - departments.csv
     - contains the codes for departments in one column and the department those codes represent in another column
   - municipalities.csv
-    - contains the codes for municipalities in one column and the municipalities those codes represent in anotheer column
+    - contains the codes for municipalities in one column and the municipalities those codes represent in another column
   - All file locations need to be updated
 - Purpose:
   - Calculates how many towers are within a certain range of those who responded to the GEM survey (total_towers_within_range function) and writes to the file total_towers_within_range.txt
