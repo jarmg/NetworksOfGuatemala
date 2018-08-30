@@ -33,34 +33,25 @@ import math
 
 
 def open_csv(name): 
-    try:
-        with open(name) as f:
-            reader = csv.reader(f)
-            data = list(reader)
-        data = data[1:]
-        return data
-    except:
-        raise Exception('invalid parameters in open_csv')
+    with open(name) as f:
+        reader = csv.reader(f)
+        data = list(reader)
+    data = data[1:]
+    return data
 
 
 def open_dict(name):
     ##open dictionary from a file, untested with not txt files
-    try:
-        with open(name) as f:
-            reader = f.read()
-            data = ast.literal_eval(reader)
-        return data
-    except:
-        raise Exception('invalid parameters in open_dict')
+    with open(name) as f:
+        reader = f.read()
+        data = ast.literal_eval(reader)
+    return data
 
 
 def convert_dict_to_list(data):
     modified_data = list()
-    try:
-        for key in data.keys():
-            modified_data.append(data[key])
-    except:
-        raise Exception('invalid parameters in convert_dict_to_list')
+    for key in data.keys():
+        modified_data.append(data[key])
     return modified_data
 
 
@@ -70,7 +61,7 @@ def initial_cleanup_gem_data(gem):
     for element in gem:
         try: #checks if entry is complete by checking if the fields contain the correct data type
             data_check = [float(element[0]), float(element[1]), float(element[2]), int(element[3])]
-        except:
+        except ValueError:
             to_be_removed.append(element)
     while len(to_be_removed) > 0:
         gem.remove(to_be_removed.pop())
@@ -84,7 +75,7 @@ def final_cleanup_data(gem, towers):
         try:
             if int(gem[index][6]) in [-1, -2]:
                 to_be_removed.append(index)
-        except:
+        except ValueError:
             pass
     while len(to_be_removed) > 0:
         index = to_be_removed.pop()
@@ -95,106 +86,85 @@ def final_cleanup_data(gem, towers):
 
 def get_column(gem, column_num):
     ##from the gem data, get one of the columns
-    try:
-        data = list()
-        for element in gem:
-            data.append(element[column_num])
-        return data
-    except:
-        raise Exception('invalid parameters in get_column')
+    data = list()
+    for element in gem:
+        data.append(element[column_num])
+    return data
 
 
 def convert_income_codes(income):
     ##convert coded income to the midpoint of the range of income they answered with
     data = list()
-    try:
-        values = {-2:"ref",-1:"idk",1:250,2:625,3:1175,4:1800,5:2250,6:2750,7:4000,8:7500,9:12500,10:17500,11:20000}
-        for index in range(0, len(income)):
-            data.append(values[int(income[index][0])])
-    except:
-        raise Exception('invalid parameters in convert_income_codes')
+    values = {-2:"ref",-1:"idk",1:250,2:625,3:1175,4:1800,5:2250,6:2750,7:4000,8:7500,9:12500,10:17500,11:20000}
+    for index in range(0, len(income)):
+        data.append(values[int(income[index][0])])
     return data
 
 
 def flag_data(data, flagged_numbers):
     ##flag data in a column to do logistic regression, flagged numbers should be a list of numbers to be flagged
     flags = {}
-    try:
-        for element in data:
-            if element not in flags.keys():
-                if int(element) in flagged_numbers:
-                    #the chosen values to flag as True, the values here currently mean that the person surveyed primarily uses internet/social media for information
-                    flags[element] = True
-                else:
-                    flags[element] = False
-        flagged_data = list()
-        for element in data:
-            if element in flags.keys():
-                flagged_data.append(flags[element])
-        return flagged_data
-    except:
-        raise Exception('invalid parameters in flag_data')
+    for element in data:
+        if element not in flags.keys():
+            if int(element) in flagged_numbers:
+                #the chosen values to flag as True, the values here currently mean that the person surveyed primarily uses internet/social media for information
+                flags[element] = True
+            else:
+                flags[element] = False
+    flagged_data = list()
+    for element in data:
+        if element in flags.keys():
+            flagged_data.append(flags[element])
+    return flagged_data
 
 
 def log(data, base):
     ##apply log function to a list with the inputed base for the log
     modified_data = list()
-    try:
-        for element in data:
-            modified_data.append(math.log(float(element),base))
-    except:
-        raise Exception('invalid parameters in log')
+    for element in data:
+        modified_data.append(math.log(float(element),base))
     return modified_data
 
 
 def stats(predictor, response, model):
     ##will apply the statistical model you enter to the variables inputed, the codes for each statistical model are viewable in the chain of if statements
-    try:
-        predictor = np.asarray(predictor)
-        response = np.asarray(response)
-        if model == 'logit':
-            model = sm.Logit(predictor, response)
-        elif model == 'lsr':
-            model = sm.OLS(predictor, response)
-        elif model == "probit":
-            model = sm.Probit(predictor, response)
-        elif model == "gls":
-            model = sm.GLS(predictor, response)
-        elif model == "glsar":
-            model = sm.GLSAR(predictor, response)
-        elif model == "quantreg":
-            model = sm.QuantReg(predictor, response)
-        else:
-            pass
-        model = model.fit()
-        print(model.summary()) #instead of printing the model summary, should return the model with the predict function as printing it here only allows you to view the summary rather than use it for anything
-    except:
-        raise Exception('invalid parameters in stats')
+    predictor = np.asarray(predictor)
+    response = np.asarray(response)
+    if model == 'logit':
+        model = sm.Logit(predictor, response)
+    elif model == 'lsr':
+        model = sm.OLS(predictor, response)
+    elif model == "probit":
+        model = sm.Probit(predictor, response)
+    elif model == "gls":
+        model = sm.GLS(predictor, response)
+    elif model == "glsar":
+        model = sm.GLSAR(predictor, response)
+    elif model == "quantreg":
+        model = sm.QuantReg(predictor, response)
+    else:
+        pass
+    model = model.fit()
+    print(model.summary()) #instead of printing the model summary, should return the model with the predict function as printing it here only allows you to view the summary rather than use it for anything
 
 
 def string_to_int(data):
     ##convert list of strings to list of integers
     modified_data = list()
-    try:
-        for element in data:
-            modified_data.append(int(element))
-    except:
-        raise Exception('invalid parameters in string_to_int')
+    for element in data:
+        modified_data.append(int(element))
     return modified_data
 
 
 def combine_lists(data):
     ##a list of n lists, each of size m will turn into a list of m lists, each of size n - i.e. [[1, 2, 3], [1, 2, 3]] -> [[1, 1], [2, 2], [3, 3]]
-    try:
-        combined_data = list()
-        for x in range(0, len(data[0])):
-            inner_list = list()
-            for y in range(0, len(data)):
-                inner_list.append(data[y][x])
-            combined_data.append(inner_list)
-        return combined_data
-    except:
-        raise Exception('invalid parameters in combine_lists')
+    combined_data = list()
+    for x in range(0, len(data[0])):
+        inner_list = list()
+        for y in range(0, len(data)):
+            inner_list.append(data[y][x])
+        combined_data.append(inner_list)
+    return combined_data
 
 
 def main():

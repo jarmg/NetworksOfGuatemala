@@ -59,14 +59,11 @@ def convert_miles_to_km(distance):
 
 
 def open_csv(name):
-    try:
-        with open(name) as f:
-            reader = csv.reader(f)
-            data = list(reader)
-        data = data[1:] #remove column names
-        return data
-    except:
-        raise Exception('invalid parameters in open_csv')
+    with open(name) as f:
+        reader = csv.reader(f)
+        data = list(reader)
+    data = data[1:] #remove column names
+    return data
 
 
 def clean_tigo_data(data):
@@ -81,17 +78,13 @@ def clean_open_cell_id_data(data):
 
 def get_columns(data, cols):
     #cols should be a list of the indices of the columns wanted from data
-    try:
-        mod_data = list()
-        for x in data:
-            holder = list()
-            for col in cols:
-                holder.append(x[col])
-            mod_data.append(holder)
-        return mod_data
-    except:
-        print("invalid parameters entered into get_columns")
-        return 0
+    mod_data = list()
+    for x in data:
+        holder = list()
+        for col in cols:
+            holder.append(x[col])
+        mod_data.append(holder)
+    return mod_data
 
 
 def distance_between_coords(lat1, lon1, lat2, lon2):

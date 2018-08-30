@@ -50,7 +50,7 @@ def clean_gps_data(data):
     for gps in data:
         try:
             gps_check = [float(gps[0]), float(gps[1]), float(gps[2]), int(gps[3]), int(gps[4]), int(gps[5])]
-        except:
+        except ValueError:
             to_be_removed.append(gps)
     while(len(to_be_removed) > 0):
         data.remove(to_be_removed.pop())
@@ -206,12 +206,12 @@ def tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_da
         closest_towers = [[" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")], [" ", float("inf")]]
         try:
             all_available_towers = city_data[person[5].lower()][3]
-        except:
+        except ValueError:
             continue
         for x in range(0, len(closest_cities)):
             try:
                 all_available_towers.append(city_data[closest_cities[x][0]][3])
-            except:
+            except ValueError:
                 continue
         for cell in cell_coords.keys():
             if cell in all_available_towers:
