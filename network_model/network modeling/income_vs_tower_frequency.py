@@ -166,9 +166,9 @@ def logit_regression(x, y):
     
 
 def main():
-    income_data = open_csv("C:\\Users\\alexa\Desktop\\Guatemala\\data\\income.csv")
-    tower_data = open_dict("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\total_towers_within_range.txt")
-    gem_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\gem_data.csv")
+    income_data = open_csv("data\\income.csv")
+    tower_data = open_dict("data\\total_towers_within_range.txt")
+    gem_data = open_csv("data\\gem_data.csv")
     internet_use, ages, index1 = clean_gem_data(gem_data, income_data)
     #print(len(income_data))
     #print(len(tower_data))

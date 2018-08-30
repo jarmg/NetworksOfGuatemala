@@ -248,7 +248,7 @@ def write_dict_to_file(data, file_name):
 
 
 def main():
-    cell_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\cells.csv")
+    cell_data = open_csv("data\\cells.csv")
     cell_data = clean_cell_data(cell_data)
     state_data = get_state_data(cell_data)
     city_data = get_city_data(cell_data)
@@ -260,7 +260,7 @@ def main():
     #closest_city, closest_city_coords = get_closest_location(avg_city_coords)
     state_distances = distance_between_locations(state_data, avg_state_coords)
     city_distances = distance_between_locations(city_data, avg_city_coords)
-    gps_data = open_csv("C:\\Users\\alexa\\Desktop\\Guatemala\\data\\gps_data.csv")
+    gps_data = open_csv("data\\gps_data.csv")
     gps_data = clean_gps_data(gps_data)
     #tower_distances = tower_distances_from_gps_data(gps_data, cell_coords, city_distances, city_data)
     towers_range_data = total_towers_within_range(gps_data, cell_coords)
