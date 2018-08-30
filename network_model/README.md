@@ -3,9 +3,8 @@
   - open_cell_id.csv
     - Available in the data folder
   - Cells.csv
-  - File locations will need to be updated
 - Purpose:
-  - Compares Tigo data from Cells.csv (file location in program needs to be changed) to the data from open_cell_id.csv (file location needs to be changed)
+  - Compares Tigo data from Cells.csv to the data from open_cell_id.csv (file location needs to be changed)
 - Current Functionality:
   - Opens and cleans relevant data to be used for comparing towers between Tigo and Open Cell ID
   - Gets all cells in each area from the Open Cell ID data and organizes them by technology 
