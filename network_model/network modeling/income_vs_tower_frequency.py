@@ -21,7 +21,7 @@ def open_csv(name):
         data = data[1:]
         return data
     except:
-        return null
+        raise Exception('invalid parameters in open_csv')
 
     
 def open_dict(name): #opens a dictionary from a file
@@ -31,7 +31,7 @@ def open_dict(name): #opens a dictionary from a file
             data = ast.literal_eval(reader)
         return data
     except:
-        return null
+        raise Exception('invalid parameters in open_dict')
 
 
 def get_list(data):
@@ -55,7 +55,7 @@ def get_income_tower_data(income_data, tower_data): #combines the data from the 
         for index in range(0, len(income_data)):
             data.append([income[int(income_data[index][0])]])
     except:
-        print("invalid data entered")
+        raise Exception('invalid parameters in get_income_tower_data')
     return data, tower_data
 
 
@@ -77,8 +77,7 @@ def separate_data(income_data, tower_data): #separates the list with both tower 
             else:
                 removed_indices.add(index)
     except:
-        print('k')
-        print("invalid data entered")
+        raise Exception('invalid parameters in separate_data')
     return income, towers, towers_raw, removed_indices
 
 
@@ -93,7 +92,7 @@ def least_squares(x, y): #x = predictor y = response
         plt.scatter(x, y)
         plt.show()
     except:
-        print("invalid parameters entered")
+        raise Exception('invalid parameters in least_squares')
 
 
 def clean_gem_data(data, income):
@@ -141,7 +140,7 @@ def apply_flags(data, flags): #generates a list with all values changed to true 
             if element[0] in flags.keys():
                 flagged_data.append(flags[element[0]])
     except:
-        print("invalid parameters entered")
+        raise Exception('invalid parameters in apply_flags')
     return flagged_data
 
 

@@ -40,8 +40,7 @@ def open_csv(name):
         data = data[1:]
         return data
     except:
-        print("invalid file name")
-        return 0
+        raise Exception('invalid parameters in open_csv')
 
 
 def open_dict(name):
@@ -52,8 +51,7 @@ def open_dict(name):
             data = ast.literal_eval(reader)
         return data
     except:
-        print("invalid file name")
-        return 0
+        raise Exception('invalid parameters in open_dict')
 
 
 def convert_dict_to_list(data):
@@ -62,7 +60,7 @@ def convert_dict_to_list(data):
         for key in data.keys():
             modified_data.append(data[key])
     except:
-        print("invalid data entered to convert_dict_to_list")
+        raise Exception('invalid parameters in convert_dict_to_list')
     return modified_data
 
 
@@ -103,8 +101,7 @@ def get_column(gem, column_num):
             data.append(element[column_num])
         return data
     except:
-        print("invalid inputs to get_column")
-        return 0
+        raise Exception('invalid parameters in get_column')
 
 
 def convert_income_codes(income):
@@ -115,7 +112,7 @@ def convert_income_codes(income):
         for index in range(0, len(income)):
             data.append(values[int(income[index][0])])
     except:
-        print("invalid data entered to convert_income_codes")
+        raise Exception('invalid parameters in convert_income_codes')
     return data
 
 
@@ -136,8 +133,7 @@ def flag_data(data, flagged_numbers):
                 flagged_data.append(flags[element])
         return flagged_data
     except:
-        print("invalid data entered to flag_data")
-        return 0
+        raise Exception('invalid parameters in flag_data')
 
 
 def log(data, base):
@@ -147,7 +143,7 @@ def log(data, base):
         for element in data:
             modified_data.append(math.log(float(element),base))
     except:
-        print("invalid data entered to log")
+        raise Exception('invalid parameters in log')
     return modified_data
 
 
@@ -173,7 +169,7 @@ def stats(predictor, response, model):
         model = model.fit()
         print(model.summary()) #instead of printing the model summary, should return the model with the predict function as printing it here only allows you to view the summary rather than use it for anything
     except:
-        print('invalid parameters entered to stats')
+        raise Exception('invalid parameters in stats')
 
 
 def string_to_int(data):
@@ -183,7 +179,7 @@ def string_to_int(data):
         for element in data:
             modified_data.append(int(element))
     except:
-        print("invalid data entered to string_to_int")
+        raise Exception('invalid parameters in string_to_int')
     return modified_data
 
 
@@ -198,8 +194,7 @@ def combine_lists(data):
             combined_data.append(inner_list)
         return combined_data
     except:
-        print("invalid data entered to combine_lists")
-        return data
+        raise Exception('invalid parameters in combine_lists')
 
 
 def main():

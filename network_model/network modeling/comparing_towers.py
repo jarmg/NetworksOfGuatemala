@@ -66,8 +66,7 @@ def open_csv(name):
         data = data[1:] #remove column names
         return data
     except:
-        print("invalid file name entered into open_csv")
-        return 0
+        raise Exception('invalid parameters in open_csv')
 
 
 def clean_tigo_data(data):
