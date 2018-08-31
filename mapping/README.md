@@ -45,7 +45,6 @@ Open an interactive R terminal, and type:
 jvp\_list now contains all of the data and can be subsetted to generate
 plots.
 
-
 ## TODO (future functionality):
 - There are many functions in the source code which say "IN PROGRESS" above
   the function. These may be useful to refine filtering.

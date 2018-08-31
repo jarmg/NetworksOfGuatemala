@@ -72,31 +72,6 @@ plot_reg_line <- function(jvp_list) {
     return(NULL)
 }
 
-# NOTE TO SELF: THIS FUNCTION IS NOT IN USE. DELETE??
-get_stats_by_home_id <- function(home_id, elec_data, k_options) {
-    # Filters election data based on user-defined home classification.
-    #
-    # Args:
-    #   home_id: The home ID of the 
-    
-    
-    # if home is tower
-    if (k_options$k_home_type == 1) { 	
-	stop("This function is not yet defined for tower to tower communitiy mapping")
-    }
-
-    # if home is municipality
-    else if (k_options$k_home_type == 2) {
-	stats <- filter(elec_data, MUNI == homeID & MUNI != "NIVEL DEPARTAMENTAL")
-	return(stats)
-    }
-
-    # if home is department
-    else if (k_options$k_home_type == 3) {
-		stats <- filter(elec_data, DEPT == home_id & MUNI == "NIVEL DEPARTAMENTAL")
-    return(stats)
-    }
-}
 
 get_elec_data_by_muni <- function(muni, all_elec_data) {
     # Filters election data by municipality.
@@ -149,26 +124,7 @@ write_similarity_vals <- function(jvp_mat, elec_data) {
     return(jvp_mat)
 }
 
-# NOTE TO SELF: THIS FUNCTION IS NOT USED. DELETE?
-similarity_check <- function(elec_data, valid_recs,
-			     all_home_recs, bin_mat, k_options) {
 
-    for (i in 1:nrow(bin_mat)) {
-	for (j in 1:ncol(bin_mat)) {
-
-	    row_name <- rownames(bin_mat[i])
-	    col_name <- colnames(bin_mat[j])
-	    current_elm <- bin_mat[i,j]
-	    	    
-	    if (!is.na(current_elm) & !is.null(current_elm)) {
-		bin_mat[i,j] <- get_similarity_val(row_name, col_name, elec_data, k_options)
-	    }
-	}
-    }
-    #df <- as.data.frame(new_mat)
-
-    return(dframe)
-}
 
 # in progress. not yet used
 # set a filter here for determining whether two communities are related
@@ -195,37 +151,31 @@ increment_matrix_elems <- function(valid_recs, all_home_recs, mat, k_options) {
 
     # for each row
     for (i in 1:nrow(valid_recs)) {         
-	current_elm <- new_mat[get_home_id(k_options$k_home_type,
-					  all_home_recs,
+	current_elm <- new_mat[get_home_id(all_home_recs, k_options$k_home_type,
 					  as.character(valid_recs$ANUMBER[i])),
-	                                  get_home_id(k_options$k_home_type,
-			                  all_home_recs, 
+	                                  get_home_id(all_home_recs, 
+						      k_options$k_home_type,
 			                  as.character(valid_recs$BNUMBER[i]))]
 
 	# if current elem is na, set to 1.
        if (is.na(current_elm)) { 	   
-	   new_mat[get_home_id(k_options$k_home_type,
-			       all_home_recs,
+	   new_mat[get_home_id(all_home_recs, k_options$k_home_type,
 			       as.character(valid_recs$ANUMBER[i])),
-	                       get_home_id(k_options$k_home_type,
-			       all_home_recs,
+	                       get_home_id(all_home_recs, k_options$k_home_type,
 			       as.character(valid_recs$BNUMBER[i]))] <- 1
        }
       
 
        #  otherwise, add 1 to the current value in that element.
        else {  	   
-	   new_mat[get_home_id(k_options$k_home_type,
-			       all_home_recs,
+	   new_mat[get_home_id(all_home_recs, k_options$k_home_type,
 			       as.character(valid_recs$ANUMBER[i])),
-	                       get_home_id(k_options$k_home_type,
-			       all_home_recs,
+	                       get_home_id(all_home_recs, k_options$k_home_type,
 			       as.character(valid_recs$BNUMBER[i]))] <- 
-			       new_mat[get_home_id(k_options$k_home_type, 
-                               all_home_recs,
+			       new_mat[get_home_id(all_home_recs, 
+						   k_options$k_home_type, 
 			       as.character(valid_recs$ANUMBER[i])),
-	                       get_home_id(k_options$k_home_type,
-			       all_home_recs, 
+	                       get_home_id(all_home_recs, k_options$k_home_type,
 			       as.character(valid_recs$BNUMBER[i]))] + 1
        }
     }
@@ -439,7 +389,7 @@ main_mapping <- function() {
     
     orig_numm_recs <- nrow(cdr)
 
-    home_ids <- remove_records_with_no_home(cdr, towers, k_options)
+    home_ids <- find_and_remove_records_with_no_home(cdr, towers, k_options)
 
     # CDR with all ANUMS who have homes
     all_home_recs <- get_all_home_recs(home_ids, cdr)
@@ -463,7 +413,7 @@ main_mapping <- function() {
     binary_mat <- make_binary_matrix(inc_mat)
 
     # write vals into jvp_mat
-    jvp_mat <- write_similarity_vals(jvp_mat, elec_data, k_options)
+    jvp_mat <- write_similarity_vals(jvp_mat, elec_data)
 
     # write to csv file
     write.table(jvp_mat, file = "jvp_mat.csv",

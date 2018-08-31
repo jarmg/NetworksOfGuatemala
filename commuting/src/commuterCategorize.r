@@ -1,4 +1,5 @@
 # Makes a decreasing sorted vector of all unique vals
+# TODO: Use this for is_itinerant() function to compare top two modes
 make_mode_vec_uniques <- function (v) with(rle(sort(v)), values[order(lengths, decreasing = TRUE)])
 
 # IN PROGRESS
@@ -69,36 +70,46 @@ get_mode <- function(v) {
 
     uniqv <- unique(v)
     uniqv[which.max(tabulate(match(v, uniqv)))]
-    return(uniqv)
 }
 
-get_mode_by_label <- function(CELL_ID, PLACE, label) {
+get_home_or_work_loc_by_label <- function(possible_locs, home_and_work_vec, label) {
     # Gets the mode of a set of CELL_IDs to determine which is the most likely
     # home/work id.
     #
     # Args:
-    #   CELL_ID: The current set of CELL_IDs.
-    #   PLACE: Used to filter the set of CELL_IDs by home or work.
-    #   label: The label which informs which PLACE by which to filter.
+    #   possible_locs: A single-column dframe of possible_locs. Depending on
+    #                  value set in k_options, possible vals could be a
+    #                  dframe of cell_ids, munis, or depts.
+    #   home_and_work_vec: A single-column dframe with values of "Home" and
+    #    	           "Work", which are classified as such by time of 
+    #                      day and correspond to the values in possible_locs.
+    #   label: The label (can be either "Home" or "Work") which is used to 
+    #          filter all possible_locs. E.g. if the input label == "Home",
+    #          Then this function will take all possible_locs, subset all
+    #          vals such that their corresponding home_work_vec val ==
+    #          "Home", and find the mode of possible_locs.
     #
     # Returns:
-    #   The mode.
-
-    filt <- data.frame(CELL_ID, PLACE) %>%
-	filter(PLACE == label) 
+    #   The most probable home/work location.
+        
+    possible_locs <- as.data.frame(possible_locs)
+    home_and_work_vec <- as.data.frame(home_and_work_vec)
+    
+    filt <- data.frame(possible_locs, home_and_work_vec) %>%
+	filter(home_and_work_vec == label) 
 
     #if(isItinerant(filt$CELL_ID)) {
     #return() # returns <NA> (I think)
     #print("found itinerant record")
     #}
+    
+    probable_home_or_work_loc = get_mode(filt$possible_locs)
 
-  mode = get_mode(filt$CELL_ID)
-  
-  return(mode)
+    return(probable_home_or_work_loc)
 }
 
 # TODO: Can use get_id_by_label instead?
-get_home_id <- function(HOME_TYPE, fcdr, number) {
+get_home_id <- function(fcdr, HOME_TYPE, number) {
     # Gets the home_id of a given number.
     #
     # Args:
@@ -184,7 +195,7 @@ get_distance <- function(fcdr, towers) {
     #   between home and work.
   
     dist <- group_by(fcdr, ANUMBER) %>% 
-	summarise(distCommute = driving_distance(get_coords(get_home_id(k_options$HOME_TYPE, fcdr, ANUMBER), towers), get_coords(get_work_id(fcdr, ANUMBER), towers)))
+	summarise(distCommute = driving_distance(get_coords(get_home_id(fcdr, k_options$HOME_TYPE, ANUMBER), towers), get_coords(get_work_id(fcdr, ANUMBER), towers)))
   return(dist)
 }
 
@@ -203,11 +214,10 @@ show_home_and_work_towers <- function(data, towers, k_options) {
     #   The data frame with all home and work towers for each ANUMBER.
   
     probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
-    
 	summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
 	group_by(ANUMBER) %>%
-	summarise(HOME_ID = get_mode_by_label(CELL_ID, PLACE, "Home"),
-	      WORK_ID = get_mode_by_label(CELL_ID, PLACE, "Work")) %>%
+	summarise(HOME_ID = get_home_or_work_loc_by_label(CELL_ID, PLACE, "Home"),
+	      WORK_ID = get_home_or_work_loc_by_label(CELL_ID, PLACE, "Work")) %>%
 	return()
 }
 
@@ -222,7 +232,7 @@ show_home_by_label <- function(data, towers, k_options) {
     #              constants.
     #
     # Returns:
-    #   The filtered cdr with the homes and works shown for each ANUMBER. 
+    #   The filtered cdr with the home shown for each ANUMBER. 
 
     label <- k_options$k_home_type[1]
        
@@ -231,7 +241,7 @@ show_home_by_label <- function(data, towers, k_options) {
 	probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CELL_ID) %>% 
 	    summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
 	    group_by(ANUMBER) %>%
-	    summarise(HOME_ID = get_mode_by_label(CELL_ID, PLACE, "Home")) %>%
+	    summarise(HOME_ID = get_home_or_work_loc_by_label(CELL_ID, PLACE, "Home")) %>%
 	    return()
     }
 
@@ -242,7 +252,7 @@ show_home_by_label <- function(data, towers, k_options) {
 	probable_place <- group_by(data, ANUMBER, START_DATE_TIME, CITY) %>% 
 	    summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
 	    group_by(ANUMBER) %>%
-	    summarise(HOME_ID = get_mode_by_label(CITY, PLACE, "Home")) %>%
+	    summarise(HOME_ID = get_home_or_work_loc_by_label(CITY, PLACE, "Home")) %>%
 	    return()
     }
 
@@ -251,12 +261,12 @@ show_home_by_label <- function(data, towers, k_options) {
 	probable_place <- group_by(data, ANUMBER, START_DATE_TIME, STATE) %>% 
 	    summarise(PLACE = home_or_work(START_DATE_TIME, k_options)) %>%
 	    group_by(ANUMBER) %>%
-	    summarise(HOME_ID = get_mode_by_label(STATE, PLACE, "Home")) %>%
+	    summarise(HOME_ID = get_home_or_work_loc_by_label(STATE, PLACE, "Home")) %>%
 	    return()
     }
 }
 
-remove_records_with_no_home_work_pair <- function(data, towers, k_options) {
+find_and_remove_records_with_no_home_work_pair <- function(data, towers, k_options) {
     # Removes all records that do not have home/work pairs.
     #
     # Args:
@@ -287,7 +297,9 @@ remove_records_with_no_home_work_pair <- function(data, towers, k_options) {
 }
 
 
-remove_records_with_no_home <- function(data, towers, k_options) {
+# TODO: Split functions such that, in main(), show_home_and_work_towers() 
+#       passes its return value into remove_records_with_no_home() 
+find_and_remove_records_with_no_home <- function(data, towers, k_options) {
     # Removes all records that do not have home_ids.
     #
     # Args:
@@ -299,9 +311,6 @@ remove_records_with_no_home <- function(data, towers, k_options) {
     print("Removing records with no home...")
     orig_num <- nrow(data) # get orig num records
 
-    print("home_id is")
-    print(data$HOME_ID)
-  
     #redefine cdr showing only recs with homes
     filt_cdr <- show_home_by_label(data, towers, k_options) %>%
 	filter(!is.na(HOME_ID) & (HOME_ID != "NOT APPLICABLE") &
@@ -347,7 +356,7 @@ get_data <- function(PATHS) {
 
 # init file paths
 init_paths <- function() {
-  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/dummySet.csv"
+  CDR_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/Filtered_Sample.csv"
   TOWER_DATA <- "/Users/tedhadges/Projects/guatemala/raw_data/tower_data.csv"
   ELECTION_DATA <- "../../mapping/data/elecData2015.csv"
   PATHS <- c(CDR_DATA, TOWER_DATA, ELECTION_DATA)
@@ -378,7 +387,7 @@ set_options<- function() {
 
 # check if packs installed and load them
 load_packs <- function() {
-    source('/Users/tedhadges/Projects/guatemala/NetworksOfGuatemala/commuting/src/timeParser.r')
+    source("timeParser.r")
   list_of_packages <- c("dplyr", "modeest", "lubridate", "XML", "bitops", "RCurl", "profvis", "ggmap", "reshape")
   new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
   if(length(new_packages)) install.packages(new_packages)
@@ -428,7 +437,7 @@ main_commute <- function() {
 
   #fcdr <- removeRecordsWithNoHomeWorkPair(cdr, towers, threshs)
   
-  fcdr <- remove_records_with_no_home(cdr, towers, k_options)
+  fcdr <- find_and_remove_records_with_no_home(cdr, towers, k_options)
   
   #fcdr_dist <- get_distance(fcdr, towers)
   cdr_for_plotting<- group_by_home_loc(fcdr)
