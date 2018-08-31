@@ -41,9 +41,9 @@ I think current values might be of a different type (factors vs chars etc).
 **Current Usage** (TODO: write an easy-to-run script which does all this)
 - `cd` to `NetworksOfGuatemala/commuting/src/`<br>
 - Open an R interactive terminal (type `R`)<br>
-- If `testthat` is not installed, type `install.packages("testthat")<br>
+- If `testthat` is not installed, type `install.packages("testthat")`<br>
 - `library(testthat)`<br>
-- test_dir(".")<br>
+- `test_dir(".")`<br>
 - Test results will be displayed in terminal<br>
 
 # Assumptions:
