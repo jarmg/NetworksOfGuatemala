@@ -1,0 +1,30 @@
+{
+  "name": "mapping-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "chart.js": "^2.7.2",
+    "d3-scale": "^2.1.0",
+    "jstat": "^1.7.1",
+    "normalize.css": "^8.0.0",
+    "prop-types": "^15.6.1",
+    "react": "^16.3.2",
+    "react-bootstrap": "^0.32.1",
+    "react-chartjs-2": "^2.7.2",
+    "react-dom": "^16.3.2",
+    "react-dom-factories": "^1.0.2",
+    "react-scripts": "1.1.4",
+    "react-select": "^2.0.0-beta.2",
+    "react-selectize": "^3.0.1",
+    "react-simple-maps": "^0.12.0",
+    "react-transition-group": "^2.3.1",
+    "topojson": "^3.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "deploy": "aws s3 sync ./build/ s3://lapop-io.networksofguatemala"
+  }
+}
