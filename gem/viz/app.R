@@ -1,6 +1,6 @@
 library(shiny)
 
-source("gem_stats.r")
+source("/home/jared/Guatemala/NetworksOfGuatemala/gem/gem_stats.r")
 data <- load_data()
 
 unique(data$EDUC_LEVEL)
@@ -28,7 +28,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   output$distPlot <- renderPlot({
     bins <- seq(min(0), max(1000), length.out = input$bins + 1)
-    cell_payments_by_eth(data, input$bins, input$educ)
+    cell_payments_by_edu(data, input$educ)
    
      
     #hist(x, breaks = bins, col = '#75AADB', border = 'white',
