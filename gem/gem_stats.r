@@ -24,6 +24,14 @@ cell_payments_by_eth <- function(data, numb) {
   ggplot(d, aes(x=PAY_CELL, fill=ETHNICITY)) + geom_density(alpha = .3)
 }
 
+cell_payments_by_eth <- function(data, numb) {
+  d = filter(data,
+             PAY_CELL < numb &
+               (ETHNICITY == "Indígena (Maya)" |  ETHNICITY == "No indígena (ladino)")
+             )
+  ggplot(d, aes(x=PAY_CELL, fill=ETHNICITY)) + geom_density(alpha = .3)
+}
+
 
 payment_granularity_by_educ <- function(data) {
   d = filter(data,
