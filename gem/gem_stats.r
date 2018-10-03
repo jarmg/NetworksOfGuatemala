@@ -31,3 +31,12 @@ payment_granularity_by_educ <- function(data) {
   d$PAY_CELL = d$PAY_CELL %% 10
   ggplot(d, aes(x=PAY_CELL, fill=EDUC_LEVEL)) + geom_density(alpha = .3)
 }
+
+
+bill_vs_edu <- function(data) {
+  d <- data[!is.na(data$PAY_CELL),]
+  sum_d <- group_by(d, xxcity) %>%
+    summarise(bill = mean(PAY_CELL), educ = mean(EDUC_LEVEL))
+  return(sum_d)
+}
+
