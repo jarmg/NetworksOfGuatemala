@@ -1,39 +1,48 @@
 library(shiny)
 
-source("/home/jared/Guatemala/NetworksOfGuatemala/gem/gem_stats.r")
-data <- load_data()
+source("/home/jared/Guatemala/NetworksOfGuatemala/gem/gem_stats.R")
+gemData <- load_data()
 
-unique(data$EDUC_LEVEL)
+unique(gemData$EDUC_LEVEL)
 
 ui <- fluidPage(
-  titlePanel("Hello world"),
+  div(
+    img(src = 'ufm_logo.png', height = 100)
+  ),
   sidebarLayout(
     sidebarPanel(
-      sliderInput(inputId='bins',
-                  label = "Number of bins:",
-                  min=1,
-                  max=500,
-                  value=10),
-    checkboxGroupInput(inputId = 'educ', 
-                       label= "Highest Education Level",
-                       choices = sort(unique(data$EDUC_LEVEL)))
+    checkboxGroupInput(inputId = 'eth', 
+                       label= "Ethnicity of respondent",
+                       choices = sort(unique(gemData$ETHNICITY)),
+                       selected = c('Indígena (Maya)', 
+                                 'No indígena (ladino)')
+                       ),
+    checkboxGroupInput(inputId = 'edu', 
+                       label= "Education level of respondent",
+                       choices = sort(unique(gemData$EDUC_LEVEL)),
+                       selected = c(1, 5, 9),
+                       inline = TRUE
+    ),
+    sliderInput('range',
+                label = "Choose a monthly payment range",
+                min = 0, max = 1000, value = c(0,1000))
     ),
     mainPanel(
-      plotOutput(outputId = 'distPlot')
+      tabsetPanel(
+        tabPanel("Ethnicity", plotOutput(outputId = 'ethPlot')),
+        tabPanel("Education", plotOutput(outputId = 'eduPlot'))
+      )
     )
   )
 )
 
 
 server <- function(input, output) {
-  output$distPlot <- renderPlot({
-    bins <- seq(min(0), max(1000), length.out = input$bins + 1)
-    cell_payments_by_edu(data, input$educ)
-   
-     
-    #hist(x, breaks = bins, col = '#75AADB', border = 'white',
-     #    xlab = "Waiting time to next eruption",
-      #   main = "Histogram of wait times")
+  output$ethPlot <- renderPlot({
+    cell_payments_by_eth(gemData, input$eth, input$range)
+  })
+  output$eduPlot <- renderPlot({
+    cell_payments_by_edu(gemData, input$edu, input$range)
   })
 }
 
