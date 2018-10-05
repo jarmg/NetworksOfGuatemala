@@ -16,13 +16,15 @@ load_data <- function() {
 }
 
 
-cell_payments_by_eth <- function(data, numb) {
+cell_payments_by_eth <- function(data, eths, rng) {
+  d <- filter(data, ETHNICITY %in% eths) %>%
+        filter(PAY_CELL > rng[1] & PAY_CELL < rng[2])
   ggplot(d, aes(x=PAY_CELL, fill=ETHNICITY)) + geom_density(alpha = .3)
 }
 
-cell_payments_by_edu <- function(data, educ_lvls) {
-  d = filter(data, EDUC_LEVEL %in% educ_lvls)
-  print(educ_lvls)
+cell_payments_by_edu <- function(data, educ_lvls, rng) {
+  d <- filter(data, EDUC_LEVEL %in% educ_lvls) %>%
+        filter(PAY_CELL > rng[1] & PAY_CELL < rng[2])
   ggplot(d, aes(x=PAY_CELL, fill=as.character(EDUC_LEVEL))) + geom_density(alpha = .3)
 }
 
