@@ -11,24 +11,30 @@ ui <- fluidPage(
   ),
   sidebarLayout(
     sidebarPanel(
-    checkboxGroupInput(inputId = 'eth', 
-                       label= "Ethnicity of respondent",
-                       choices = sort(unique(gemData$ETHNICITY)),
-                       selected = c('Indígena (Maya)', 
-                                 'No indígena (ladino)')
-                       ),
-    checkboxGroupInput(inputId = 'edu', 
-                       label= "Education level of respondent",
-                       choices = sort(unique(gemData$EDUC_LEVEL)),
-                       selected = c(1, 5, 9),
-                       inline = TRUE
+    conditionalPanel(
+      condition = "input.tabPanel == 'Ethnicity'",
+      checkboxGroupInput(inputId = 'eth',
+                         label= "Ethnicity of respondent",
+                         choices = sort(unique(gemData$ETHNICITY)),
+                         selected = c('Indígena (Maya)',
+                                   'No indígena (ladino)')
+                         )
+    ),
+    conditionalPanel(
+      condition = "input.tabPanel == 'Education'",
+      checkboxGroupInput(inputId = 'edu',
+                         label= "Education level of respondent",
+                         choices = sort(unique(gemData$EDUC_LEVEL)),
+                         selected = c(1, 5, 9),
+                         inline = TRUE
+      )
     ),
     sliderInput('range',
                 label = "Choose a monthly payment range",
                 min = 0, max = 1000, value = c(0,1000))
     ),
     mainPanel(
-      tabsetPanel(
+      tabsetPanel(id = 'tabPanel',
         tabPanel("Ethnicity", plotOutput(outputId = 'ethPlot')),
         tabPanel("Education", plotOutput(outputId = 'eduPlot'))
       )
