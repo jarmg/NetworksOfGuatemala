@@ -1,23 +1,23 @@
 library(data.table)
 
 recodings <- 
-  c(PAY_CELL  = 'Q72.11.3',
-    PAY_INT   = 'Q72.11.4',
-    PAY_TV    = 'Q72.11.5',
-    ETHNICITY = 'Q60',
-    LIFE_IMPRVD = 'Q64',
-    TV_IN_HOME   = 'Q72.9',
-    CELL_IN_HOME = 'Q72.6',
-    OWN_CELL     = 'Q86',
-    NEWS_CTY  = 'JG2',
-    NEWS_MUNI = 'JG3',
-    WHY_NOT_INT_CTY  = 'JG4',
-    WHY_NOT_INT_MUNI = 'JG5',
-    BETTER_INT = 'JG6',
-    NUM_BEDROOMS = 'Q70.1.1',
-    NUM_HOUSEHOLD_MEMS = 'hhsize',
-    EDUC_LEVEL = 'xxreduc',
-    HOUSEHOLD_INCOME = 'xxhhinc'
+  c(mobilePay = 'Q72.11.3',
+    intPay    = 'Q72.11.4',
+    tvPay     = 'Q72.11.5',
+    ethnicity = 'Q60',
+    lifeImproved  = 'Q64',
+    tvInHome      = 'Q72.9',
+    mobileInHome  = 'Q72.6',
+    mobilePersonal= 'Q86',
+    newsCntry     = 'JG2',
+    newsMuni      = 'JG3',
+    whyNoIntCntry = 'JG4',
+    whyNoIntMuni  = 'JG5',
+    intImprove    = 'JG6',
+    bedrooms      = 'Q70.1.1',
+    membersHousehold   = 'hhsize',
+    educLevel          = 'xxreduc',
+    incomeHousehold    = 'xxhhinc'
   )
           
 recode <- function(data) {

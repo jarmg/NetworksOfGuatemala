@@ -15,7 +15,7 @@ ui <- fluidPage(
       condition = "input.tabPanel == 'Ethnicity'",
       checkboxGroupInput(inputId = 'eth',
                          label= "Ethnicity of respondent",
-                         choices = sort(unique(gemData$ETHNICITY)),
+                         choices = sort(unique(gemData$ethnicity)),
                          selected = c('Indígena (Maya)',
                                    'No indígena (ladino)')
                          )
@@ -24,7 +24,7 @@ ui <- fluidPage(
       condition = "input.tabPanel == 'Education'",
       checkboxGroupInput(inputId = 'edu',
                          label= "Education level of respondent",
-                         choices = sort(unique(gemData$EDUC_LEVEL)),
+                         choices = sort(unique(gemData$educLevel)),
                          selected = c(1, 5, 9),
                          inline = TRUE
       )
