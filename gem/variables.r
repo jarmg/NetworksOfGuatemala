@@ -20,7 +20,7 @@ recodings <-
     incomeHousehold    = 'xxhhinc'
   )
 
-recodeIncome <- function(gem) {
+recode.income <- function(gem) {
   gem$incomeHousehold = factor(gem$incomeHousehold)
 
   #Set level to middle of income category
@@ -32,10 +32,35 @@ recodeIncome <- function(gem) {
   gem
 }
           
+recode.intInHome <- function(gem){
+  gem$intInHome <- as.numeric(gem$intPay > 0)
+  gem$intInHome[is.na(gem$intPay)] <- 0
+  gem
+}
+
+
+recode.startbiz <- function(gem) {
+  # 'No' <- 2, 'Yes' <- 1
+  gem$easystart[gem$easystart == 1] <- 1
+  gem$easystart[gem$easystart == 2] <- 0
+  gem$easystart[gem$easystart < 0] <- NA
+  gem
+}
+
+
+recode.mobilePersonal <- function(gem) {
+  gem$mobilePersonal[gem$mobilePersonal < 0] <- NA
+  gem$mobilePersonal[gem$mobilePersonal == 2] <- 0
+  gem$mobilePersonal[gem$mobilePersonal == 1] <- 1
+  gem
+}
 
 recode <- function(data) {
   old_names = recodings
   new_names = names(mapply(function(name) {deparse(substitute(name))}, recodings))
   setnames(data, old=old_names, new=new_names) %>%
-  recodeIncome
+    recode.income %>%
+    recode.startbiz %>%
+    recode.mobilePersonal %>%
+    recode.intInHome
 }
