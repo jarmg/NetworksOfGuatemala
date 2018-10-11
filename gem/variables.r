@@ -19,10 +19,23 @@ recodings <-
     educLevel          = 'xxreduc',
     incomeHousehold    = 'xxhhinc'
   )
+
+recodeIncome <- function(gem) {
+  gem$incomeHousehold = factor(gem$incomeHousehold)
+
+  #Set level to middle of income category
+  levels(gem$incomeHousehold) = 
+    c(NA, NA, 250, 625, 1175, 1800, 2250,
+      2750, 4000, 7500, 12500, 17000, 25000)
+
+  gem$incomeHousehold = as.numeric(as.character(gem$incomeHousehold))
+  gem
+}
           
+
 recode <- function(data) {
   old_names = recodings
   new_names = names(mapply(function(name) {deparse(substitute(name))}, recodings))
-  setnames(data, old=old_names, new=new_names)
-  
+  setnames(data, old=old_names, new=new_names) %>%
+  recodeIncome
 }
