@@ -38,6 +38,12 @@ recode.intInHome <- function(gem){
   gem
 }
 
+recode.ethnicity <- function(gem) {
+  gem$ethnicity <- 
+    factor(gem$ethnicity, labels = names(attributes(gem$ethnicity)$value))
+  gem
+}
+
 
 recode.startbiz <- function(gem) {
   # 'No' <- 2, 'Yes' <- 1
@@ -62,5 +68,6 @@ recode <- function(data) {
     recode.income %>%
     recode.startbiz %>%
     recode.mobilePersonal %>%
-    recode.intInHome
+    recode.intInHome %>%
+    recode.ethnicity
 }

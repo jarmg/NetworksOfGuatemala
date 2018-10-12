@@ -2,7 +2,7 @@ library(foreign)
 library(dplyr)
 library(ggplot2)
 
-source('/home/jared/Guatemala/NetworksOfGuatemala/gem/variables.r')
+source('/home/jared/Guatemala/NetworksOfGuatemala/gem/variables.R')
 
 GEM_FILE = '/home/jared/Guatemala/NetworksOfGuatemala/gem/data/gem_2018.sav'
 
@@ -31,7 +31,9 @@ cell_payments_by_eth <- function(data, eths, rng) {
 cell_payments_by_edu <- function(data, educ_lvls, rng) {
   d <- filter(data, educLevel %in% educ_lvls) %>%
         filter(mobilePay > rng[1] & mobilePay < rng[2])
-  ggplot(d, aes(x=mobilePay, fill=as.character(educLevel))) + geom_density(alpha = .3)
+  ggplot(d, aes(x=mobilePay, fill=as.character(educLevel))) + 
+    geom_density(alpha = .3) + 
+    labs(fill="Education level")
 }
 
 
@@ -44,7 +46,7 @@ payment_granularity_by_educ <- function(data) {
 reg.startBiz <- function(gem) {
   glm(
       easystart ~ 
-        log(incomeHousehold) + educLevel + intInHome + log(mobilePay), 
+        log(incomeHousehold) + educLevel + intInHome + mobilePay, 
       family = binomial(link='logit'), 
       data=gem
   )
@@ -60,9 +62,7 @@ bill_vs_edu <- function(data) {
 
 run.model.startBiz  <- function() {
   gemData <- loadData()
-  mdl = reg.startBiz(gemData)
-  print(summary(mdl))
-  mdl
+  reg.startBiz(gemData)
 }
 
 
