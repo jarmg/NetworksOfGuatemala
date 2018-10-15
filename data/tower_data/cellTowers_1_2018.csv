@@ -1,0 +1,343 @@
+Departamento,Municipio,Cantidad de Radiobases
+Alta Verapaz,Cahabón,21
+Alta Verapaz,Chahal,9
+Alta Verapaz,Chisec,68
+Alta Verapaz,Cobán,207
+Alta Verapaz,Fray Bartolomé de las Casas,42
+Alta Verapaz,Lanquín,8
+Alta Verapaz,Panzós,35
+Alta Verapaz,Raxruhá,9
+Alta Verapaz,San Cristóbal Verapaz,37
+Alta Verapaz,San Juan Chamelco,23
+Alta Verapaz,San Pedro Carchá,92
+Alta Verapaz,Santa Catalina La Tinta,14
+Alta Verapaz,Santa Cruz Verapaz,32
+Alta Verapaz,Senahú,14
+Alta Verapaz,Tactic,31
+Alta Verapaz,Tamahú,7
+Alta Verapaz,Tucurú,18
+Baja Verapaz,Cubulco,29
+Baja Verapaz,El Chol,16
+Baja Verapaz,Granados,16
+Baja Verapaz,Purulhá,24
+Baja Verapaz,Rabinal,25
+Baja Verapaz,Salamá,89
+Baja Verapaz,San Jerónimo,29
+Baja Verapaz,San Miguel Chicaj,27
+Chimaltenango,Acatenango,25
+Chimaltenango,Chimaltenango,336
+Chimaltenango,Comalapa,29
+Chimaltenango,El Tejar,51
+Chimaltenango,Parramos,13
+Chimaltenango,Patzicia,17
+Chimaltenango,Patzún,45
+Chimaltenango,Pochuta,15
+Chimaltenango,San Andrés Iztapa,33
+Chimaltenango,San José Poaquil,17
+Chimaltenango,San Martín Jilotepeque,76
+Chimaltenango,Santa Apolonia,19
+Chimaltenango,Santa Cruz Balanyá,13
+Chimaltenango,Tecpán Guatemala,74
+Chimaltenango,Yepocapa,27
+Chimaltenango,Zaragoza,20
+Chiquimula,Camotán,31
+Chiquimula,Chiquimula,316
+Chiquimula,Concepción las Minas,30
+Chiquimula,Esquipulas,90
+Chiquimula,Ipala,50
+Chiquimula,Jocotán,24
+Chiquimula,Olopa,12
+Chiquimula,Quezaltepeque,28
+Chiquimula,San Jacinto,17
+Chiquimula,San José la Arada,14
+Chiquimula,San Juan Ermita,15
+Escuintla,Escuintla,540
+Escuintla,Guanagazapa,17
+Escuintla,Iztapa,56
+Escuintla,La Democracia,91
+Escuintla,La Gomera,45
+Escuintla,Masagua,64
+Escuintla,Nueva Concepción,81
+Escuintla,Palín,68
+Escuintla,San José,131
+Escuintla,San Vicente Pacaya,29
+Escuintla,Santa Lucía Cotzumalguapa,90
+Escuintla,Siquinalá,63
+Escuintla,Tiquisate,71
+Guatemala,Amatitlán,122
+Guatemala,Chinautla,105
+Guatemala,Chuarrancho,26
+Guatemala,Fraijanes,145
+Guatemala,Guatemala,2946
+Guatemala,Mixco,578
+Guatemala,Palencia,61
+Guatemala,Petapa,119
+Guatemala,San José del Golfo,45
+Guatemala,San José Pinula,98
+Guatemala,San Juan Sacatepéquez,284
+Guatemala,San Pedro Ayampuc,46
+Guatemala,San Pedro Sacatepéquez,70
+Guatemala,San Raymundo,52
+Guatemala,Santa Catarina Pinula,271
+Guatemala,Villa Canales,181
+Guatemala,Villa Nueva,415
+Huehuetenango,Aguacatán,42
+Huehuetenango,Chiantla,89
+Huehuetenango,Colotenango,13
+Huehuetenango,Concepción Huista,46
+Huehuetenango,Cuilco,36
+Huehuetenango,Huehuetenango,602
+Huehuetenango,Jacaltenango,65
+Huehuetenango,La Democracia,56
+Huehuetenango,La Libertad,30
+Huehuetenango,Malacatancito,104
+Huehuetenango,Nentón,1661
+Huehuetenango,San Antonio Huista,441
+Huehuetenango,San Gaspar Ixchil,26
+Huehuetenango,San Idelfonso Ixtahuacán,109
+Huehuetenango,San Juan Atitán,12
+Huehuetenango,San Juan Ixcoy,47
+Huehuetenango,San Mateo Ixtatán,60
+Huehuetenango,San Miguel Acatán,24
+Huehuetenango,San Pedro Necta,36
+Huehuetenango,San Pedro Soloma,40
+Huehuetenango,San Rafael Petzal,168
+Huehuetenango,San Rafel la Independencia,91
+Huehuetenango,San Sebastián Coatán,206
+Huehuetenango,San Sebastián Huehuetenango,24
+Huehuetenango,Santa Ana Huista,34
+Huehuetenango,Santa Bárbara,17
+Huehuetenango,Santa Cruz Barillas,60
+Huehuetenango,Santa Eulalia,28
+Huehuetenango,Santiago Chimaltenango,53
+Huehuetenango,Tectitán,7
+Huehuetenango,Todos Santos Cuchumatán,35
+Huehuetenango,Unión Cantinil,14
+Izabal,El Estor,56
+Izabal,Livingston,90
+Izabal,Los Amates,64
+Izabal,Morales,100
+Izabal,Puerto Barrios,100
+Izabal,Santo Tomás de Castilla,12
+Jalapa,Jalapa,220
+Jalapa,Mataquiescuintla,33
+Jalapa,Monjas,40
+Jalapa,San Carlos Alzatate,11
+Jalapa,San Luis Jilotepeque,34
+Jalapa,San Manuel Chaparron,19
+Jalapa,San Pedro Pinula,37
+Jutiapa,Agua Blanca,30
+Jutiapa,Asunción Mita,47
+Jutiapa,Atescatempa,33
+Jutiapa,Comapa,23
+Jutiapa,Conguaco,36
+Jutiapa,El Adelanto,17
+Jutiapa,El Progreso,161
+Jutiapa,Jalpatagua,30
+Jutiapa,Jerez,12
+Jutiapa,Jutiapa,332
+Jutiapa,Moyuta,51
+Jutiapa,Pasaco,61
+Jutiapa,Quesada,67
+Jutiapa,San José Acatempa,70
+Jutiapa,Santa Catarina Mita,92
+Jutiapa,Yupiltepeque,6
+Jutiapa,Zapotitlán,44
+El Petén,Dolores,42
+El Petén,El Chal,14
+El Petén,Flores,52
+El Petén,La Libertad,32
+El Petén,Las Cruces,5
+El Petén,Melchor de Mencos,38
+El Petén,Poptún,48
+El Petén,San Andrés,50
+El Petén,San Benito,50
+El Petén,San Francisco,31
+El Petén,San José,61
+El Petén,San Luis,61
+El Petén,Santa Ana,49
+El Petén,Santa Elena,23
+El Petén,Sayaxché,54
+El Progreso,El Jicaro,62
+El Progreso,Guastatoya,80
+El Progreso,Morazán,35
+El Progreso,San Agustín Acasaguastlán,57
+El Progreso,San Antonio La Paz,37
+El Progreso,San Cristobál Acasaguastlán,27
+El Progreso,Sanarate,42
+El Progreso,Sansare,18
+Quetzaltenango,Almolonga,17
+Quetzaltenango,Cabricán,16
+Quetzaltenango,Cajolá,11
+Quetzaltenango,Cantel,30
+Quetzaltenango,Coatepeque,161
+Quetzaltenango,Colomba Costa Cuca,55
+Quetzaltenango,Concepción Chiquirichapa,16
+Quetzaltenango,El Palmar,17
+Quetzaltenango,Flores Costa Cuca,14
+Quetzaltenango,Génova,38
+Quetzaltenango,Huitán,12
+Quetzaltenango,La Esperanza,30
+Quetzaltenango,Olintepeque,43
+Quetzaltenango,Palestina de Los Altos,19
+Quetzaltenango,Quetzaltenango,647
+Quetzaltenango,Salcajá,29
+Quetzaltenango,San Carlos Sijá,58
+Quetzaltenango,San Francisco La Unión,6
+Quetzaltenango,San Juan Ostuncalco,51
+Quetzaltenango,San Martín Sacatepéquez,30
+Quetzaltenango,San Mateo,11
+Quetzaltenango,San Miguel Siguilá,6
+Quetzaltenango,Sibilia,14
+Quetzaltenango,Zunil,25
+Quiché,Canillá,12
+Quiché,Chajul,22
+Quiché,Chicamán,23
+Quiché,Chiché,20
+Quiché,Chichicastenango,77
+Quiché,Chinique,17
+Quiché,Cotzal,27
+Quiché,Cunen,34
+Quiché,Ixcán,95
+Quiché,Joyabaj,65
+Quiché,Nebaj,49
+Quiché,Pachalum,10
+Quiché,Patzité,6
+Quiché,Sacapulas,26
+Quiché,San Andrés Sajcabajá,13
+Quiché,San Antonio Ilotenango,17
+Quiché,San Bartolomé Jocotenango,3
+Quiché,San Pedro Jocopilas,23
+Quiché,Santa Cruz del Quiché,65
+Quiché,Uspantán,41
+Quiché,Zacualpa,10
+Retalhuleu,Champerico,42
+Retalhuleu,El Asintal,43
+Retalhuleu,Nuevo San Carlos,37
+Retalhuleu,Retalhuleu,262
+Retalhuleu,San Andrés Villa Seca,33
+Retalhuleu,San Felipe Realhuleu,38
+Retalhuleu,San Martín Zapotitlán,23
+Retalhuleu,San Sebastián,28
+Retalhuleu,Santa Cruz Mulúa,33
+Sacatepéquez,Alotenango,26
+Sacatepéquez,Antigua Guatemala,162
+Sacatepéquez,Ciudad Vieja,24
+Sacatepéquez,Jocotenango,40
+Sacatepéquez,Magdalena Milpas Altas,10
+Sacatepéquez,Pastores,21
+Sacatepéquez,San Antonio Aguas Calientes,5
+Sacatepéquez,San Bartolomé Milpas Altas,11
+Sacatepéquez,San Lucas Sacatepéquez,81
+Sacatepéquez,San Miguel Dueñas,7
+Sacatepéquez,Santa Catarina Barahona,8
+Sacatepéquez,Santa Lucia Milpas Altas,31
+Sacatepéquez,Santa María de Jesús,10
+Sacatepéquez,Santiago Sacatepéquez,48
+Sacatepéquez,Santo Domingo Xenacoj,18
+Sacatepéquez,Sumpango,46
+San Marcos,Ayutla,60
+San Marcos,Catarina,34
+San Marcos,Comitancillo,26
+San Marcos,Concepcion Tutuapa,50
+San Marcos,El Quetzal,18
+San Marcos,El Tumbador,31
+San Marcos,Esquipulas Palo Gordo,20
+San Marcos,Ixchiguan,20
+San Marcos,La Blanca,0
+San Marcos,La Reforma,16
+San Marcos,Malacatán,101
+San Marcos,Nuevo Progreso,21
+San Marcos,Ocos,37
+San Marcos,Pajapita,28
+San Marcos,Rio Blanco,5
+San Marcos,San Antonio Sacatepequez,17
+San Marcos,San Cristobal Cucho,14
+San Marcos,San Jose El Rodeo,25
+San Marcos,San Jose Ojetenam,26
+San Marcos,San Lorenzo,15
+San Marcos,San Marcos,540
+San Marcos,San Miguel Ixtahuacan,30
+San Marcos,San Pablo,33
+San Marcos,San Pedro Sacatepequez,64
+San Marcos,San Rafael Pie De La Cuesta,17
+San Marcos,Sibinal,10
+San Marcos,Sipacapa,15
+San Marcos,Tacana,56
+San Marcos,Tajumulco,35
+San Marcos,Tejutla,26
+Santa Rosa,Barberena,54
+Santa Rosa,Casillas,29
+Santa Rosa,Chiquimulilla,99
+Santa Rosa,Cuilapa,62
+Santa Rosa,Guazacapan,16
+Santa Rosa,Nueva Santa Rosa,44
+Santa Rosa,Oratorio,34
+Santa Rosa,Pueblo Nuevo Viñas,28
+Santa Rosa,San Juan Tecuaco,6
+Santa Rosa,San Rafael las Flores,19
+Santa Rosa,Santa Cruz el Naranjo,22
+Santa Rosa,Santa María Ixhuatan,21
+Santa Rosa,Santa Rosa de Lima,34
+Santa Rosa,Taxisco,75
+Sololá,Concepción,6
+Sololá,Nahualá,54
+Sololá,Panajachel,30
+Sololá,San Andrés Semetabaj,14
+Sololá,San Antonio Palopó,18
+Sololá,San Jorge La Laguna,1
+Sololá,San José Chacayá,6
+Sololá,San Juan La Laguna,9
+Sololá,San Lucas Toliman,21
+Sololá,San Marcos La Laguna,3
+Sololá,San Pablo La Laguna,2
+Sololá,San Pedro La Laguna,11
+Sololá,Santa Catarina Ixtahuacán,39
+Sololá,Santa Catarina Palopó,6
+Sololá,Santa Clara La Laguna,9
+Sololá,Santa Cruz La Laguna,11
+Sololá,Santa Lucia Utatlán,21
+Sololá,Santa María Visitación,0
+Sololá,Santiago Atitlán,19
+Sololá,Sololá,74
+Suchitepéquez,Chicacao,27
+Suchitepéquez,Cuyotenango,54
+Suchitepéquez,Mazatenango,113
+Suchitepéquez,Patulul,37
+Suchitepéquez,Pueblo Nuevo,6
+Suchitepéquez,Río Bravo,33
+Suchitepéquez,Samayac,12
+Suchitepéquez,San Antonio Suchitepéquez,54
+Suchitepéquez,San Bernardino,16
+Suchitepéquez,San Francisco Zapotitlán,15
+Suchitepéquez,San Gabriel,5
+Suchitepéquez,San José El Ídolo,12
+Suchitepéquez,San José la Máquina,0
+Suchitepéquez,San Juan Bautista,7
+Suchitepéquez,San Lorenzo,30
+Suchitepéquez,San Miguel Panán,10
+Suchitepéquez,San Pablo Jocopilas,20
+Suchitepéquez,Santa Bárbara,27
+Suchitepéquez,Santo Domingo Suchitepéquez,45
+Suchitepéquez,Santo Tomás La Unión,16
+Suchitepéquez,Zunilito,4
+Totonicapán,Momostenango,81
+Totonicapán,San Andres Xecul,9
+Totonicapán,San Bartolo Aguas Calientes,6
+Totonicapán,San Cristobal Totonicapán,28
+Totonicapán,San Francisco El Alto,39
+Totonicapán,Santa Lucia La Reforma,9
+Totonicapán,Santa Maria Chiquimula,31
+Totonicapán,Totonicapán,103
+Zacapa,Cabañas,16
+Zacapa,Estanzuela,14
+Zacapa,Gualán,78
+Zacapa,Huité,14
+Zacapa,La Unión,11
+Zacapa,Río Hondo,57
+Zacapa,San Diego,11
+Zacapa,San Jorge,0
+Zacapa,Teculután,23
+Zacapa,Usumatlán,25
+Zacapa,Zacapa,229
+,,
