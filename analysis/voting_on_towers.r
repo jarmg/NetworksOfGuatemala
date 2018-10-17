@@ -19,11 +19,11 @@ unwanted_array = list(    'Š'='S', 'š'='s', 'Ž'='Z', 'ž'='z', 'À'='A',
                           'û'='u', 'ý'='y', 'ý'='y', 'þ'='b', 'ÿ'='y' )
 
 voting <-
-  read.csv('../data/election_data/elecData2015.csv', encoding = 'latin1')
+  read.csv('~/Guatemala/NetworksOfGuatemala/data/election_data/elecData2015.csv', encoding = 'latin1')
 pop    <-
-  read.csv('../data/populationByMuni.csv', encoding = 'latin1')
+  read.csv('~/Guatemala/NetworksOfGuatemala/data/populationByMuni.csv', encoding = 'latin1')
 towers <-
-  read.csv('../data/tower_data/cellTowers_1_2018.csv', encoding = 'latin1')
+  read.csv('~/Guatemala/NetworksOfGuatemala/data/tower_data/cellTowers_1_2018.csv', encoding = 'latin1')
 
 
 removeAccents  <- function(strings) {
