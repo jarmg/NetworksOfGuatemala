@@ -1,4 +1,8 @@
+library(plyr)
+library(dplyr)
 library(data.table)
+
+source('~/Guatemala/NetworksOfGuatemala/utils.R')
 
 recodings <- 
   c(mobilePay = 'Q72.11.3',
@@ -20,9 +24,8 @@ recodings <-
     incomeHousehold    = 'xxhhinc'
   )
 
-recode.income <- function(gem) {
-  gem$incomeHousehold = factor(gem$incomeHousehold)
 
+recode.income <- function(gem) {
   #Set level to middle of income category
   levels(gem$incomeHousehold) = 
     c(NA, NA, 250, 625, 1175, 1800, 2250,
@@ -31,43 +34,64 @@ recode.income <- function(gem) {
   gem$incomeHousehold = as.numeric(as.character(gem$incomeHousehold))
   gem
 }
-          
+
+
+recode.indig <- function(gem) {
+  #Add column for whether or not they are indigenous
+  gem$indig <- revalue(gem$ethnicity, 
+                  c('Indígena (Maya)' = 1, 'No indígena (ladino)' = 0)
+                )
+  gem$indig <- levels(gem$indig)[gem$indig] %>% as.numeric
+  gem
+}
+
+
+#NOTE: Currently unused since the numbers are being convereted to NAs on
+# factor casting
 recode.intInHome <- function(gem){
   gem$intInHome <- as.numeric(gem$intPay > 0)
   gem$intInHome[is.na(gem$intPay)] <- 0
   gem
 }
 
-recode.ethnicity <- function(gem) {
-  gem$ethnicity <- 
-    factor(gem$ethnicity, labels = names(attributes(gem$ethnicity)$value))
-  gem
-}
-
 
 recode.startbiz <- function(gem) {
-  # 'No' <- 2, 'Yes' <- 1
-  gem$easystart[gem$easystart == 1] <- 1
-  gem$easystart[gem$easystart == 2] <- 0
-  gem$easystart[gem$easystart < 0] <- NA
+  gem$easystart <- 
+    revalue(gem$easystart, c('Yes' = 1, 'No' = 0))
+  gem$easystart <-
+    as.numeric(levels(gem$easystart)[gem$easystart])
   gem
 }
 
 
 recode.mobilePersonal <- function(gem) {
-  gem$mobilePersonal[gem$mobilePersonal < 0] <- NA
-  gem$mobilePersonal[gem$mobilePersonal == 2] <- 0
-  gem$mobilePersonal[gem$mobilePersonal == 1] <- 1
+  gem$mobilePersonal <- 
+    revalue(gem$mobilePersonal, c('Sí' = 1, 'No' = 0))
+  gem$mobilePersonal <- 
+    as.numeric(levels(gem$mobilePersonal)[gem$mobilePersonal])
   gem
 }
 
-recode <- function(data) {
+
+FixDuplicatedFactors <- function(rd) {
+  #FIXME (jmg 10/17/18): This manually changes two data rows to prevent
+  # factor level duplication and I'm not SURE these are actually the same location
+  rd$xxcity[which(rd$xxcity == 21,)]  <- 20
+  vlabs = attr(rd$xxcity, "value.labels")
+  setattr(rd$xxcity, "value.labels", vlabs[vlabs != 21])
+
+  d  <- lapply(rd, Int2Factor)
+  as.data.frame(d, stringsAsFactors = FALSE)
+}
+
+
+recode <- function(rawData) {
+  data <- FixDuplicatedFactors(rawData)
   old_names = recodings
   new_names = names(mapply(function(name) {deparse(substitute(name))}, recodings))
   setnames(data, old=old_names, new=new_names) %>%
+    recode.indig %>%
     recode.income %>%
     recode.startbiz %>%
-    recode.mobilePersonal %>%
-    recode.intInHome %>%
-    recode.ethnicity
+    recode.mobilePersonal
 }
