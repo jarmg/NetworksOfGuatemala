@@ -4,10 +4,10 @@ library(ggplot2)
 
 source('/home/jared/Guatemala/NetworksOfGuatemala/gem/variables.R')
 
-GEM_FILE = '/home/jared/Guatemala/NetworksOfGuatemala/gem/data/gem_2018.sav'
+GEM_FILE = '/home/jared/Guatemala/NetworksOfGuatemala/data/gem/gem_2018.sav'
 
 
-loadData <- function()
+load.gem.data <- function()
     rawData() %>% recode
 
 
@@ -61,7 +61,7 @@ bill_vs_edu <- function(data) {
 }
 
 run.model.startBiz  <- function() {
-  gemData <- loadData()
+  gemData <- load.gem.data()
   reg.startBiz(gemData)
 }
 

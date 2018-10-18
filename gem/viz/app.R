@@ -3,7 +3,7 @@ library(shinythemes)
 
 
 source("/home/jared/Guatemala/NetworksOfGuatemala/gem/gem_stats.R")
-gemData <- loadData()
+gemData <- load.gem.data()
 
 ui <- fluidPage(theme = shinytheme("united"),
   div(

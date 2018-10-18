@@ -39,6 +39,6 @@ RemoveAccents  <- function(strings) {
          paste(accentMap, collapse=''), strings)    
 }
 
-CleanString <- function(string) {
-  RemoveAccents(string) %>% tolower
+CleanStrings <- function(strings) {
+  RemoveAccents(strings) %>% tolower
 }
