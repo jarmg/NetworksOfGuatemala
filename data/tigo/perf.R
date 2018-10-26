@@ -8,8 +8,6 @@ nav <- readLines("WQ_navdata.json")
 navData <- jsonlite::fromJSON(nav)
 
 
-
-
 getPrensaData <- function() {
   traffic <- readLines("PrensaNavData.json") %>% jsonlite::fromJSON()
   perf <- readLines("perfMaySept.json") %>% jsonlite::fromJSON()
@@ -19,51 +17,27 @@ getPrensaData <- function() {
   perf$perfRatio3g <- perf$`sum(timenavreq803g)`/perf$`sum(time3g)`
   perf$perfRatio4g <- perf$`sum(timenavreq804g)`/perf$`sum(time4g)`
   
-  md <- merge(perf, traffic, all = T)
-  
-  plot(md$perfRatio4g, md$`sum(bytes_down)`)
-  plot(md$perfRatio3g, md$`sum(bytes_down)`)
-  plot(md$perfRatio4g, md$`sum(subscribers)`)
-  plot(md$perfRatio4g, md$`sum(bytes_down)`/md$`sum(subscribers)`)
-  
-  summary(lm(md$`sum(bytes_down)`/md$`sum(subscribers)` ~ md$perfRatio3g))
-  
+  md <- merge(perf, traffic, all = F)
   md$`sum(subscribers)`[is.na(md$`sum(subscribers)`)] <- 0
-  md$`sum(subscribers)`
-  summary(lm(md$`sum(subscribers)` ~ md$perfRatio4g))  
-}
-
-
-plot.perfByDate <- function(perf) {
-	perf$fct_dt <- factor(perf$fct_dt)
-	f <- group_by(perf, fct_dt) %>%
-		summarise(
-		  perf3g = mean(timenavreq803g/time3g, na.rm = T),
-		  perf4g = mean(timenavreq804g/time4g, na.rm = T),
-		  time3g = sum(time3g)
-			)
-	ggplot() +
-	  geom_point(
-	    data = f, 
-	    aes(x = f$fct_dt, y = f$perf3g, color = "red")
-	  )
-}
-
-plot.navData <- function(navData) {
-  navData$service_name <- factor(navData$service_name)
-  gnd <- group_by(navData, service_name) %>% 
-    summarise(subs = sum(subscribers, na.rm = T))
-  plot(gnd)
-  ggplot() +
-    geom_line(
-      data = gnd, 
-      aes(x = date_time, 
-          y = subscribers,
-          color = "red"
-      )
+  
+  
+  callAvg<- group_by(md, bts_sh_nm) %>%
+    summarise(
+           avgPerfRatio3g = mean(perfRatio3g, na.rm = T),
+           avgPerfRatio4g = mean(perfRatio4g, na.rm = T),
+           avgPrensaSubs = mean(`sum(subscribers)`, na.rm = T),
+           avgPrensaDown = mean(`sum(bytes_down)`, na.rm = T)
     )
+  
+           
+  md2 <- left_join(md, callAvg)
+  tail(md2[md$lvl_val == 'WZCP894E',])
+  md2 <- mutate(md2,
+                perfDiff4g = perfRatio4g - avgPerfRatio4g,
+                perfDiff3g = perfRatio3g - avgPerfRatio3g,
+                diffBytes = `sum(bytes_down)` - avgPrensaDown,
+                diffSubs =  `sum(subscribers)` - avgPrensaSubs)
 }
-
-plot.perfByDate(perfData)
+  
 
 
