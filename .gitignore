@@ -6,3 +6,4 @@
 *.swp
 *.swo
 __pycache__
+data/tigo/*.json
