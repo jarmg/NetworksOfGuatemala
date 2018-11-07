@@ -6,12 +6,12 @@ run.subsAndPerfByCell <- function(prensaData, shouldPlot= F, net4g= T) {
   
   if (missing(prensaData)) { prensaData <- get.prensa.cellData() }
   
-  if(net4g){ netData <- prensaData$diff4g}
-  else {netData <- prensaData$diff3g}
+  if(net4g){ netData <- prensaData$cellPerfDiff4g}
+  else {netData <- prensaData$cellPerfDiff3g}
 
-  if (shouldPlot){ plot(prensaData$diffSubs, netData)}
+  if (shouldPlot){ plot(prensaData$cellSubsDiff, netData)}
   
-  lm(prensaData$diffSubs ~ netData)
+  lm(prensaData$cellSubsDiff ~ netData)
 }
 
 
