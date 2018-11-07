@@ -1,25 +1,32 @@
+source("../data/tigo/tigo.R")
+
+run.subsAndPerfByCell <- function(prensaData, shouldPlot= F, net4g= T) {
+  # Relationship between variance from 5 month mean for # of prensa 
+  # subscribers and cell performance ratio 
+  
+  if (missing(prensaData)) { prensaData <- get.prensa.cellData() }
+  
+  if(net4g){ netData <- prensaData$diff4g}
+  else {netData <- prensaData$diff3g}
+
+  if (shouldPlot){ plot(prensaData$diffSubs, netData)}
+  
+  lm(prensaData$diffSubs ~ netData)
+}
 
 
-run.prensaAnalysis <- function(){
+run.subsAndPerfByMuni <- function(prensaData, shouldPlot= F, net4g= T) {
+  # Relationship between variance from 5 month mean for # of prensa 
+  # subscribers and performance ratio for all cells in a muni
   
-  plot(md2$avgPerfRatio4g, md2$perfDiff4g)
+  if (missing(prensaData)) { prensaData <- get.prensa.muniData() }
   
-  dt <- getPrensaData()
-  prensa <- dt[dt$`sum(subscribers)` > 0,]
+  if(net4g){ netData <- prensaData$cityPerfDiff4g}
+  else {netData <- prensaData$cityPerfDiff3g}
+
+  if (shouldPlot){ plot(prensaData$citySubsDiff, netData)}
   
-  summary(lm(md$`sum(bytes_down)`/md$`sum(subscribers)` ~ md$perfRatio3g))
-  summary(lm(md$`sum(subscribers)`/md$`sum(subs)` ~ md$perfRatio4g))
-  mean(md$`sum(bytes_down)`/md$`sum(subscribers)`)
-  md[is.na(md$subs),]
-  md$`sum(subscribers)`/md$`sum(subs)` 
-  md = md[md$`sum(subs)` != 0,]
-  
-  md$`sum(subscribers)`[is.na(md$`sum(subscribers)`)] <- 0
-  md$`sum(subscribers)`
-  
-  
-  #TODO: Use a poisson on number of subscribers
-  summary(lm(md$`sum(subscribers)` ~ md$perfRatio4g))  
+  lm(prensaData$citySubsDiff ~ netData)
 }
 
 
