@@ -7,3 +7,4 @@
 *.swo
 __pycache__
 data/tigo/*.json
+data/tigo/*.csv
