@@ -1,5 +1,10 @@
 library(dplyr)
 
+
+qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.json"
+navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.json"
+cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"
+
 addCellAverages <- function(prensa) {                                      
   cellAvg <- group_by(prensa, bts_sh_nm) %>%                               
     summarise(                                                             
@@ -49,7 +54,6 @@ run.subsAndPerfByCell <- function(prensaData, shouldPlot= F, net4g= T) {
                                                                            
   if(net4g){ netData <- prensaData$cellPerfDiff4g}                         
   else {netData <- prensaData$cellPerfDiff3g}                              
-                                                                           
   if (shouldPlot){ plot(prensaData$cellSubsDiff, netData)}                 
                                                                            
   lm(prensaData$cellSubsDiff ~ netData)                                    

@@ -1,5 +1,9 @@
 library(dplyr)
 
+qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.json"
+navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.json"
+cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"  
+
 addCellAverages <- function(prensa) {                                      
   cellAvg <- group_by(prensa, bts_sh_nm) %>%                               
     summarise(                                                             
