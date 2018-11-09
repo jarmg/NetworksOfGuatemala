@@ -2,4 +2,13 @@
 .Rhistory
 .RData
 .Ruserdata
+<<<<<<< HEAD
 lapop-explorer/node_modules
+=======
+*.sav
+*.swp
+*.swo
+__pycache__
+data/tigo/*.json
+data/tigo/*.csv
+>>>>>>> master
