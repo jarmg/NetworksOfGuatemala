@@ -1,8 +1,8 @@
 library(dplyr)
 
 
-qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.json"
-navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.json"
+qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
+navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
 cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"
 
 addCellAverages <- function(prensa) {                                      
@@ -39,8 +39,8 @@ aggregate.cellAndMonth <- function(traffic, perf) {
 }  
 
 get.prensa.cellData <- function() {                                        
-  traffic <- readLines(navDataPath) %>% jsonlite::fromJSON()               
-  perf <- readLines(qosDataPath)    %>% jsonlite::fromJSON()               
+  traffic <- readRDS(navDataPath)               
+  perf <- readRDS(qosDataPath)               
   d <- aggregate.cellAndMonth(traffic, perf)                               
   d <- mergeLocationData(d)                                                
   addCellAverages(d)                                                       

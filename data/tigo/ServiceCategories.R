@@ -117,18 +117,18 @@ cats <- c("social", "intlNews", "ntlNews", "other")
 
 getCategory <- function(serviceLabel) {
 	if (serviceLabel %in% socialMedia)
-		return(factor("social", labels= cats))
+		return(factor("social", levels= cats))
 
 	if (serviceLabel %in% intlNews)
-		return(factor("intlNews", labels= cats))
+		return(factor("intlNews", levels= cats))
 	
 	if (serviceLabel %in% ntlNews)
-		return(factor("ntlNews", labels= cats))
+		return(factor("ntlNews", levels= cats))
 
 	if (serviceLabel %in% other)
-		return(factor("other", labels= cats))
+		return(factor("other", levels= cats))
 
 	stop(past0("UNKNOWN SERVICE CATEGORY: ", serviceLabel)) 
-
+}
 
 
