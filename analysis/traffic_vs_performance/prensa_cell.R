@@ -10,14 +10,12 @@ addCellAverages <- function(prensa) {
     summarise(                                                             
            cellAvgPerfRatio3g = mean(perfRatio3g, na.rm = T),              
            cellAvgPerfRatio4g = mean(perfRatio4g, na.rm = T),              
-           cellAvgPrensaSubs = mean(subscribers, na.rm = T),               
-           cellAvgPrensaDown = mean(bytesdown, na.rm = T)                  
+           cellAvgPrensaSubs = mean(subscribers, na.rm = T) 
     )                                                                      
                                                                            
     left_join(prensa, cellAvg) %>%                                         
       mutate(cellPerfDiff4g   = perfRatio4g - cellAvgPerfRatio4g,          
               cellPerfDiff3g  = perfRatio3g - cellAvgPerfRatio3g,          
-              cellBytesDiff   = bytesdown - cellAvgPrensaDown,             
               cellSubsDiff    = subscribers - cellAvgPrensaSubs)           
 }                                                                          
      
