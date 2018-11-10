@@ -1,7 +1,6 @@
 ---
 title: "4G Performance Variance Overview"
 author: Jared
-output: pdf_document
 ---
 
 
@@ -59,6 +58,10 @@ QOS is calculated as `time / timeNavReq`
   qos <- readRDS(qosDataPath)
   qos$perfRatio4g <- qos$timenavreq4g/qos$time4g
 
+
+  globalMean4g <- mean(qos$perfRatio4g, na.rm=T)
+  print(globalMean4g)
+
   # calculate avg performance ratios over time per cell 
   cellAvg <- group_by(qos, lvl_val) %>%
   summarise(
@@ -68,7 +71,10 @@ QOS is calculated as `time / timeNavReq`
   # merge cell performance averages with the rest of the dataset and
   # calculate deviation from cell performance mean
   qos <- left_join(qos, cellAvg) %>%
-    mutate( cellPerfDiff4g   = perfRatio4g - avgPerf4g)
+    mutate(
+      cellPerfDiff4g   = perfRatio4g - avgPerf4g,
+      globalPerfDiff4g = perfRatio4g - globalMean4g
+    )
 
   # remove non-4g transceiver cells
   qos4g <- qos[qos$mbytes4g > 0,]
@@ -83,9 +89,15 @@ QOS is calculated as `time / timeNavReq`
       x= "mean cell performance ratio")
   
   ggplot(qos4g, aes(x=cellPerfDiff4g)) + 
-    geom_histogram(color= color1, fill= color1, binwidth=.005) + 
+    geom_histogram(color= color1, fill= color1, binwidth= .005) + 
     labs(title="Distribution of deviations from cell performance mean", 
       x= "deviation from cell mean performance")
+
+  ggplot(qos4g, aes(x=globalPerfDiff4g)) + 
+    geom_histogram(color= color1, fill= color1, binwidth=.005) + 
+    labs(title="Distribution of deviations from global performance mean", 
+      x= "deviation from global mean performance")
+```
 ```
 
 ```{r include= F}
@@ -102,10 +114,13 @@ QOS is calculated as `time / timeNavReq`
 ```{r}
   var(qos4g$avgPerf4g)
 ```
-
-Cell performance deviation variance testing
+##### Cell performance deviation variance testing
 ```{r}
   var(qos4g$cellPerfDiff4g)
+```
+##### Global performance variance testing
+```{r}
+  var(qos4g$perfRatio4g)
 ```
 ##### Mean performance vs cell variance
 ```{r echo=F, message=F}
