@@ -24,7 +24,7 @@ author: Jared
 ## Data Overview
 We'll start by taking a look at a few dummy rows for the dataset to better understand what we're working with.  
 
-**Note:** This is fake data but the categories are real.
+**Note:** This is fake data but the data and categories are representative of the dataset used.
 
 ##Cell performance
 ```{r message= F, echo= F}
