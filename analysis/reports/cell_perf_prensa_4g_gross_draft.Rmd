@@ -1,0 +1,404 @@
+---
+  title: "Variance in 4g cell performance and prensa access from cell"
+  author: Networks of Guatemala
+---
+
+## Appendix:
+```{r}
+  addCellAverages <- function(prensa) {                                      
+    cellAvg <- group_by(prensa, bts_sh_nm) %>%                               
+      summarise(                                                             
+             cellAvgPerfRatio3g = mean(perfRatio3g, na.rm = T),              
+             cellAvgPerfRatio4g = mean(perfRatio4g, na.rm = T),              
+             cellAvgPrensaSubs = mean(subscribers, na.rm = T), 
+             cellAvgSubs = mean(subs, na.rm = T) 
+      )                                                                      
+                                                                             
+      left_join(prensa, cellAvg) %>%                                         
+        mutate(cellPerfDiff4g       = perfRatio4g - cellAvgPerfRatio4g,          
+                cellPerfDiff3g      = perfRatio3g - cellAvgPerfRatio3g,          
+                cellPrensaSubsDiff  = subscribers - cellAvgPrensaSubs,
+                cellPrensaSubsPercentDiff   = cellPrensaSubsDiff / cellAvgPrensaSubs,
+                cellSubsDiff                = subs - cellAvgSubs, 
+                cellSubsPercentDiff         = cellSubsDiff / cellAvgSubs,
+        )           
+  }                                                                          
+       
+
+  mergeLocationData <- function(prensa, cells) {                                    
+    cells$cell <- cells$CELL_ID                                              
+    left_join(prensa, cells)                                                 
+  }                                                                          
+     
+
+  aggregate.cellAndMonth <- function(traffic, perf) {                        
+    traffic$dateAndCell <- paste(traffic$monthyear, traffic$bts_sh_nm)       
+    perf$dateAndCell <- paste(perf$monthyear, perf$lvl_val)                  
+                                                                             
+    merge(perf, traffic, all = F)                                            
+  }  
+
+```
+
+```{r}
+  library(dplyr)
+  library(knitr)
+  library(ggplot2)
+
+  qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
+  navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
+  cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"
+
+  color1 <- "#941010"                                                      
+```
+
+
+### Data cleaning
+We begin by loading our three datasets: qosData, navData, and cellData.
+```{r}
+  traffic <- readRDS(navDataPath)               
+  perf <- readRDS(qosDataPath)               
+  cells <- read.csv(cellDataPath)                                          
+```
+
+
+This analysis uses monthly cell-level performance and navigation data 
+from May to Sept of 2018. It is meant to help answer the larger quesiton of
+whether cell performance impact political engagement. 
+
+In this analysis, we investigate whether there is a correlation between
+monthly changes in a cell's performance and changes for the same month
+in the number of subscribers that used this cell to access PrensaLibre.
+
+
+We then add a performance ratio, which will be used later, to our performance dataset
+```{r}
+  perf$perfRatio3g <- perf$timenavreq3g/perf$time3g                        
+  perf$perfRatio4g <- perf$timenavreq4g/perf$time4g                        
+```
+The `timenavreq` column gives the amount of time that this cell provided
+a connection that was good for the user's activity. Therefore, this 
+performance ratio represents the % of time that users which connnected 
+using this cell experienced good Quality of Service.
+
+
+
+Then we merge our network navigation data, our network cell performance data, 
+and our cell information by month and cell
+```{r}
+  # the aggregation functions can be found in the appendix
+  cellData <- aggregate.cellAndMonth(traffic, perf) %>%                              
+    mergeLocationData(cells)                                                 
+```
+
+Our full cell data now looks like this
+```{r}
+  kable(head(cellData))
+```
+
+Now that we have our fully merged cell data, we need to perform some mutations
+to create new columns that we will use for our analysis. 
+
+We want to determine whether, in a month that a cell's performance declined,
+did the number of subscribers that accessed PrensaLibre also decline. 
+
+For this, we need the average performance and average subscriber numbers
+for each cell. Then we need the amount that a cell varied from its 5-month 
+mean in a given month.
+
+We use a function `addCellAverages` to compute this and add these columns 
+to our data
+```{r}
+    # this function can be found in the appendix
+    cellData <- addCellAverages(cellData)                                                       
+```
+
+Now our data is ready for analysis. First, let's explore the data visually.
+
+
+Here we'll plot the monthly variance in performance and subscriber numbers
+for each (cell, month) pairing. Remember, these differences are based on
+how much a particular cell in a given month varied from that same cell's 
+5-month average performance ratio.
+```{r echo= F, out.width="1800px"}
+
+  ggplot(cellData, aes(x = cellPerfDiff4g, y = cellPrensaSubsDiff)) +                       
+    geom_point(aes(colour = STATE), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+One of the interesting things about this chart is the high varition if prensa
+subscribers in the green departments vs the rest of the country. Let's take
+a close look by building the same graph, but only looking at 
+Escuintla, Guatemala, Huehuetenango, and Izabal.
+
+```{r echo= F, out.width="1800px"}
+
+  greenDepts <- c("ESCUINTLA", "GUATEMALA", "HUEHUETENANGO", "IZABAL")
+  greenCellData <- cellData[cellData$STATE %in% greenDepts,]
+
+  ggplot(greenCellData, aes(x = cellPerfDiff4g, y = cellPrensaSubsDiff)) +                       
+    geom_point(aes(colour = STATE), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+This view indicates that the variance is coming from Guatemala. This makes
+sense since PrensaLibre is primarily read here in the capital. 
+
+
+Let's check this assumption by looking at the variance by municipality in the
+department of Guatemala.
+```{r echo= F, out.width="1800px"}
+
+  guateCellData <- cellData[cellData$STATE == "GUATEMALA",]
+
+  ggplot(guateCellData, aes(x = cellPerfDiff4g, y = cellPrensaSubsDiff)) +                       
+    geom_point(aes(colour = CITY), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+As expected, the majority of variation in prensa readers is coming from
+the capital.
+
+Now we'll look at the variance in the capital grouped by month
+```{r echo= F, out.width="1800px"}
+  
+  capitalCellData  <- guateCellData[guateCellData$CITY == "GUATEMALA",]
+
+  ggplot(capitalCellData, aes(x = cellPerfDiff4g, y = cellPrensaSubsDiff)) +                       
+    geom_point(aes(colour = monthyear), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+
+
+Now we'll build a linear regression model to examine the correlation
+```{r}
+    summary(lm(cellData$cellPrensaSubsDiff ~ cellData$cellPerfDiff4g))    
+```
+This model indicates a positive correlation between
+monthly variation in the number of subscribers accessing prensa and
+the monthly variation in cell performance. However, the $R^2$ value is 
+extremely small, indicating that a small amount of the variation is 
+explained by our dependent variable. 
+
+As we showed in our graphs above, 
+most of the variation in prensa subscribers comes from the capital. 
+Therefore, let's run the same analysis focused on Guatemala City.
+
+```{r}
+    capitalCellData <- guateCellData[guateCellData$CITY == "GUATEMALA",]
+    ols.model = lm(capitalCellData$cellPrensaSubsDiff ~ capitalCellData$cellPerfDiff4g)    
+    summary(ols.model)
+```
+As expected, this result increases the correlation and $R^2$ value - though
+it it remains extremely small. The coefficient displayed here indicates 
+that a 1% deviation from the average performance for a given cell is 
+correlated with a shift of 2.46 subscribers around the average number of 
+prensa subscribers from a given cell.
+
+
+For a better understanding of this coefficient, we'll produce a confidence interval.
+```{r}
+  confint(ols.model)
+```
+Building off of our initial logic, this indicates that a 1% shift in a cells
+performance ratio from it's mean performance is correlated with a shift 
+in the number of subscribers that access Prensa Libre of between 
+2.07 and 2.85.
+
+
+
+Let's put this into context. How many subscribers are usually accessing 
+prensa from the cells in the capital?
+```{r}
+  summary(capitalCellData$subscribers)
+```
+With a mean of 25.23 subscribers and a median of 7.00 subscribers, these
+results indicate that a 1% change in cell performance is correlated with
+an 8.2% shift in prensa subscribers in the worst case and a 40.7% in the best
+case vs. the global average.
+
+###Overall subscriber shifts
+
+Now that we've seen the correlation between Prensa Subscribers and 
+cell performance, what about total subscribers? We'll look at this here.
+
+Variance across the country
+```{r echo= F, out.width="1800px"}
+
+  ggplot(cellData, aes(x = cellPerfDiff4g, y = cellSubsDiff)) +                       
+    geom_point(aes(colour = STATE), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+Variance in the same departments we filtered for before 
+```{r echo= F, out.width="1800px"}
+
+  ggplot(greenCellData, aes(x = cellPerfDiff4g, y = cellSubsDiff)) +                       
+    geom_point(aes(colour = STATE), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Prensa Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+Variance throughout Guatemala
+```{r echo= F, out.width="1800px"}
+  ggplot(guateCellData, aes(x = cellPerfDiff4g, y = cellSubsDiff)) +                       
+    geom_point(aes(colour = CITY), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+Variance throughout Guatemala
+```{r echo= F, out.width="1800px"}
+  ggplot(capitalCellData, aes(x = cellPerfDiff4g, y = cellSubsDiff)) +                       
+    geom_point(aes(colour = monthyear), size = .1) +                                            
+    labs(x = "Cell performance ratio variance", 
+         y = "Cell Subscriber variance") +
+    theme(
+          legend.position="bottom", 
+          legend.text = element_text(size=5),
+          legend.direction = "horizontal",
+          legend.box = "vertical"
+    ) +
+    guides(
+           colour = guide_legend(override.aes = list(size=2)),
+           fill=guide_legend(title="Department")
+    )
+
+```
+
+
+Now we'll build a model to examine the correlation
+```{r}
+    summary(lm(cellData$cellSubsDiff ~ cellData$cellPerfDiff4g))    
+```
+This model indicates a positive correlation between
+monthly variation in the number of subscribers accessing prensa and
+the monthly variation in cell performance. However, the $R^2$ value is 
+extremely small, indicating that a small amount of the variation is 
+explained by our dependent variable. 
+
+As we showed in our graphs above, 
+most of the variation in prensa subscribers comes from the capital. 
+Therefore, let's run the same analysis focused on Guatemala City.
+
+```{r}
+    capitalCellData <- guateCellData[guateCellData$CITY == "GUATEMALA",]
+    ols.model = lm(capitalCellData$cellSubsDiff ~ capitalCellData$cellPerfDiff4g)    
+```
+
+
+
+
+
+
+###Correlation or Causation
+
+*TODO: Need to build an alaysis to answer the questions below*
+Now we ask whether this correlation is causal. The biggest area for error
+arises from how we measure performance. To measure performance we use the 
+number of minutes in which a call provided good performance given the activity
+of the user. It is possible that increased traffic to Prensa shifted the 
+distribution of content accessed towards text and away from heavier activity
+like video streaming. In this case, the increased Prensa traffic would 
+cause the performance deviation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,2 +1,5 @@
-rmarkdown::render("4g_perf_variance.Rmd")
-rmarkdown::render("3g_perf_variance.Rmd")
+#rmarkdown::render("4g_perf_variance.Rmd")
+#rmarkdown::render("3g_perf_variance.Rmd")
+#rmarkdown::render("voting_on_towers.Rmd")
+#rmarkdown::render("cell_performance_and_prensa_subs.Rmd")
+rmarkdown::render("cell_performance_and_prensa_subs_PERC.Rmd")
