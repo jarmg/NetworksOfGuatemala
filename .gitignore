@@ -9,4 +9,4 @@ __pycache__
 data/tigo/*.json
 data/tigo/*.csv
 data/tigo/*.RData
-
+analysis/reports/*.html
