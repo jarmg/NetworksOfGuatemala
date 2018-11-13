@@ -2,6 +2,17 @@
 library(dplyr)
 
 
+baseDir <- function() {
+  if ("Linux" %in% Sys.info())
+    return("/home/jared/Guatemala/NetworksOfGuatemala/")
+  if ("Windows" %in% Sys.info())
+    return("C:/Users/jgreene/Analysis/NetworksOfGuatemala/")
+}
+
+
+
+
+
 Int2Factor <- function(x) {
     if(!is.null(attr(x, "value.labels"))){
         vlab <- attr(x, "value.labels")
