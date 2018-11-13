@@ -45,9 +45,15 @@
   library(knitr)
   library(ggplot2)
 
-  qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
-  navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
-  cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"
+  source("../../utils.R")
+
+  base  <- baseDir()
+
+  qosDataPath <- paste(base, "data/tigo/perfMaySept.RData", sep='')
+  print("QOS PATH: ")
+  print(qosDataPath)
+  navDataPath <- paste(base, "data/tigo/PrensaNavData.RData", sep='')
+  cellDataPath <- paste(base, "data/tigo/cells.csv", sep='')
 
   color1 <- "#941010"                                                      
 ```
