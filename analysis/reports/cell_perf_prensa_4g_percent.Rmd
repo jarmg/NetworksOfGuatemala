@@ -1,7 +1,16 @@
 ---
-  title: "Variance in 4g cell performance and prensa access from cells in the capital"
-  author: Networks of Guatemala
+title: "Variance in 4g cell performance and prensa access from cells in the capital"
+author: "Networks of Guatemala"
+output:
+  html_document:
+    df_print: paged
 ---
+
+<style>
+body {
+text-align: justify}
+</style>
+
 
 ```{r include= F}
   ## Appendix:
@@ -45,14 +54,16 @@
   library(knitr)
   library(ggplot2)
 
-  qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
-  navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
-  cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"
+  qosDataPath <- "C:/Users/jgreene/Analysis/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
+  navDataPath <- "C:/Users/jgreene/Analysis/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
+  cellDataPath <- "C:/Users/jgreene/Analysis/NetworksOfGuatemala/data/tigo/cells.csv"
 
   color1 <- "#941010"                                                      
 ```
 
 ###Overview
+
+####Intro
 This analysis uses monthly cell-level performance and navigation data 
 from May to Sept of 2018. It is meant to help answer the larger quesiton of
 whether cell performance impacts political engagement. 
@@ -63,9 +74,29 @@ in the % of the number of subscribers that used this cell to access
 PrensaLibre.
 
 
+####Preliminary findings
+We find a direct connection between local cell performance and changes in the
+number of subscribers that access Prensa Libre. Our model indicates that, 
+for devices in Guatemala City, a 10% increase in cell performance for a given 
+month is correlated with between a 62.5% and a 73.3% increase in the 
+number of devices that access Prensa Libre. This is compared to a 3.6% change
+in devices that access the network as a whole.
+
+This result is notable because it demonstrated that network performance has a 
+disproportionate impact on consumption on new from the population. 
+
+####How these findings can be used
+These preliminary findings demonstrate that performance networks can be a 
+powerful tool for strengthening democracy by creating a more informed populous.
+Governments can act on this by expanding available spectrum and decreasing the 
+auction prices in order to promote more performant networks. 
+Funding and development agencies can use these findings as support for 
+ICT infrastructure expansion loans and subisidies.  
+
+
 ###Data cleaning
 We begin by loading our three datasets: qosData, navData, and cellData.
-```{r}
+```{r message= F}
   traffic <- readRDS(navDataPath)               
   perf <- readRDS(qosDataPath)               
   cells <- read.csv(cellDataPath)                                          
@@ -87,7 +118,7 @@ using this cell experienced good Quality of Service.
 
 Then we merge our network navigation data, our network cell performance data, 
 and our cell information by month and cell
-```{r}
+```{r message= F}
   cellData <- aggregate.cellAndMonth(traffic, perf) %>%                              
     mergeLocationData(cells)                                                 
 ```
@@ -119,7 +150,7 @@ Here we'll plot the monthly variance in performance and subscriber numbers
 for each (cell, month) pairing. Remember, these differences are based on
 how much a particular cell in a given month varied from that same cell's 
 5-month average performance ratio.
-```{r echo= F, out.width="1800px"}
+```{r echo, out.width="1800px", message= F}
   ggplot(capitalCellData, aes(x = cellPerfDiff4g, y = cellPrensaSubsPercentDiff)) +                       
     geom_point(color= color1, size = .1) +                                            
     labs(x = "Cell performance ratio variation", 
@@ -128,7 +159,7 @@ how much a particular cell in a given month varied from that same cell's
 ```
 
 Now we'll look at the variance in the capital grouped by month
-```{r echo= F, out.width="1800px"}
+```{r echo= F, out.width="1800px", message= F}
   
   capitalCellData  <- guateCellData[guateCellData$CITY == "GUATEMALA",]
 
@@ -163,7 +194,7 @@ For a better understanding of this coefficient, we'll produce a confidence inter
 ```{r}
   confint(ols.model)
 ```
-This indicates that a 1% shift in a cells
+This indicates that a 1% shift in a cell's
 performance ratio from it's mean performance is correlated with a shift 
 in the number of subscribers that access Prensa Libre of between 
 6.25% and 7.3%.
@@ -171,7 +202,7 @@ in the number of subscribers that access Prensa Libre of between
 ************************************************************
 
 ###Performance by month
-We notices a relationship between performance and month before.
+We noticed a relationship between performance and month before.
 Here we'll take a closer look at this correlation with a linear regression
 of performance differences by month.
 ```{r}
@@ -180,7 +211,7 @@ of performance differences by month.
     confint(ols.model)
 ```
 This model confirms our hunch. We see a 10% average performance difference
-from May to June. This is a *large* monthly difference for a city of 
+from May to June. This is a notable monthly difference for a city of 
 3 million people.
 
 
@@ -191,9 +222,8 @@ Now let's look at this same model but for cells across the country.
     summary(ols.model)
     confint(ols.model)
 ```
-Though not quite as pronounced, we still see drastic shifts in performance 
-by month. Again, changes of this magnitude are surprising for a 10 million 
-user cell network.
+Though not quite as pronounced, we still see performance fluctuation. Again, changes of this magnitude are notable for a 10 million 
+user cell network. This performance fluctuation is useful as an exogenous source of variation in further analyses.
 
 ************************************************************
 
@@ -271,8 +301,7 @@ performance numbers.
 
 
 ###Next steps
-This is promising as a preliminary result; however, it is far from 
-conclusive.
+This is promising as a preliminary result, but it is not conclusive.
 
 To expand on this analysis our next steps are to look at all departments
 and analyze news consumption using a set of websites, rather than just one.
