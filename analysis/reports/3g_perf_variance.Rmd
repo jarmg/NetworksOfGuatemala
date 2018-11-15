@@ -1,6 +1,9 @@
 ---
 title: "3G Performance Variance Overview"
-author: Jared
+author: Networks of Guatemala
+output:
+  html_document:
+    df_print: paged
 ---
 
 
@@ -10,12 +13,15 @@ author: Jared
 
   library(knitr)
   library(ggplot2)
-  library(EnvStats)
   library(dplyr)
+  library(kableExtra)
 
-  qosDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/perfMaySept.RData"
-  navDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/PrensaNavData.RData"
-  cellDataPath <- "~/Guatemala/NetworksOfGuatemala/data/tigo/cells.csv"    
+  source("../../utils.R")
+  base  <- baseDir()
+
+  qosDataPath  <- paste(base, "data/tigo/perfMaySept.RData", sep= '')
+  navDataPath  <- paste(base, "data/tigo/PrensaNavData.RData", sep = '')
+  cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
 
   color1 <- "#941010"
 
@@ -34,7 +40,6 @@ We'll start by taking a look at a few dummy rows for the dataset to better under
   cellId <- c("HJAK7842","LAQ32J", "ABC123") 
   classif <- c("PREPAID", "POSTPAID", "PREPAID")
   deviceTech <- c("LTE", "NO-SMART", "SMART")
-  subsPerDay <- c(10, 5, 3)
   mbs  <- c(13.1234, 3.1234, 1.1234)
   mbs2G <- c(0, 0, 1.1234)
   mbs3G <- c(13.1234, 0, 0)
@@ -42,17 +47,18 @@ We'll start by taking a look at a few dummy rows for the dataset to better under
   time2G <- c(0, 0, 1921) 
   time3G <- c(2152, 0, 0) 
   time4G <- c(0, 1050, 0) 
-  timeNavReq3G <- c(1920, 0, 0)
-  timeNavReq4G <- c(0, 832, 0)
+  timeGoodPerf3G <- c(1920, 0, 0)
+  timeGoodPerf4G <- c(0, 832, 0)
   
-  dataSample <- data.frame(monthYear, cellId, classif, deviceTech, subsPerDay, mbs, mbs2G, mbs3G, mbs4G, time2G, time3G, time4G, timeNavReq3G, timeNavReq4G) 
+  dataSample <- data.frame(monthYear, cellId, classif, deviceTech, mbs, mbs2G, mbs3G, mbs4G, time2G, time3G, time4G, timeGoodPerf3G, timeGoodPerf4G) 
 
-  kable(dataSample)
+  kable(dataSample) %>%
+     kable_styling(bootstrap_options = "striped", font_size = 9)
 ```
 
 ## Variation: 3G Performance data
 Now we'll look at how quality of service (QOS) ratios vary.
-QOS is calculated as `time / timeNavReq`
+QOS is calculated as `timeGoodPerf / time`
 
 ```{r message= F}
   # add performance ratio numbers
@@ -99,10 +105,7 @@ QOS is calculated as `time / timeNavReq`
     labs(title="Distribution of deviations from global performance mean", 
       x= "deviation from global mean performance")
 ```
-```
 
-```{r include= F}
-```
 ##### Cell performance mean
 ```{r}
   summary(qos3g$avgPerf3g)
