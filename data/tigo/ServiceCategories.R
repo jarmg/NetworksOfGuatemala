@@ -132,3 +132,17 @@ getCategory <- function(serviceLabel) {
 }
 
 
+sqlSyntax <- function(cat) {
+  return(paste("INSERT INTO service_categories (service, category) VALUES ('", cat, "', '",  getCategory(cat), "');", sep=''))
+  
+}
+
+sql_social <- mapply(sqlSyntax, socialMedia)
+sql_ntl <- mapply(sqlSyntax, ntlNews)
+sql_intl <- mapply(sqlSyntax, intlNews)
+sql_other <- mapply(sqlSyntax, other)
+
+write(sql_social, "sql_syntax_categories.txt")
+write(sql_ntl, "sql_syntax_categories.txt", append = T)
+write(sql_intl, "sql_syntax_categories.txt", append = T)
+write(sql_other, "sql_syntax_categories.txt", append = T)
