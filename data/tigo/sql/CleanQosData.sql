@@ -36,7 +36,7 @@ select count(*), count(distinct BTS_SH_NM) from cells_qos_4g;
 
 drop table cells_qos_daily_sum_4g;
 
-
+/* Aggregate traffic at the cell, day level */
 CREATE TABLE CELLS_QOS_DAILY_SUM_4G AS
     select 
         fct_dt,
@@ -47,7 +47,6 @@ CREATE TABLE CELLS_QOS_DAILY_SUM_4G AS
         sum(subs) as subs
     from cells_qos_4g
     group by bts_lng_nm, fct_dt;
-    
     
 CREATE TABLE CELLS_QOS_DAILY_SUM_3G AS
     select 
@@ -77,4 +76,5 @@ select q.*, a.lt_avg_timenavreq/a.lt_avg_time4g as cell_avg_perf
 from cells_qos_daily_sum_4g q
 join cells_qos_avgs_4g a
 on q.cell = a.cell;
+
 
