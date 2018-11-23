@@ -1,0 +1,65 @@
+---
+title: "xela_sept20_protest"
+author: "Networks of Guatemala"
+date: "November 23, 2018"
+output: html_document
+---
+
+
+```{r Setup environment, cache=TRUE}
+  # Set up the doc environment 
+  library(knitr)
+  library(ggplot2)
+  library(dplyr)
+  library(kableExtra)
+
+  source("../../utils.R")
+  base  <- baseDir()
+
+  qosDataPath  <- paste(base, "data/tigo/QosDailyNational4g.csv", sep= '')
+  cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
+
+  color1 <- "#941010"
+```
+
+```{r Import and clean data, cache= T}
+  # import quality of service data and cell location data
+  qos4g <- rio::import(qosDataPath)
+  cells <- rio::import(cellDataPath)
+  
+  #prep dataframes for merge
+  qos4g$CELL <- as.character(qos4g$CELL)
+ 
+   
+  # add cell location 
+  qos4g <- left_join(qos4g, cells, by = c("CELL" = "CELL_ID") )
+  
+  # filter towers with no traffic
+  qos4g <- qos4g[qos4g$TIME4G > 0, ] 
+  
+  
+  #TODO: Get location data for new towners (cells.csv is a few months old)
+  qos4g<- qos4g[!is.na(qos4g$STATE),]  
+  
+  # filter towers outside of the department of Quetzalatenango
+  quetz <- qos4g[qos4g$STATE == "QUETZALTENANGO",]
+```
+
+```{r Calculate aggregation numbers, cache=TRUE}
+   
+  # calculate performance ratios and cell-level differences from the mean
+  quetz$perfRatio4g <- quetz$TIMENAVREQ804G / quetz$TIME4G
+  quetz$cellPerfDiff4g <- quetz$perfRatio4g - quetz$CELL_AVG_PERF
+  
+``` 
+
+
+
+```{r}
+  quetz <- quetz[quetz$CITY == "QUETZALTENANGO",]
+  qztSep <- quetz[substr(quetz$FCT_DT, start= 4, stop= 6) == "SEP", ]
+  plot(qztSep$TIME4G, as.integer(substr(qztSep$FCT_DT, start=1, stop=2)))
+  as.integer(substr(qztSep$FCT_DT, start = 1, stop = 2))
+  
+
+```

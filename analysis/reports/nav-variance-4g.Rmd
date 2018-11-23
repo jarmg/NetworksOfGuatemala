@@ -1,0 +1,131 @@
+---
+title: "4g-nav-variance"
+author: "Networks of Guatemala"
+date: "November 23, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+<style>
+body {
+text-align: justify}
+</style>
+
+
+### What is this data?
+This comes from a dataset of cell tower daily performance metrics.
+
+```{r}
+  # Set up the doc environment 
+  library(knitr)
+  library(ggplot2)
+  library(dplyr)
+  library(kableExtra)
+
+  getwd()
+  
+  source("../../utils.R")
+  base  <- baseDir()
+
+  navDataPath  <- paste(base, "data/tigo/NavDailyNational4g.csv", sep= '')
+  cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
+
+  color1 <- "#941010"
+```
+
+```{r}
+  # import nav of service data and cell location data
+  nav4g <- rio::import(navDataPath)
+  cells <- rio::import(cellDataPath)
+  
+  head(nav4g)
+  
+  # merge cell geodata
+  nav4g$CELL <- as.character(nav4g$CELL)
+  nav4g <- left_join(nav4g, cells, by = c("CELL" = "CELL_ID") )
+  
+  #TODO: Get location data for new towners (cells.csv is a few months old)
+  nav4g <- nav4g[!is.na(nav4g$STATE),]
+
+  head(nav4g)
+``` 
+
+
+```{r news nav average by cell}
+  
+  nav4g$newsDevices = nav4g$NTL_NEWS_DEVICES + nav4g$INTL_NEWS_DEVICES
+
+  cellDevices <- nav4g %>%
+    group_by(CELL, STATE, CITY) %>%
+    summarise(avgNewsDevices = mean(newsDevices),
+              varNewsDevices = var(newsDevices),
+              avgSocialDevices = mean(SOCIAL_DEVICES),
+              varSocialDevices = var(SOCIAL_DEVICES),
+              avgOtherDevices = mean(OTHER_DEVICES),
+              varOtherDevice = mean(SOCIAL_DEVICES)
+    )
+  nav4g <- right_join(cellDevices, nav4g)
+  
+  
+  head(cellDevices)
+```
+
+```{r Visualize news subs}
+  ggplot(cellDevices, aes(x= avgNewsDevices)) + 
+    geom_histogram(fill= color1, binwidth = 20) + 
+    labs(title="Avg total news devices", 
+      x= "Avg number of unique devices that access the news from a cell each day")
+```
+```{r}
+  ggplot(cellDevices, aes(x= avgSocialDevices)) + 
+    geom_histogram(fill= color1, binwidth = 20) + 
+    labs(title="Avg social devices", 
+      x= "Avg number of unique devices that access social content from a cell each day")
+```
+
+```{r Visualize news devices variance}
+  ggplot(cellDevices, aes(x= varNewsDevices)) + 
+    geom_histogram(fill= color1, binwidth = 10) + 
+    labs(title="Variance in unique devices", 
+      x= "Cell-level variance")
+
+
+  ggplot(cellDevices, aes(x = varNewsDevices, y = avgNewsDevices)) +
+    geom_point(color= color1) + 
+    labs(
+      x = "Cell-level device count variance", 
+      y = "Cell-level average device count", 
+      title="Variance vs Average News Device Count")
+```
+
+
+```{r Visualize social devices variance}
+  ggplot(cellDevices, aes(x= varSocialDevices)) + 
+    geom_histogram(fill= color1, binwidth = 1000) + 
+    labs(title="Variance in unique social devices", 
+      x= "Cell-level variance")
+
+
+  ggplot(cellDevices, aes(x = varSocialDevices, y = avgSocialDevices)) +
+    geom_point(color= color1) + 
+    labs(
+      x = "Cell-level social content device count variance", 
+      y = "Cell-level social content average device count", 
+      title="Variance vs Average Social Device Count")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
