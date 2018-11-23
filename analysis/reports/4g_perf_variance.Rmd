@@ -12,9 +12,11 @@ text-align: justify}
 </style>
 
 
-```{r include= F}
-  # Set up the doc environment 
+### What is this data?
+This comes from a dataset of cell tower daily performance metrics.
 
+```{r}
+  # Set up the doc environment 
   library(knitr)
   library(ggplot2)
   library(dplyr)
@@ -23,136 +25,91 @@ text-align: justify}
   source("../../utils.R")
   base  <- baseDir()
 
-  qosDataPath  <- paste(base, "data/tigo/perfMaySept.RData", sep= '')
-  navDataPath  <- paste(base, "data/tigo/PrensaNavData.RData", sep = '')
+  qosDataPath  <- paste(base, "data/tigo/FullPerfData4GDaily.csv", sep= '')
   cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
 
   color1 <- "#941010"
-
 ```
-
-## Data Overview
-We'll start by taking a look at a few dummy rows for the dataset to better understand what we're working with.  
-
-**Note:** This is fake data but the data and categories are representative of the dataset used.
-
-```{r message= F, echo= F}
-
-  monthYear <- c("08-2018", "10-2018", "09-2018")
-  cellId <- c("HJAK7842","LAQ32J", "ABC123") 
-  classif <- c("PREPAID", "POSTPAID", "PREPAID")
-  deviceTech <- c("LTE", "NO-SMART", "SMART")
-  mbs  <- c(13.1234, 3.1234, 1.1234)
-  mbs2G <- c(0, 0, 1.1234)
-  mbs3G <- c(13.1234, 0, 0)
-  mbs4G <- c(0, 3.1234, 0)
-  time2G <- c(0, 0, 1921) 
-  time3G <- c(2152, 0, 0) 
-  time4G <- c(0, 1050, 0) 
-  timeGoodPerf3G <- c(1920, 0, 0)
-  timeGoodPerf4G <- c(0, 832, 0)
-  
-  dataSample <- data.frame(monthYear, cellId, classif, deviceTech, mbs, mbs2G, mbs3G, mbs4G, time2G, time3G, time4G, timeGoodPerf3G, timeGoodPerf4G) 
-
-  kable(dataSample) %>%
-     kable_styling(bootstrap_options = "striped", font_size = 9)
-```
-
 
 ## Variation: 4G Performance data
 Now we'll look at how quality of service (QOS) ratios vary.
 QOS is calculated as `timeGoodPerf / time`
 
-```{r message= F}
-  # add performance ratio numbers
-  qos <- readRDS(qosDataPath)
-  qos$perfRatio4g <- qos$timenavreq4g/qos$time4g
-
-
-  globalMean4g <- mean(qos$perfRatio4g, na.rm=T)
-  print(globalMean4g)
-
-  # calculate avg performance ratios over time per cell 
-  cellAvg <- group_by(qos, lvl_val) %>%
-  summarise(
-      avgPerf4g = mean(perfRatio4g),
-      varPerf4g = var(perfRatio4g))
-
-  # merge cell performance averages with the rest of the dataset and
-  # calculate deviation from cell performance mean
-  qos <- left_join(qos, cellAvg) %>%
-    mutate(
-      cellPerfDiff4g   = perfRatio4g - avgPerf4g,
-      globalPerfDiff4g = perfRatio4g - globalMean4g
-    )
-
-  # remove non-4g transceiver cells
-  qos4g <- qos[qos$mbytes4g > 0,]
-
-  # remove NAs and NaNs
-  qos4g <- qos4g[!qos4g$cellPerfDiff4g %in% c(NaN, NA),]
+```{r}
+  # import quality of service data and cell location data
+  qos4g <- rio::import(qosDataPath)
+  cells <- rio::import(cellDataPath)
+  
+  #prep dataframes for merge
+  qos4g$CELL <- as.character(qos4g$CELL)
+  
+  # add cell location 
+  qos4g <- left_join(qos4g, cells, by = c("CELL" = "CELL_ID") )
+  
+  # filter towers with no traffic
+  qos4g <- qos4g[qos4g$TIME4G > 0, ] 
+  
+  # calculate performance ratios and cell-level differences from the mean
+  qos4g$perfRatio4g <- qos4g$TIMENAVREQ804G / qos4g$TIME4G
+  qos4g$cellPerfDiff4g <- qos4g$perfRatio4g - qos4g$CELL_AVG_PERF
+  
+  # calculate the global performance ratio mean
+  globalMean4g <- mean(qos4g$perfRatio4g, na.rm=T)
+  
+  # calculate cell-level difference from global performance mean
+  qos4g$globalPerfDiff4g <- qos4g$perfRatio4g - globalMean4g 
+  
+  # calculate variance per cell
+  cellVars <- group_by(qos4g, CELL) %>% 
+    summarise(cellVar = var(perfRatio4g))
+  qos4g <- left_join(qos4g, cellVars)
+  
 ``` 
 ```{r message= F, echo= F}
-  ggplot(qos4g, aes(x=avgPerf4g)) + 
+  ggplot(qos4g, aes(x=perfRatio4g)) + 
     geom_histogram(color= color1, fill= color1, binwidth=.005) + 
-    labs(title="Distribution of mean cell performance", 
-      x= "mean cell performance ratio")
-  
-  ggplot(qos4g, aes(x=cellPerfDiff4g)) + 
-    geom_histogram(color= color1, fill= color1, binwidth= .005) + 
-    labs(title="Distribution of deviations from cell performance mean", 
-      x= "deviation from cell mean performance")
+    labs(title="Distribution of daily cell performance", 
+      x= "cell performance ratio")
 
-  ggplot(qos4g, aes(x=globalPerfDiff4g)) + 
-    geom_histogram(color= color1, fill= color1, binwidth=.005) + 
-    labs(title="Distribution of deviations from global performance mean", 
-      x= "deviation from global mean performance")
+  ggplot(qos4g, aes(x=cellPerfDiff4g)) + 
+    geom_histogram(fill= color1, binwidth= .005) + 
+    labs(title="Distribution of daily differences from cell performance mean", 
+      x= "deviation from cell mean performance (daily cell perf - average cell perf)")
+  
+  ggplot(qos4g, aes(x= cellVar)) + 
+    geom_histogram(fill= color1, binwidth= .001) + 
+    labs(title="Distribution of cell-level performance ratio variance", 
+      x= "cell performance ratio variance)")
 ```
 
 ##### Cell performance mean
 ```{r}
-  summary(qos4g$avgPerf4g)
-```
-##### Cell performance deviation from the mean
-```{r}
-  summary(qos4g$cellPerfDiff4g)
-```
-##### Cell performance variance testing
-```{r}
-  var(qos4g$avgPerf4g)
-```
-##### Cell performance deviation variance testing
-```{r}
-  var(qos4g$cellPerfDiff4g)
-```
-##### Global performance variance testing
-```{r}
-  var(qos4g$perfRatio4g)
+  summary(qos4g$CELL_AVG_PERF)
 ```
 ##### Mean performance vs cell variance
-```{r echo=F, message=F}
+```{r message=F}
   #plot performance mean and average cell variance
-  ggplot(qos4g, aes(x = varPerf4g, y = avgPerf4g)) +
-    geom_point(color= color1) + 
+  ggplot(qos4g, aes(x = cellVar, y = CELL_AVG_PERF)) +
+    geom_point(color= color1, size=0.01) + 
     labs(x = "cell performance variance", y = "mean cell performance")
 
 ```
 
 ##### Drilling down on variance, splitting between high and low var `threshold = .05`
 ```{r}
-  qos4g.highvar <- qos4g[qos4g$varPerf4g > .05,]
-  qos4g.lowvar <- qos4g[qos4g$varPerf4g < .05,]
+  qos4g.highvar <- qos4g[qos4g$cellVar > .03,]
+  qos4g.lowvar <- qos4g[qos4g$cellVar < .03,]
 ```
-`r length(unique(qos4g.highvar$lvl_val)) ` cells have a variance greater than .05  
+`r length(unique(qos4g.highvar$CELL)) ` cells have a variance greater than .03  
 
-`r length(unique((qos4g.lowvar)$lvl_val)) ` cells have a variance less than .05
+`r length(unique((qos4g.lowvar)$CELL)) ` cells have a variance less than .03
 
 ```{r}
-  ggplot(qos4g.highvar, aes(x = varPerf4g, y = avgPerf4g)) +
+  ggplot(qos4g.highvar, aes(x = cellVar, y = CELL_AVG_PERF)) +
     geom_point(color= color1) + 
     labs(x = "cell performance variance", y = "mean cell performance", title="High Variance")
   
-  ggplot(qos4g.lowvar, aes(x = varPerf4g, y = avgPerf4g)) +
+  ggplot(qos4g.lowvar, aes(x = cellVar, y = CELL_AVG_PERF)) +
     geom_point(color= color1) + 
     labs(x = "cell performance variance", y = "mean cell performance", title="Low Variance")
   
