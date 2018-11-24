@@ -12,11 +12,6 @@ output: html_document
   library(tmaptools)
   
   read_shape()
-
-
-
-
-
 ```
 
 ```{r Setup environment, cache=TRUE}
@@ -32,10 +27,14 @@ output: html_document
   source("../../utils.R")
   base  <- baseDir()
 
-  qosDataPath  <- paste(base, "data/tigo/QosDailyNational4g.csv", sep= '')
-  navDataPath  <- paste(base, "data/tigo/navDailyNational4g.csv", sep= '')
+  qosData4gPath  <- paste(base, "data/tigo/QosDailyNational4g.csv", sep= '')
+  qosData3gPath  <- paste(base, "data/tigo/QosDailyNational3g.csv", sep= '')
+  navData4gPath  <- paste(base, "data/tigo/navDailyNational4g.csv", sep= '')
+  navData3gPath  <- paste(base, "data/tigo/navDailyNational3g.csv", sep= '')
   cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
   mapDataPath <- paste(base, "data/map_data/GTM_adm2.shp", sep= '')    
+  cellMapping <- paste(base, "data/tigo/cellMapping.csv", sep= '')    
+
   
   tmap_mode("view")
   color1 <- "#941010"
@@ -43,49 +42,71 @@ output: html_document
 
 ```{r Import and clean data, cache= T}
   # import quality of service data and cell location data
-  qos4g <- rio::import(qosDataPath)
-  nav4g <- rio::import(navDataPath)
+  qos4g <- rio::import(qosData4gPath)
+  qos3g <- rio::import(qosData3gPath)
+  nav4g <- rio::import(navData4gPath)
+  nav3g <- rio::import(navData3gPath)
   cells <- rio::import(cellDataPath)
+  cellIds <- rio::import(cellMapping)
   gt_munis <- read_shape(mapDataPath)
   library(rgdal)  
-  
+ 
+  head(nav4g) 
   # merge qos and cell geo data
   nav4g$CELL <- as.character(nav4g$CELL)
-  nav4g <- left_join(nav4g, cells, by = c("CELL" = "CELL_ID") )
+  nav4g <- left_join(nav4g, cellIds, by = c("CELL" = "BTS_SH_NM") )
+  nav4g <- left_join(nav4g, cells, by = c("BTS_LNG_NM" = "CELL_ID") )
+  nav3g$CELL <- as.character(nav3g$CELL)
+  nav3g <- left_join(nav3g, cellIds, by = c("CELL" = "BTS_SH_NM") )
+  nav3g <- left_join(nav3g, cells, by = c("BTS_LNG_NM" = "CELL_ID") )
   
   #TODO: Get location data for new towners (cells.csv is a few months old)
   nav4g <- nav4g[!is.na(nav4g$STATE),]  
+  nav3g <- nav3g[!is.na(nav4g$STATE),]  
+  
+  head(nav3g)
   
   # filter towers outside of the department of Quetzalatenango
-  qtz <- nav4g[nav4g$CITY == "QUETZALTENANGO",]
-  qtz20 <- qtz[qtz$DATE_TIME == "20-SEP-18",]
-  qtz20<- nav4g[nav4g$DATE_TIME == "20-SEP-18",]
-
-  dim(qtz20)
- 
+  sep204g <- nav4g[nav4g$DATE_TIME == "20-SEP-18",]
+  sep203g <- nav3g[nav3g$DATE_TIME == "20-SEP-18",]
+  head(sep203g) 
   #Remove NA COORDS 
-  qtz20 <- qtz20[!is.na(qtz20$LATITUDE),]
-  qtz20 <- qtz20[qtz20$LATITUDE != 'TBD',]
-  qtz20 <- qtz20[qtz20$LONGITUDE!= 'TBD',]
-  View(qtz20)   
-  qtz20$LATITUDE  <- as.double(qtz20$LATITUDE) 
-  qtz20$LONGITUDE <- as.double(qtz20$LONGITUDE) 
-  towers <- st_as_sf(qtz20, coords = c("LONGITUDE", "LATITUDE"))
-  dim(towers)
-    
-  st_crs(towers) <- st_crs(gt_munis)
+  sep204g <- sep204g[!is.na(sep204g$LATITUDE),]
+  sep204g <- sep204g[sep204g$LATITUDE != 'TBD',]
+  sep204g <- sep204g[sep204g$LONGITUDE!= 'TBD',]
+  
+  sep203g <- sep203g[!is.na(sep203g$LATITUDE),]
+  sep203g <- sep203g[sep203g$LATITUDE != 'TBD',]
+  sep203g <- sep203g[sep203g$LONGITUDE!= 'TBD',]
+  
+  sep204g$LATITUDE  <- as.double(sep204g$LATITUDE) 
+  sep204g$LONGITUDE <- as.double(sep204g$LONGITUDE) 
+  
+  
+  sep203g$LATITUDE  <- as.double(sep203g$LATITUDE) 
+  sep203g$LONGITUDE <- as.double(sep203g$LONGITUDE) 
+   
+  towers4g <- st_as_sf(sep204g, coords = c("LONGITUDE", "LATITUDE"))
+  towers3g <- st_as_sf(sep204g, coords = c("LONGITUDE", "LATITUDE"))
+  
+  sep204g
 
-  leaflet(qtz20) %>%
+  leaflet() %>%
     addTiles() %>%
     setView(lng = -90.5, lat= 15.5, zoom= 7.4) %>%
-    addCircleMarkers(radius = .1, popup = ~htmlEscape(paste("National news devices:", NTL_NEWS_DEVICES)))
-  
-gt_munis
-towers
-st_crs(gt_munis)
-st_crs(towers)
-gt_munis$geometry
-towers$geometry
-gt_munis$geometry
-?st_as_sf  
+    addCircleMarkers(
+      data=sep203g,
+      radius = .1, 
+      color = 'red',
+      fillOpacity = .4,
+      popup = ~htmlEscape(
+        paste("Tower id:", CELL))
+    ) %>%
+    addCircleMarkers(
+      data=sep204g,
+      fillOpacity = .4,
+      radius = .1, 
+      popup = ~htmlEscape(
+        paste("Tower id:", CELL))
+    )
 ```
