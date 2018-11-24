@@ -1,0 +1,91 @@
+---
+title: "mapping"
+author: "Networks of Guatemala"
+date: "November 23, 2018"
+output: html_document
+---
+
+
+
+```{r}
+  library(tmap)
+  library(tmaptools)
+  
+  read_shape()
+
+
+
+
+
+```
+
+```{r Setup environment, cache=TRUE}
+  # Set up the doc environment 
+  library(knitr)
+  library(ggplot2)
+  library(dplyr)
+  library(kableExtra)
+  library(tmap)
+  library(tmaptools)
+  library(htmltools)
+
+  source("../../utils.R")
+  base  <- baseDir()
+
+  qosDataPath  <- paste(base, "data/tigo/QosDailyNational4g.csv", sep= '')
+  navDataPath  <- paste(base, "data/tigo/navDailyNational4g.csv", sep= '')
+  cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
+  mapDataPath <- paste(base, "data/map_data/GTM_adm2.shp", sep= '')    
+  
+  tmap_mode("view")
+  color1 <- "#941010"
+```
+
+```{r Import and clean data, cache= T}
+  # import quality of service data and cell location data
+  qos4g <- rio::import(qosDataPath)
+  nav4g <- rio::import(navDataPath)
+  cells <- rio::import(cellDataPath)
+  gt_munis <- read_shape(mapDataPath)
+  library(rgdal)  
+  
+  # merge qos and cell geo data
+  nav4g$CELL <- as.character(nav4g$CELL)
+  nav4g <- left_join(nav4g, cells, by = c("CELL" = "CELL_ID") )
+  
+  #TODO: Get location data for new towners (cells.csv is a few months old)
+  nav4g <- nav4g[!is.na(nav4g$STATE),]  
+  
+  # filter towers outside of the department of Quetzalatenango
+  qtz <- nav4g[nav4g$CITY == "QUETZALTENANGO",]
+  qtz20 <- qtz[qtz$DATE_TIME == "20-SEP-18",]
+  qtz20<- nav4g[nav4g$DATE_TIME == "20-SEP-18",]
+
+  dim(qtz20)
+ 
+  #Remove NA COORDS 
+  qtz20 <- qtz20[!is.na(qtz20$LATITUDE),]
+  qtz20 <- qtz20[qtz20$LATITUDE != 'TBD',]
+  qtz20 <- qtz20[qtz20$LONGITUDE!= 'TBD',]
+  View(qtz20)   
+  qtz20$LATITUDE  <- as.double(qtz20$LATITUDE) 
+  qtz20$LONGITUDE <- as.double(qtz20$LONGITUDE) 
+  towers <- st_as_sf(qtz20, coords = c("LONGITUDE", "LATITUDE"))
+  dim(towers)
+    
+  st_crs(towers) <- st_crs(gt_munis)
+
+  leaflet(qtz20) %>%
+    addTiles() %>%
+    setView(lng = -90.5, lat= 15.5, zoom= 7.4) %>%
+    addCircleMarkers(radius = .1, popup = ~htmlEscape(paste("National news devices:", NTL_NEWS_DEVICES)))
+  
+gt_munis
+towers
+st_crs(gt_munis)
+st_crs(towers)
+gt_munis$geometry
+towers$geometry
+gt_munis$geometry
+?st_as_sf  
+```
