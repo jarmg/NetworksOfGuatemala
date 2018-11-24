@@ -88,6 +88,51 @@ run.model.startBiz  <- function() {
 }
 
 
+#---------------- GEMDATA ----------------
+gemData <- load.gem.data()
+
+#-------- Show all GEM labels -----------
+#show all labels
+names(gemData)
+#show all labels alphabetical order
+ls(gemData)
+
+#-------- functions to show the frequencies
+count(gemData$incomeHousehold)
+count(gemData$newsCntry)
+count(gemData$age)
+count(gemData$age7c)
+
+#-------- more functions to show frequencies with library hmisc
+describe(gemData$incomeHousehold)
+describe(gemData$age7c)
+
+#-------- frequencies of income household with country news
+household.news <- count(gemData,c("incomeHousehold","newsCntry"))
+h.n <- household.news[,c(3,1,2)]
+h.n
+#hist(household.news)
+
+#-------- frequencies of income household with age categories
+household.age <- count(gemData,c("incomeHousehold","age7c"))
+household.age
+plot(household.age)
+
+#-------- show cross-section
+table(gemData$age7c, gemData$incomeHousehold)
+
+#-------- ANOVA ----------------
+#--------make sure variables can work for one way ANOVA
+fg1.income <- as.factor(gemData$incomeHousehold)
+
+
+
+#-------- ANOVA functions
+income.age1 <- lm(gemData$incomeHousehold ~ gemData$age7c)
+anova(income.age1)
+#see differences between vars
+TukeyHSD(aov(income.age1))
+
 
 
 
