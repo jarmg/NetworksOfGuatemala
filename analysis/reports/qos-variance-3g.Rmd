@@ -1,0 +1,92 @@
+---
+title: "3G Performance Variance Overview"
+author: Networks of Guatemala
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r Setup environment and load data, cache=TRUE}
+  # Set up the doc environment 
+  library(ggplot2)
+  library(dplyr)
+
+  source("../../utils.R")
+  base  <- baseDir()
+  color1 <- "#941010"
+  
+  qosData3gPath  <- paste(base, "data/tigo/QosDailyNational3g.csv", sep= '')
+  qos3g <- rio::import(qosData3gPath)
+```
+## Variation: 3G Performance data
+For each cell, the telco records the amount of time that users experienced a good connection for the activity given
+the activity they are performing. Note that this 'good performance' threshold is different for reading articles
+and streaming video. 
+
+The performance of a given cell is calculated as `good performance time / total connection time` which 
+produces a performance ratio. This is the ratio we use to measure performance.
+
+```{r Add performance metrics}
+  # add performance ratio numbers
+  qos3g$perfRatio3g <- qos3g$TIMENAVREQ803G / qos3g$TIME3G 
+
+  globalMean3g <- mean(qos3g$perfRatio3g, na.rm=T)
+  print(globalMean3g)
+
+  # calculate avg performance ratios over time per cell (shortId).
+  # If a cell is replaced because it breaks it could have a different 
+  # longId but may take on the shortId of the cell it replaces.
+  library(dplyr)
+  cellAvg <- group_by(qos3g, CELL) %>%
+  summarise(
+      avgPerf3g = mean(perfRatio3g),
+      varPerf3g = var(perfRatio3g))
+
+  # merge cell performance averages with the rest of the dataset and
+  # calculate deviation from cell performance mean
+  qos3g <- left_join(qos3g, cellAvg)
+``` 
+```{r Plot performance ratios}
+  ggplot(qos3g, aes(x=avgPerf3g)) + 
+    geom_histogram(color= color1, fill= color1, binwidth=.005) + 
+    labs(title="3g average cell performance", 
+      x= "mean cell performance ratio")
+  
+  ggplot(qos3g, aes(x=varPerf3g)) + 
+    geom_histogram(color= color1, fill= color1, binwidth= .005) + 
+    labs(title="Distribution of deviations from cell performance mean", 
+      x= "deviation from cell mean performance")
+```
+
+##### Cell performance variance and averages
+```{r Summary and variance outputs}
+  summary(qos3g$avgPerf3g)
+  var(qos3g$avgPerf3g)
+  var(qos3g$perfRatio3g)
+```
+##### Mean performance vs cell variance
+```{r Plot mean performance vs. variance}
+  ggplot(qos3g, aes(x = varPerf3g, y = avgPerf3g)) +
+    geom_point(color= color1) + 
+    labs(x = "cell performance variance", y = "mean cell performance")
+
+```
+
+##### Drilling down on variance, splitting between high and low var `threshold = .05`
+```{r Plot high and low variance cells}
+  qos3g.highvar <- qos3g[qos3g$varPerf3g > .05,]
+  qos3g.lowvar <- qos3g[qos3g$varPerf3g < .05,]
+  
+  ggplot(qos3g.highvar, aes(x = varPerf3g, y = avgPerf3g)) +
+    geom_point(color= color1) + 
+    labs(x = "cell performance variance", y = "mean cell performance", title="High Variance")
+  
+  ggplot(qos3g.lowvar, aes(x = varPerf3g, y = avgPerf3g)) +
+    geom_point(color= color1) + 
+    labs(x = "cell performance variance", y = "mean cell performance", title="Low Variance")
+```
+
+
+
+
+
