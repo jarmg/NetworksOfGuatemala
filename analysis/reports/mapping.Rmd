@@ -5,42 +5,29 @@ date: "November 23, 2018"
 output: html_document
 ---
 
-
-
-```{r}
-  library(tmap)
-  library(tmaptools)
-  
-  read_shape()
-```
-
 ```{r Setup environment, cache=TRUE}
   # Set up the doc environment 
   library(knitr)
   library(ggplot2)
   library(dplyr)
   library(kableExtra)
-  library(tmap)
-  library(tmaptools)
   library(htmltools)
+  library(leaflet)
 
   source("../../utils.R")
   base  <- baseDir()
 
   qosData4gPath  <- paste(base, "data/tigo/QosDailyNational4g.csv", sep= '')
   qosData3gPath  <- paste(base, "data/tigo/QosDailyNational3g.csv", sep= '')
-  navData4gPath  <- paste(base, "data/tigo/navDailyNational4g.csv", sep= '')
-  navData3gPath  <- paste(base, "data/tigo/navDailyNational3g.csv", sep= '')
+  navData4gPath  <- paste(base, "data/tigo/NavDailyNational4g.csv", sep= '')
+  navData3gPath  <- paste(base, "data/tigo/NavDailyNational3g.csv", sep= '')
   cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
-  mapDataPath <- paste(base, "data/map_data/GTM_adm2.shp", sep= '')    
   cellMapping <- paste(base, "data/tigo/cellMapping.csv", sep= '')    
 
-  
-  tmap_mode("view")
   color1 <- "#941010"
 ```
 
-```{r Import and clean data, cache= T}
+```{r Import and join data, cache= T}
   # import quality of service data and cell location data
   qos4g <- rio::import(qosData4gPath)
   qos3g <- rio::import(qosData3gPath)
@@ -48,10 +35,7 @@ output: html_document
   nav3g <- rio::import(navData3gPath)
   cells <- rio::import(cellDataPath)
   cellIds <- rio::import(cellMapping)
-  gt_munis <- read_shape(mapDataPath)
-  library(rgdal)  
- 
-  head(nav4g) 
+  
   # merge qos and cell geo data
   nav4g$CELL <- as.character(nav4g$CELL)
   nav4g <- left_join(nav4g, cellIds, by = c("CELL" = "BTS_SH_NM") )
@@ -59,54 +43,44 @@ output: html_document
   nav3g$CELL <- as.character(nav3g$CELL)
   nav3g <- left_join(nav3g, cellIds, by = c("CELL" = "BTS_SH_NM") )
   nav3g <- left_join(nav3g, cells, by = c("BTS_LNG_NM" = "CELL_ID") )
-  
-  #TODO: Get location data for new towners (cells.csv is a few months old)
+``` 
+```{r Clean data}  
+  #TODO: Get location data for new towers (cells.csv is a few months old)
   nav4g <- nav4g[!is.na(nav4g$STATE),]  
   nav3g <- nav3g[!is.na(nav4g$STATE),]  
   
-  head(nav3g)
+  # filter for Quetzaltenango for September 20th with valid lat/long data
+  qtzSep204g <- filter(nav4g, 
+                       DATE_TIME == "20-SEP-18" &
+                         CITY == "QUETZALTENANGO" &
+                         !LATITUDE %in% c('TBD', NA) &
+                         !LONGITUDE %in% c('TBD', NA)
+                      )
+  qtzSep203g <- filter(nav3g, 
+                       DATE_TIME == "20-SEP-18" &
+                         CITY == "QUETZALTENANGO" &
+                         !LATITUDE %in% c('TBD', NA) &
+                         !LONGITUDE %in% c('TBD', NA)
+                      )
+ 
+  # cast lat/long as doubles 
+  qtzSep204g$LATITUDE  <- as.double(qtzSep204g$LATITUDE) 
+  qtzSep204g$LONGITUDE <- as.double(qtzSep204g$LONGITUDE) 
   
-  # filter towers outside of the department of Quetzalatenango
-  sep204g <- nav4g[nav4g$DATE_TIME == "20-SEP-18",]
-  sep203g <- nav3g[nav3g$DATE_TIME == "20-SEP-18",]
-  head(sep203g) 
-  #Remove NA COORDS 
-  sep204g <- sep204g[!is.na(sep204g$LATITUDE),]
-  sep204g <- sep204g[sep204g$LATITUDE != 'TBD',]
-  sep204g <- sep204g[sep204g$LONGITUDE!= 'TBD',]
-  
-  sep203g <- sep203g[!is.na(sep203g$LATITUDE),]
-  sep203g <- sep203g[sep203g$LATITUDE != 'TBD',]
-  sep203g <- sep203g[sep203g$LONGITUDE!= 'TBD',]
-  
-  sep204g$LATITUDE  <- as.double(sep204g$LATITUDE) 
-  sep204g$LONGITUDE <- as.double(sep204g$LONGITUDE) 
-  
-  
-  sep203g$LATITUDE  <- as.double(sep203g$LATITUDE) 
-  sep203g$LONGITUDE <- as.double(sep203g$LONGITUDE) 
-   
-  towers4g <- st_as_sf(sep204g, coords = c("LONGITUDE", "LATITUDE"))
-  towers3g <- st_as_sf(sep204g, coords = c("LONGITUDE", "LATITUDE"))
-  
-  sep204g
+  qtzSep203g$LATITUDE  <- as.double(qtzSep203g$LATITUDE) 
+  qtzSep203g$LONGITUDE <- as.double(qtzSep203g$LONGITUDE) 
+```  
 
+```{r Build map}
   leaflet() %>%
     addTiles() %>%
-    setView(lng = -90.5, lat= 15.5, zoom= 7.4) %>%
+    setView(lng = -91.52, lat= 14.85, zoom= 12.5) %>%
     addCircleMarkers(
-      data=sep203g,
-      radius = .1, 
-      color = 'red',
-      fillOpacity = .4,
+      data=qtzSep204g,
+      fillOpacity = .2,
+      radius = .1,
+      color = color1,
       popup = ~htmlEscape(
-        paste("Tower id:", CELL))
-    ) %>%
-    addCircleMarkers(
-      data=sep204g,
-      fillOpacity = .4,
-      radius = .1, 
-      popup = ~htmlEscape(
-        paste("Tower id:", CELL))
+        paste("Cell id:", CELL))
     )
 ```
