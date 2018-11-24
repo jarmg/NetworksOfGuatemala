@@ -113,87 +113,96 @@ INSERT INTO service_categories (service, category) VALUES ('consejosgratis.es', 
 INSERT INTO service_categories (service, category) VALUES ('gigya.com', 'other');
 INSERT INTO service_categories (service, category) VALUES ('rcn1.com.gt', 'other');
 
-
 CREATE TABLE CELL_NAV_4G AS
     select * 
     from profiling.cells_nav n
     JOIN service_categories
     ON n.service_name = service_categories.service
+    JOIN profiling.cell_mapping p
+    ON n.cell = p.bts_lng_nm
     where EXISTS 
         (SELECT * FROM cells_qos_4g g
-            where g.bts_LNG_nm = n.cell);
+            where g.lvl_val = p.bts_sh_nm);
 
 CREATE TABLE CELL_NAV_3G AS
     select * 
     from profiling.cells_nav n
     JOIN service_categories
     ON n.service_name = service_categories.service
+    JOIN profiling.cell_mapping p
+    ON n.cell = p.bts_lng_nm
     where EXISTS 
         (SELECT * FROM cells_qos_3g g
-            where g.bts_LNG_nm = n.cell);
+            where g.lvl_val = p.bts_sh_nm);
 
 CREATE TABLE CELL_NAV_2G AS
     select * 
     from profiling.cells_nav n
     JOIN service_categories
     ON n.service_name = service_categories.service
+    JOIN profiling.cell_mapping p
+    ON n.cell = p.bts_lng_nm
     where EXISTS 
         (SELECT * FROM cells_qos_2g g
-            where g.bts_LNG_nm = n.cell);
+            where g.lvl_val = p.bts_sh_nm);
 
-create index nav_cell_day_2g on cell_nav_2g (cell, date_time);
-create index nav_cell_day_3g on cell_nav_3g (cell, date_time);
-create index nav_cell_day_4g on cell_nav_4g (cell, date_time);
+create index nav_cell_day_2g on cell_nav_2g (bts_sh_nm, date_time);
+create index nav_cell_day_3g on cell_nav_3g (bts_sh_nm, date_time);
+create index nav_cell_day_4g on cell_nav_4g (bts_sh_nm, date_time);
+
+/***************************************************/
+/* 4G Content categorization */
+/***************************************************/
 
 create table nav_other_4g as
     select 
             date_time,
-            cell,
+            bts_sh_nm as cell,
             sum(bytes_down) as bytes_down,
             sum(bytes_up) as bytes_up,
             sum(duration) as duration,
             sum(subscribers) as devices 
         from cell_nav_4g 
         where category = 'other'
-        group by (date_time, cell);
+        group by date_time, bts_sh_nm;
 
  
  create table nav_ntl_news_4g as
     select 
             date_time,
-            cell,
+            bts_sh_nm as cell,
             sum(bytes_down) as bytes_down,
             sum(bytes_up) as bytes_up,
             sum(duration) as duration,
             sum(subscribers) as devices 
         from cell_nav_4g 
         where category = 'ntlNews'
-        group by (date_time, cell);
+        group by date_time, bts_sh_nm;
 
 
  create table nav_intl_news_4g as
     select 
             date_time,
-            cell,
+            bts_sh_nm as cell,
             sum(bytes_down) as bytes_down,
             sum(bytes_up) as bytes_up,
             sum(duration) as duration,
             sum(subscribers) as devices 
         from cell_nav_4g
         where category = 'intlNews'
-        group by (date_time, cell);   
+        group by date_time, bts_sh_nm;   
 
 create table nav_social_4g as
     select 
             date_time,
-            cell,
+            bts_sh_nm as cell,
             sum(bytes_down) as bytes_down,
             sum(bytes_up) as bytes_up,
             sum(duration) as duration,
             sum(subscribers) as devices 
         from cell_nav_4g
         where category = 'social'
-        group by (date_time, cell);
+        group by date_time, bts_sh_nm;
         
 
 create table cell_nav_categorized_4g as
@@ -223,4 +232,89 @@ create table cell_nav_categorized_4g as
         on social.cell = ntl.cell and social.date_time = ntl.date_time
     join nav_intl_news_4g other
         on social.cell = other.cell and social.date_time = other.date_time;
-    
+
+/***************************************************/
+/* 3G Content categorization */
+/***************************************************/
+
+create table nav_other_3g as
+    select
+            date_time,
+            bts_sh_nm as cell,
+            sum(bytes_down) as bytes_down,
+            sum(bytes_up) as bytes_up,
+            sum(duration) as duration,
+            sum(subscribers) as devices
+        from cell_nav_3g
+        where category = 'other'
+        group by date_time, bts_sh_nm;
+
+
+create table nav_ntl_news_3g as
+    select
+            date_time,
+            bts_sh_nm as cell,
+            sum(bytes_down) as bytes_down,
+            sum(bytes_up) as bytes_up,
+            sum(duration) as duration,
+            sum(subscribers) as devices
+        from cell_nav_3g
+        where category = 'ntlNews'
+        group by date_time, bts_sh_nm;
+
+
+create table nav_intl_news_3g as
+    select
+            date_time,
+            bts_sh_nm as cell,
+            sum(bytes_down) as bytes_down,
+            sum(bytes_up) as bytes_up,
+            sum(duration) as duration,
+            sum(subscribers) as devices
+        from cell_nav_3g
+        where category = 'intlNews'
+        group by date_time, bts_sh_nm;
+
+create table nav_social_3g as
+    select
+            date_time,
+            bts_sh_nm as cell,
+            sum(bytes_down) as bytes_down,
+            sum(bytes_up) as bytes_up,
+            sum(duration) as duration,
+            sum(subscribers) as devices
+        from cell_nav_3g
+        where category = 'social'
+        group by date_time, bts_sh_nm;
+
+
+create table cell_nav_categorized_3g as
+    select
+        social.date_time,
+        social.cell,
+        social.bytes_down as social_bytes_down,
+        social.bytes_up as social_bytes_up,
+        social.duration as social_duration,
+        social.devices as social_devices,
+        ntl.bytes_down as ntl_news_bytes_down,
+        ntl.bytes_up as ntl_news_bytes_up,
+        ntl.duration as ntl_news_duration,
+        ntl.devices as ntl_news_devices,
+        intl.bytes_down as intl_news_bytes_down,
+        intl.bytes_up as intl_news_bytes_up,
+        intl.duration as intl_news_duration,
+        intl.devices as intl_news_devices,
+        other.bytes_down as other_bytes_down,
+        other.bytes_up as other_bytes_up,
+        other.duration as other_duration,
+        other.devices as other_devices
+    from nav_social_3g social
+    join nav_intl_news_3g intl
+        on social.cell = intl.cell and social.date_time = intl.date_time
+    join nav_ntl_news_3g ntl
+        on social.cell = ntl.cell and social.date_time = ntl.date_time
+    join nav_intl_news_3g other
+        on social.cell = other.cell and social.date_time = other.date_time;
+
+select * from cell_nav_categorized_4g;
+
