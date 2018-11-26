@@ -5,30 +5,26 @@ date: "November 23, 2018"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 <style>
 body {
 text-align: justify}
 </style>
 
-
 ### What is this data?
-This comes from a dataset of cell tower daily performance metrics.
+This comes from a dataset of cell tower daily navigation metrics. This data has been preprocessed by 
+1) categorizing the traffic into 4 buckets based on the service (category mappings can be found below)
+2) grouping the categories for each cell  by summing metrics for traffic in the same category 
 
-```{r}
+```{r setup}
+  knitr::opts_chunk$set(echo = TRUE)
+
   # Set up the doc environment 
-  library(knitr)
   library(ggplot2)
   library(dplyr)
-  library(kableExtra)
-
-  getwd()
   
   source("../../utils.R")
   base  <- baseDir()
-
+  
   navDataPath  <- paste(base, "data/tigo/NavDailyNational4g.csv", sep= '')
   cellDataPath <- paste(base, "data/tigo/cells.csv", sep= '')    
 
@@ -36,20 +32,8 @@ This comes from a dataset of cell tower daily performance metrics.
 ```
 
 ```{r}
-  # import nav of service data and cell location data
+  # import nav data
   nav4g <- rio::import(navDataPath)
-  cells <- rio::import(cellDataPath)
-  
-  head(nav4g)
-  
-  # merge cell geodata
-  nav4g$CELL <- as.character(nav4g$CELL)
-  nav4g <- left_join(nav4g, cells, by = c("CELL" = "CELL_ID") )
-  
-  #TODO: Get location data for new towners (cells.csv is a few months old)
-  nav4g <- nav4g[!is.na(nav4g$STATE),]
-
-  head(nav4g)
 ``` 
 
 
@@ -58,7 +42,7 @@ This comes from a dataset of cell tower daily performance metrics.
   nav4g$newsDevices = nav4g$NTL_NEWS_DEVICES + nav4g$INTL_NEWS_DEVICES
 
   cellDevices <- nav4g %>%
-    group_by(CELL, STATE, CITY) %>%
+    group_by(CELL) %>%
     summarise(avgNewsDevices = mean(newsDevices),
               varNewsDevices = var(newsDevices),
               avgSocialDevices = mean(SOCIAL_DEVICES),
@@ -66,10 +50,6 @@ This comes from a dataset of cell tower daily performance metrics.
               avgOtherDevices = mean(OTHER_DEVICES),
               varOtherDevice = mean(SOCIAL_DEVICES)
     )
-  nav4g <- right_join(cellDevices, nav4g)
-  
-  
-  head(cellDevices)
 ```
 
 ```{r Visualize news subs}
